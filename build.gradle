@@ -1,0 +1,56 @@
+group 'flames'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'scala'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.scala-lang:scala-library:2.12.3', 'org.scalatest:scalatest_2.12:3.0.1', 'org.apache.hadoop:hadoop-common:2.7.3',
+            'com.amazonaws:aws-java-sdk:1.7.4','org.apache.hadoop:hadoop-aws:2.7.3','org.testng:testng:6.11'
+    testCompile "org.scala-lang:scala-library:2.12.3",'org.testng:testng:6.11'
+    zinc 'com.typesafe.zinc:zinc:0.3.9'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        scala{
+            srcDirs = ['src/main/scala']
+        }
+    }
+    test {
+        scala {
+           // srcDirs = ['test/scala']
+        }
+        java {
+            srcDirs = ['src/test/java']
+        }
+    }
+}
+
+jar{
+   // sourceSets.getByName("main").getJava().srcDirs().name
+   // println "SourceSet output directories are "+ sourceSets.compile.output.dirs.toSet().toString()
+    archiveName = "aws.jar"
+    from{
+        configurations.compile.collect()
+    }
+    exclude '*scala*.jar'
+    manifest{
+        attributes("Main-Class":"Aws.class")
+    }
+    doLast{
+        println sourceSets.getByName("main").output.dirs
+    }
+}
+
+

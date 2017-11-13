@@ -1,0 +1,13 @@
+/build/
+.gradle/
+out
+src/main/java/com/experiments
+src/main/scala/hackerrank/algorithms
+src/code/
+src/main/java/com/xyz/
+test2/
+*.ipr
+*.iml
+*.iws
+.idea
+
