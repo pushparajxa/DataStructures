@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//Un-directed Graph with no loops. Vericies with zero degree can exist
+//Un-directed Graph with no loops.
 public class Graph {
 
     PriorityQueue<Integer>[] adjecencyList;
@@ -54,18 +54,18 @@ public class Graph {
     }
 
     //Depth first search
-    private void dfs(int vertex){
+   /* private void dfs(int vertex){
         Set<Integer> visited = new HashSet<>();
         List<Edge> edges = new LinkedList<>();
         visited.add(vertex);
-        Iterator<Integer> iterator = adjecencyList[vertex-1].iterator();
+        Iterator<Integer> iterator = adjacencyList[vertex-1].iterator();
         while(iterator.hasNext()){
             int next = iterator.next()-1;
             if(!visited.contains(next)){
                 dfs(next);
             }
         }
-    }
+    }*/
 
     static class Edge{
         int vertex1,vertex2;

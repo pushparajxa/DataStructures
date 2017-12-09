@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//Un-directed Graph with no loops. Vertices with zero degree can exist
+//Un-directed Graph with no loops.
 public class Graph_Goodrich {
 
     HashMap<Integer,Vertex> vertexContainer = new HashMap<Integer, Vertex>();
