@@ -57,19 +57,24 @@ public class Graph_Goodrich {
     }
 
     //Depth first search
-    private void dfs(int vertex,Set<Integer> visited, List<Edge> backEdges,  List<Edge>  discoveryEdges, Set<Edge> explored) {
+    /*
+       In case of digraph or directed graph we can label the non-tree edges as forward edges, back-edges, cross-edges
+     */
+    private void dfs(int vertex,Set<Integer> visited, List<Edge> nonTreeEdges, List<Edge>  discoveryEdges/*Tree Edges */, Set<Edge> explored) {
         visited.add(vertex);
         Iterator<Edge> iterator = vertexContainer.get(vertex).adjacencyList.iterator();
         while(iterator.hasNext()) {
             Edge edge = iterator.next();
-            if(!explored.contains(edge)){
+            if(!explored.contains(edge)){ // We should check whether edge is explored or not, otherwise we will mark tree edge as non-tree edge
+                //A->B->C->A after going from A,B,C,A then we may mark A->B as non-tree edge overriding its status as tree edge.
                 explored.add(edge);
                 Vertex otherEnd = edge.getOtherEnd(vertexContainer.get(vertex));
-                if(visited.contains(otherEnd))
-                    backEdges.add(edge);
+                if(visited.contains(otherEnd)) {
+                    nonTreeEdges.add(edge);
+                }
                 else{
                     discoveryEdges.add(edge);
-                    dfs(otherEnd.number,visited,backEdges,discoveryEdges,explored); //TODO : Is it possible to write non-recursively?
+                    dfs(otherEnd.number,visited,nonTreeEdges,discoveryEdges,explored); //TODO : Is it possible to write non-recursively?
                 }
             }
         }
@@ -100,6 +105,8 @@ public class Graph_Goodrich {
     static class Edge {
         Vertex vertex1, vertex2;
         int data;
+        /*Decorator pattern .. page no. 329 Goodrich 6.5.1 Decorator Pattern*/
+        Hashtable<String,Object> attributes =  new Hashtable<>();
 
         Edge(Vertex vertex1,Vertex vertex2) {
             this.vertex1 = vertex1;
@@ -114,6 +121,14 @@ public class Graph_Goodrich {
             else
                 throw new RuntimeException("Given vertex doesn't belong to this edge");
         }
+
+        boolean isExplored(){
+            if(attributes.containsKey("Explored")){
+                return (Boolean)attributes.get("Explored");
+            }else
+                 return  false;
+        }
+
     }
 
     static class Vertex {
