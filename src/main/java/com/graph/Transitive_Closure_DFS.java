@@ -5,6 +5,9 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/*
+https://www.geeksforgeeks.org/transitive-closure-of-a-graph-using-dfs/
+ */
 public class Transitive_Closure_DFS {
     Hashtable<Integer,Vertex> vertexContainer = new Hashtable<>();
     List<Edge> edgeContainer = new ArrayList<>();
