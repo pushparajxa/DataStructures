@@ -35,13 +35,25 @@ public class Graph_Goodrich {
                         int vertex_num1 = Integer.parseInt(matcher.group(1));
                         int vertex_num2 = Integer.parseInt(matcher.group(2));
 
-                        Vertex vertex1 = new Vertex(vertex_num1);
-                        Vertex vertex2 = new Vertex(vertex_num2);
-                        vertexContainer.put(vertex_num1,vertex1);
-                        vertexContainer.put(vertex_num2,vertex2);
-                        Edge edge = new Edge(vertex1,vertex2);
-                        vertex1.adjacencyList.add(edge);
-                        vertex2.adjacencyList.add(edge);
+                        Vertex vtx1 ;
+                        Vertex vtx2 ;
+
+                        if(vertexContainer.containsKey(vertex_num1)){
+                            vtx1 = vertexContainer.get(vertex_num1);
+                        }else{
+                            vtx1 = new Vertex(vertex_num1);
+                            vertexContainer.put(vertex_num1,vtx1);
+                        }
+                        if(vertexContainer.containsKey(vertex_num2)){
+                            vtx2 = vertexContainer.get(vertex_num2);
+                        }else{
+                            vtx2 = new Vertex(vertex_num2);
+                            vertexContainer.put(vertex_num2,vtx2);
+                        }
+
+                        Edge edge = new Edge(vtx1,vtx2);
+                        vtx1.adjacencyList.add(edge);
+                        vtx2.adjacencyList.add(edge);
                         edgeContainer.add(edge);
                     }
 
