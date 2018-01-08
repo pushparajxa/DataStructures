@@ -78,13 +78,14 @@ public class SortTestCases {
         //String sortClassName = "com.sort.SelectionSort";
         //String sortClassName = "com.sort.HeapSort";
         //String sortClassName = "com.sort.InsertionSort";
-        String sortClassName = "com.sort.BucketSort";
+        //String sortClassName = "com.sort.BucketSort";
         //String sortClassName = "com.sort.CountingSort";
         //String sortClassName = "com.sort.RadixSort";
         //String sortClassName = "com.sort.MergeSort";
         //String sortClassName = "com.sort.QuickSort";
-        //String sortClassName = "com.sort.ParallelMergeSort";
+       // String sortClassName = "com.sort.ParallelMergeSort";
        // String sortClassName = "com.sort.HeapSort";
+        String sortClassName = "com.sort.BubbleSort";
 
         for(int i=0;i<20;i++){
             int[] input = generateSample(10,100);
