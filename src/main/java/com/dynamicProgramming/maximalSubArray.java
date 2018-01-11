@@ -48,7 +48,7 @@ public class maximalSubArray {
     }
 
     //Handle the case where all of the array elements are negative numbers
-    //Handled in GeeksForGeeks solutin
+    //Handled in GeeksForGeeks solution
 
     //TODO : Fix This. Not working correctly
      static int printMaximumSum2(int arr[]){
@@ -56,7 +56,7 @@ public class maximalSubArray {
         int max_sum_so_far=0;
         int max_up_to_here=0;
         for(int i = 0;i<arr.length;i++) {
-            max_up_to_here = Math.max(0,max_up_to_here+arr[i]);
+            max_up_to_here = Math.max(arr[i],max_up_to_here+arr[i]);
             max_sum_so_far = Math.max(max_up_to_here,max_sum_so_far);
         }
 
