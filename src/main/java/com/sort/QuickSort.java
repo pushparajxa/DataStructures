@@ -1,6 +1,8 @@
 
 package com.sort;
 
+import static  com.general.ArrayUtils.*;
+
 public class QuickSort {
     public static void sortArray(int[] arr) {
         if(arr.length>0)
@@ -23,15 +25,15 @@ public class QuickSort {
             if(arr[i]<=pivot) {
                 i++;
             }else {
-                SortUtils.swap(i,j,arr);
+                swap(i,j,arr);
                 j--;
             }
         }
         if(arr[i]>pivot) {
-            SortUtils.swap(i,end,arr);
+            swap(i,end,arr);
             return i;
         }else {
-            SortUtils.swap(i+1,end,arr);
+            swap(i+1,end,arr);
             return i+1;
         }
     }

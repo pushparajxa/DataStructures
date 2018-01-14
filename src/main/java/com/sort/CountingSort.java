@@ -1,7 +1,7 @@
 
 package com.sort;
 
-import static com.sort.SortUtils.*;
+import static com.general.ArrayUtils.*;
 
 //Stable
 public class CountingSort {
