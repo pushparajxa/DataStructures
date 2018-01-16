@@ -2,6 +2,8 @@ package com.list;
 /*
 Reverse a singly linked list.
  */
+import static com.list.LinkedListUtils.*;
+
 public class ReverseLinkedList {
     public static void main(String[] args) {
 
@@ -13,10 +15,10 @@ public class ReverseLinkedList {
         node1.next = node2;
         node2.next = node3;
         node3.next = node4;
-        linkedList.printList(node1);
+        printList(node1);
         System.out.println("After Reversing");
         Node head = linkedList.reverse(node1);
-        linkedList.printList(head);
+        printList(head);
     }
 
     private Node reverse(Node head){
@@ -31,19 +33,4 @@ public class ReverseLinkedList {
         return previous;
     }
 
-    void printList(Node node){
-        while(node!=null){
-            System.out.println(node.value);
-            node = node.next;
-        }
-    }
-
-    static class Node{
-        int value;
-        Node next;
-
-        public Node(int i) {
-            this.value=i;
-        }
-    }
 }

@@ -52,6 +52,8 @@ public class TravellingSalesManProblem {
 
         HashMap<Integer,HashMap<Set<Integer>,Pair>> preValues;
         //For a give Set store a Pair which contains cost to reach 0(using the Integer key) using this set and the path
+        //The Size of this map is highest when you (n-1)/2 items from a list of n i..e 2^n.When we iterate each
+        // of that selection though n cities we get storage as O(n*(2^n)
         HashMap<Integer,HashMap<Set<Integer>,Pair>> preValuesNew = new HashMap<>();
 
         for(int l = 0;l<cities.length;l++) {
