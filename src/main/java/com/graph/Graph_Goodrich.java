@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 //Un-directed Graph with no loops.
+//http://www.cs.yale.edu/homes/aspnes/pinewiki/DepthFirstSearch.html
 public class Graph_Goodrich {
 
     HashMap<Integer,Vertex> vertexContainer = new HashMap<Integer, Vertex>();
