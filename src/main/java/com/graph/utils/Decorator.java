@@ -17,4 +17,8 @@ public  class Decorator {
     public void updateProperty(String property,Object newValue) {
         properties.put(property,newValue);
     }
+
+    public void clearProperties() {
+        properties.clear();
+    }
 }

@@ -5,13 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Hashtable;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.graph.utils.DirectedGraph.DirectedEdge.EDGE_MARK;
 import static com.graph.utils.DirectedGraphUtils.VISITED;
 
 public  class DirectedGraph {
@@ -38,14 +36,30 @@ public  class DirectedGraph {
                 if(matcher.find()) {
                     int vertex1 = Integer.parseInt(matcher.group(1));
                     int vertex2 = Integer.parseInt(matcher.group(2));
+
+                    Vertex startVertex=null,endVertex=null;
                     int value = Integer.parseInt(matcher.group(3));
-                    Vertex startVertex = new Vertex(vertex1);
-                    Vertex endVertex = new Vertex(vertex2);
+
+                    if(graph.vertexContainer.containsKey(vertex1)){
+                        startVertex = graph.vertexContainer.get(vertex1);
+
+                    }else{
+                        startVertex = new Vertex(vertex1);
+                        graph.addVertex(startVertex);
+                    }
+
+                    if(graph.vertexContainer.containsKey(vertex2)){
+                       endVertex = graph.vertexContainer.get(vertex2);
+
+                    }else{
+                        endVertex = new Vertex(vertex2);
+                        graph.addVertex(endVertex);
+                    }
+
                     DirectedEdge edge = new DirectedEdge(startVertex,endVertex,value);
                     startVertex.outEdges.add(edge);
                     endVertex.inEdges.add(edge);
-                    graph.addVertex(startVertex);
-                    graph.addVertex(endVertex);
+
                     graph.addEdge(edge);
                 }
                 count++;
@@ -78,6 +92,23 @@ public  class DirectedGraph {
         return edgeContianer;
     }
 
+    public void printGraph(){
+        System.out.println("V-->ST ,ET");
+        for(Vertex vertex: vertexContainer.values()){
+            System.out.println(vertex.number+"-->"+Vertex.getStartTime(vertex)+"  , "+Vertex.getEndTime(vertex));
+        }
+
+        System.out.println();
+
+        for(DirectedEdge edge: edgeContianer){
+            System.out.println(edge.begin.number+"-->"+edge.end.number+" :: "+edge.getProperty(EDGE_MARK));
+        }
+    }
+
+    public Vertex getVertex(int startVertex) {
+        return vertexContainer.get(startVertex);
+    }
+
 
     public static class Vertex extends Decorator {
         private int number;
@@ -85,6 +116,7 @@ public  class DirectedGraph {
         private List<DirectedEdge> outEdges = new ArrayList<>();
         private static String START_TIME="StartTime";
         private static String END_TIME ="EndTime";
+        private static String PARENT = "Parent";
 
         public static boolean isVisited(Vertex vertex) {
             if(vertex.isPropertyDefined(VISITED)){
@@ -121,6 +153,11 @@ public  class DirectedGraph {
             }
         }
 
+        @Override
+        public String toString(){
+            return number+"";
+        }
+
         public int getNumber() {
             return number;
         }
@@ -139,6 +176,14 @@ public  class DirectedGraph {
 
         public static int getEndTime(Vertex vertex) {
             return  (int)vertex.getProperty(END_TIME);
+        }
+
+        public static void setParent(Vertex vertex,Vertex parent) {
+            vertex.updateProperty(PARENT,parent);
+        }
+
+        public static boolean isParent(Vertex begin,Vertex end) {
+            return end.getProperty(PARENT).equals(begin);
         }
     }
 
