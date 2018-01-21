@@ -1,4 +1,4 @@
-package com.graph;
+package com.graph.DirectedGraph;
 
 import static com.graph.utils.DirectedGraph.*;
 import static com.graph.utils.DirectedGraph.DirectedEdge.*;

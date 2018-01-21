@@ -29,10 +29,11 @@ public  class DirectedGraph {
             graph.num_edges = Integer.parseInt(bufferedReader.readLine());
             graph.edgeContianer = new ArrayList<>(graph.num_edges);
             int count = 0;
+            Pattern pattern = Pattern.compile("\\s*(\\d+)\\s+(\\d+)\\s+(\\d+)");
+            Matcher matcher = pattern.matcher("");
             while(count<graph.num_edges) {
                 String line = bufferedReader.readLine();
-                Pattern pattern = Pattern.compile("\\s*(\\d+)\\s+(\\d+)\\s+(\\d+)");
-                Matcher matcher = pattern.matcher(line);
+                matcher.reset(line);
                 if(matcher.find()) {
                     int vertex1 = Integer.parseInt(matcher.group(1));
                     int vertex2 = Integer.parseInt(matcher.group(2));
@@ -40,16 +41,16 @@ public  class DirectedGraph {
                     Vertex startVertex=null,endVertex=null;
                     int value = Integer.parseInt(matcher.group(3));
 
-                    if(graph.vertexContainer.containsKey(vertex1)){
-                        startVertex = graph.vertexContainer.get(vertex1);
+                    if(graph.containsVertex(vertex1)){
+                        startVertex = graph.getVertex(vertex1);
 
                     }else{
                         startVertex = new Vertex(vertex1);
                         graph.addVertex(startVertex);
                     }
 
-                    if(graph.vertexContainer.containsKey(vertex2)){
-                       endVertex = graph.vertexContainer.get(vertex2);
+                    if(graph.containsVertex(vertex2)){
+                       endVertex = graph.getVertex(vertex2);
 
                     }else{
                         endVertex = new Vertex(vertex2);
@@ -70,6 +71,10 @@ public  class DirectedGraph {
             e.printStackTrace();
         }
         return graph;
+    }
+
+    public boolean containsVertex(int vertex1) {
+            return vertexContainer.containsKey(vertex1);
     }
 
     private void addEdge(DirectedEdge edge) {
