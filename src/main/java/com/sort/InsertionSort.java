@@ -1,5 +1,6 @@
 package com.sort;
 
+//Stable
 public class InsertionSort {
 
     private static void sortArray(int[] arr) {

@@ -7,6 +7,7 @@ import java.util.Queue;
 
 import static com.general.ArrayUtils.findMaximum;
 
+//Stable
 public class RadixSort {
 
     //Using queues

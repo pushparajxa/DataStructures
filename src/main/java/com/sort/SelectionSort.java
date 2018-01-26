@@ -3,6 +3,7 @@ package com.sort;
 
 import java.util.Scanner;
 
+//Not Stable
 public class SelectionSort {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);

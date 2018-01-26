@@ -1,9 +1,16 @@
 
 package com.sort;
 
-import static  com.general.ArrayUtils.*;
+import java.util.Arrays;
 
+import static  com.general.ArrayUtils.*;
+//In-Place quicksort with O(1) is not stable
 public class QuickSort {
+    public static void main(String[] args) {
+        int[] ints = {1,2,7,7,7,3};
+        sortArray(ints);
+        System.out.println(Arrays.toString(ints));
+    }
     public static void sortArray(int[] arr) {
         if(arr.length>0)
             quickSort(arr,0,arr.length-1);

@@ -30,13 +30,19 @@ public class BinarySearch {
     }
 
 
-    static void binarySearch_while(int myStart, int myEnd, int find, int[] arr) {
+    static int binarySearch_iterative(int myStart, int myEnd, int find, int[] arr) {
         while (myStart != myEnd) {
             int mid = (myEnd - myStart) / 2;
-            //if(arr[mid+myStart]>)
-
-            //}
+            if(arr[mid]>find){
+                myStart=myStart+mid+1;
+            }else{
+                myEnd=myStart+mid;
+            }
         }
+        if(find == arr[myStart])
+            return myStart;
+        else
+            return -1;
     }
 
     public static void main(String args[]) {

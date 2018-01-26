@@ -2,7 +2,7 @@
 package com.sort;
 
 import java.util.Arrays;
-
+//Stable
 public class MergeSort {
 
     public static void sortArray(int[] arr) {
@@ -42,7 +42,7 @@ public class MergeSort {
         if(i<=sEnd){
             System.arraycopy(arr,i,b,count,sEnd-i+1);
         }
-        if(j<=dEnd && j<arr.length){ //j< arr.legth because to handle the case where dStart == arr.length
+        if(j<=dEnd && j<arr.length){ //j< arr.length because to handle the case where dStart == arr.length
             System.arraycopy(arr,j,b,count,dEnd-j+1);
         }
     }

@@ -42,7 +42,7 @@ public class maximalSubArray {
           }
         }
         int[] subArray = new int[end-start+1];
-        System.arraycopy(arr,start,subArray,0,end-start+1);
+        System.arraycopy(arr,start,subArray,0,arr.length);
         return subArray;
 
     }

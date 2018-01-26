@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.ListIterator;
-
+//Stable
 public class BucketSort {
     // array : Assuming all the input elements in the array are greater than or equal to zero.
     private static void sortArray(int[] arr) {

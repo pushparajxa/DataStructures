@@ -1,6 +1,6 @@
 package com.sort;
 
-
+//Stable
 public class BubbleSort {
     private static void sortArray(int[] arr) {
         for(int i = 0;i<arr.length-1;i++) {
