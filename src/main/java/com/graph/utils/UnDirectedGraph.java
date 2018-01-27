@@ -5,15 +5,15 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.graph.utils.CommonGraphUtils.*;
+
 public class UnDirectedGraph {
     private Hashtable<Integer,Vertex> vertexContainer = new Hashtable<>();
-    private List<Edge> edgeContainer;
+    private List<Edge> edgeContainer= new ArrayList<>();
     private int num_vertices;
     private int num_edges;
 
@@ -40,6 +40,7 @@ public class UnDirectedGraph {
 
                     }else {
                         v1 = new Vertex(vertex1);
+                        graph.addVertex(v1);
                     }
 
                     if(graph.containsVertex(vertex2)) {
@@ -47,6 +48,7 @@ public class UnDirectedGraph {
 
                     }else {
                         v2 = new Vertex(vertex2);
+                        graph.addVertex(v2);
                     }
 
                     Edge edge = new Edge(v1,v2,value);
@@ -64,6 +66,10 @@ public class UnDirectedGraph {
         return graph;
     }
 
+    private void addVertex(Vertex v2) {
+        vertexContainer.put(v2.number,v2);
+    }
+
     public Vertex getVertex(int vertex1) {
         return vertexContainer.get(vertex1);
     }
@@ -76,7 +82,11 @@ public class UnDirectedGraph {
         return vertexContainer.containsKey(vertex1);
     }
 
-    static class Vertex extends Decorator {
+    public Collection<Vertex> getVertices() {
+        return vertexContainer.values();
+    }
+
+    public static class Vertex extends Decorator {
         private int number;
         private List<Edge> edges = new LinkedList<>();
 
@@ -96,24 +106,86 @@ public class UnDirectedGraph {
         public void addEdge(Edge edge) {
             edges.add(edge);
         }
+
+        public static boolean isVisited(Vertex vertex) {
+            if(vertex.isPropertyDefined(VISITED_FLAG))
+                return (boolean)vertex.getProperty(VISITED_FLAG);
+            else
+                return false;
+        }
+
+        public static void setVisited(Vertex vertex,boolean b) {
+            vertex.updateProperty(VISITED_FLAG,b);
+        }
+
+        public List<Edge> getEdges() {
+            return edges;
+        }
+
+        public static void setLowTime(Vertex vertex,int clock) {
+            vertex.updateProperty( LOW_TIME,clock);
+        }
+
+        public static void setDiscoveryTime(Vertex vertex,int clock) {
+            vertex.updateProperty(DISC_TIME,clock);
+        }
+
+        public static int getDiscoveryTime(Vertex otherEnd) {
+           return (int) otherEnd.getProperty(DISC_TIME);
+        }
+
+        public static int getLowTime(Vertex otherEnd) {
+            return (int) otherEnd.getProperty(LOW_TIME);
+        }
+
+        public static void setArticularionPointFlag(Vertex vertex,boolean b) {
+            vertex.updateProperty(ARTICULATION_POINT_FLAG,b);
+        }
+
+        public static boolean getArticularionPointFlag(Vertex vertex) {
+            if(vertex.isPropertyDefined(ARTICULATION_POINT_FLAG))
+                 return  (boolean)vertex.getProperty(ARTICULATION_POINT_FLAG);
+            else
+                return false;
+        }
+
+        public int getNumber(){
+            return number;
+        }
     }
 
-    static class Edge extends Decorator {
+    public static class Edge extends Decorator {
         private int value;
         private Vertex end1, end2;
 
-        Edge(Vertex end1,Vertex end2,int value) {
+        public Edge(Vertex end1,Vertex end2,int value) {
             this.value = value;
             this.end1 = end1;
             this.end2 = end2;
         }
 
-        Vertex getOtherEnd(Vertex end1) {
-            if(end1.equals(end1)) {
+        public Vertex getOtherEnd(Vertex end1) {
+            if(this.end1.equals(end1)) {
                 return end2;
             }else {
-                return end2;
+                return this.end1;
             }
+        }
+
+        public static boolean isVisited(Edge edge) {
+            if(edge.isPropertyDefined(VISITED_FLAG))
+                return (boolean)edge.getProperty(VISITED_FLAG);
+            else
+                return false;
+        }
+
+        public static void setMark(Edge edge,UnDirectedGraphUtils.EDGE_TYPE edge_type) {
+            edge.updateProperty(EDGE_TYPE,edge_type);
+
+        }
+
+        public static void setVisited(Edge edge,boolean b) {
+            edge.updateProperty(VISITED_FLAG,true);
         }
     }
 }

@@ -16,8 +16,8 @@ public class ProducerConusmer {
     }
 
     static class Box {
+        private static int CAPACITY = 2;
         private int size;
-        private static int CAPACITY =2;
         private ArrayList<java.lang.Integer> box;
 
         Box() {
@@ -25,35 +25,35 @@ public class ProducerConusmer {
         }
 
         public synchronized void add(int n) {
-            if(size < CAPACITY) {
-                box.add(n);
-                size++;
-                notifyAll();
-                System.out.println("Producer :: "+n);
-            }else{
+
+            while(size>=CAPACITY) {
                 try {
                     wait();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+            box.add(n);
+            size++;
+            System.out.println("Producer :: "+n);
+            notifyAll();
+
         }
 
         public synchronized void remove() {
 
-            if(size > 0) {
-                int remove= box.remove(0);
-                size--;
-                notifyAll();
-                System.out.println("Consumer :: "+remove);
-            }
-            else{
+            while(size<=0) {
                 try {
                     wait();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+
+            int remove = box.remove(0);
+            size--;
+            System.out.println("Consumer :: "+remove);
+            notifyAll();
         }
 
         public int getSize() {
@@ -94,7 +94,7 @@ public class ProducerConusmer {
         @Override
         public void run() {
             while(true) {
-                 box.remove();
+                box.remove();
             }
         }
     }

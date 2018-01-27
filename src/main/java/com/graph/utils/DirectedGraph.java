@@ -9,8 +9,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.graph.utils.DirectedGraph.DirectedEdge.EDGE_MARK;
-import static com.graph.utils.DirectedGraphUtils.VISITED;
+import static com.graph.utils.CommonGraphUtils.*;
 
 public  class DirectedGraph {
     private Hashtable<Integer,Vertex> vertexContainer = new Hashtable<>();
@@ -106,7 +105,7 @@ public  class DirectedGraph {
         System.out.println();
 
         for(DirectedEdge edge: edgeContianer){
-            System.out.println(edge.begin.number+"-->"+edge.end.number+" :: "+edge.getProperty(EDGE_MARK));
+            System.out.println(edge.begin.number+"-->"+edge.end.number+" :: "+edge.getProperty(EDGE_TYPE));
         }
     }
 
@@ -119,13 +118,11 @@ public  class DirectedGraph {
         private int number;
         private List<DirectedEdge> inEdges = new ArrayList<>();
         private List<DirectedEdge> outEdges = new ArrayList<>();
-        private static String START_TIME="StartTime";
-        private static String END_TIME ="EndTime";
-        private static String PARENT = "Parent";
+
 
         public static boolean isVisited(Vertex vertex) {
-            if(vertex.isPropertyDefined(VISITED)){
-                return (Boolean)vertex.getProperty(VISITED);
+            if(vertex.isPropertyDefined(VISITED_FLAG)){
+                return (Boolean)vertex.getProperty(VISITED_FLAG);
             }else{
                 return false;
             }
@@ -133,7 +130,7 @@ public  class DirectedGraph {
 
 
         public static void setVisited(Vertex vertex,boolean b) {
-            vertex.updateProperty(VISITED,b);
+            vertex.updateProperty(VISITED_FLAG,b);
         }
 
         public static void setStartTime(Vertex vertex,int startTime) {
@@ -195,23 +192,20 @@ public  class DirectedGraph {
     public static class DirectedEdge extends Decorator {
         private Vertex begin, end;
         private int value;
-        public static final String EDGE_MARK = "EdgeMark";
 
         public static void markEdge(DirectedEdge edge,EDGE_MARK treeEdge) {
-            edge.updateProperty(EDGE_MARK,treeEdge);
+            edge.updateProperty(EDGE_TYPE,treeEdge);
         }
 
         public static enum EDGE_MARK {TREE_EDGE,BACK_EDGE,CROSS_EDGE,FORWARD_EDGE }
 
         public static boolean isVisited(DirectedEdge edge){
-            if(edge.isPropertyDefined(VISITED)){
-                return (Boolean)edge.getProperty(VISITED);
+            if(edge.isPropertyDefined(VISITED_FLAG)){
+                return (Boolean)edge.getProperty(VISITED_FLAG);
             }else{
                 return false;
             }
         }
-
-
 
         DirectedEdge(Vertex begin,Vertex end) {
             this.begin = begin;
