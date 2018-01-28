@@ -1,6 +1,7 @@
 package com.graph.utils;
 
 public class CommonGraphUtils {
+    public static final String BRIDGE_FLAG = "BRIDGE";
     public  static final String VISITED_FLAG = "VISITED_FLAG";
     public  static final String EDGE_TYPE = "EDGE_TYPE";
     public static String START_TIME="StartTime";

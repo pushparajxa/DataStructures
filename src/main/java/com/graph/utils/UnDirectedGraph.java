@@ -86,6 +86,10 @@ public class UnDirectedGraph {
         return vertexContainer.values();
     }
 
+    public List<Edge> getEdges() {
+        return edgeContainer;
+    }
+
     public static class Vertex extends Decorator {
         private int number;
         private List<Edge> edges = new LinkedList<>();
@@ -172,6 +176,11 @@ public class UnDirectedGraph {
             }
         }
 
+        @Override
+        public String toString(){
+            return end1.number+" -> "+end2.number;
+        }
+
         public static boolean isVisited(Edge edge) {
             if(edge.isPropertyDefined(VISITED_FLAG))
                 return (boolean)edge.getProperty(VISITED_FLAG);
@@ -186,6 +195,18 @@ public class UnDirectedGraph {
 
         public static void setVisited(Edge edge,boolean b) {
             edge.updateProperty(VISITED_FLAG,true);
+        }
+
+        public static void setBridgeFlag(Edge edge,boolean b) {
+            edge.updateProperty(BRIDGE_FLAG,b);
+        }
+
+        public static boolean getBridgeFlag(Edge edge){
+            if(edge.isPropertyDefined(BRIDGE_FLAG)){
+                return (boolean)edge.getProperty(BRIDGE_FLAG);
+            }else{
+                return false;
+            }
         }
     }
 }
