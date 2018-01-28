@@ -10,4 +10,5 @@ public class CommonGraphUtils {
     public static String LOW_TIME = "LowTime";
     public static String DISC_TIME = "DiscoveryTime";
     public static String ARTICULATION_POINT_FLAG = "ArticulationPointFlag";
+    public static String ON_STACK_FLAG = "OnStack";
 }

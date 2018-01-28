@@ -187,6 +187,34 @@ public  class DirectedGraph {
         public static boolean isParent(Vertex begin,Vertex end) {
             return end.getProperty(PARENT).equals(begin);
         }
+
+        public static void setDiscoveryTime(Vertex vertex,int discoveryTime) {
+            vertex.updateProperty(DISC_TIME,discoveryTime);
+        }
+
+        public static int getDiscoveryTime(Vertex otherEnd) {
+            return (int)otherEnd.getProperty(DISC_TIME);
+         }
+
+        public static int getLowTime(Vertex otherEnd) {
+            return (int)otherEnd.getProperty(LOW_TIME);
+        }
+
+        public static void setLowTime(Vertex vertex,int lowTime) {
+            vertex.updateProperty(LOW_TIME,lowTime);
+        }
+
+        public static void setOnStackFlag(Vertex popped,boolean b) {
+            popped.updateProperty(ON_STACK_FLAG,b);
+        }
+
+        public static boolean getOnStackFlag(Vertex vertex) {
+            if(vertex.isPropertyDefined(ON_STACK_FLAG)){
+                return (boolean)vertex.getProperty(ON_STACK_FLAG);
+            }else{
+                return false;
+            }
+        }
     }
 
     public static class DirectedEdge extends Decorator {
