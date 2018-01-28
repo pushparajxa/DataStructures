@@ -29,9 +29,10 @@ Ans :: 1
 1 6 0
 Ans :: 1
  */
+//Running time : O(V+E)
 public class ArticulationPoints {
     public static void main(String[] args) {
-            UnDirectedGraph graph = UnDirectedGraphUtils.readGraph("/tmp/unDirectedGraph");
+            UnDirectedGraph graph = UnDirectedGraphUtils.readGraph("/tmp/unDirectedGraph1");
             findArticulationPOints(graph);
     }
 
@@ -58,10 +59,6 @@ public class ArticulationPoints {
         clock++;
         int childrenCount=0;
         for(Edge edge: vertex.getEdges()){
-            //ex: 0->1 is a undirected edge. DFS at 0 you will visit that edge. At DFS at 1 you will do that again
-            //if you don't to this if check or mark that edge as visited.
-            if(!Edge.isVisited(edge)){
-                Edge.setVisited(edge,true);
                 Vertex otherEnd = edge.getOtherEnd(vertex);
                 if(Vertex.isVisited(otherEnd)){
                     int discTime = Vertex.getDiscoveryTime(otherEnd);
@@ -85,7 +82,6 @@ public class ArticulationPoints {
                     }
                 }
             }
-        }
         Vertex.setLowTime(vertex,lowTime);
         return clock;
     }
