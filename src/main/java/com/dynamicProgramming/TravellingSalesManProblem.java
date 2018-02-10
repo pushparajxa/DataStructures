@@ -60,7 +60,6 @@ public class TravellingSalesManProblem {
             HashMap<Set<Integer>,Pair> setIntegerHashMap = new HashMap<>();
             setIntegerHashMap.put(toSet(new int[]{}),new Pair(tourCost[cities[l]][0],0));
             preValuesNew.put(cities[l],setIntegerHashMap);
-
         }
 
         for(int i = 1;i<=cities.length-1;i++) {
