@@ -13,7 +13,7 @@ repositories {
 
 dependencies {
     compile 'org.scala-lang:scala-library:2.12.3', 'org.scalatest:scalatest_2.12:3.0.1',
-            'org.testng:testng:6.11','org.apache.hadoop:hadoop-common:2.7.3'
+            'org.testng:testng:6.11','org.apache.hadoop:hadoop-common:2.7.3','joda-time:joda-time:2.9.9'
            // , 'org.apache.commons:commons-lang3:3.7'
             // 'com.amazonaws:aws-java-sdk:1.7.4','org.apache.hadoop:hadoop-aws:2.7.3'
     testCompile "org.scala-lang:scala-library:2.12.3",'org.testng:testng:6.11'
