@@ -1,6 +1,7 @@
 
 package com.lang.Date;
 
+import java.sql.Time;
 import java.util.TimeZone;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -12,7 +13,7 @@ public class DateTimeTest {
     long l1 = 1527235200000l;
     long l2 = 1527181465793l;
 
-    DateTime d1 = new DateTime(l1,DateTimeZone.UTC);
+    /*DateTime d1 = new DateTime(l1,DateTimeZone.UTC);
     System.out.println(d1);
 
     DateTime d2 = new DateTime(l2,DateTimeZone.UTC);
@@ -60,12 +61,12 @@ public class DateTimeTest {
 
     DateTime arrivalTime = new DateTime(1527243900000l,DateTimeZone.forTimeZone(TimeZone.getTimeZone("Asia/Kolkata")));
 
-    System.out.println(arrivalTime);
+    System.out.println(arrivalTime);*/
     //1527072875893
     //32460000
     //1527251400000
 
-    DateTime dt = new DateTime(1527072875893l,DateTimeZone.forTimeZone(TimeZone.getTimeZone("Asia/Kolkata")));
+   /* DateTime dt = new DateTime(1527072875893l,DateTimeZone.forTimeZone(TimeZone.getTimeZone("Asia/Kolkata")));
     System.out.println(dt);
 
     System.out.println(dt.withMillisOfDay(32460000));
@@ -93,7 +94,24 @@ public class DateTimeTest {
     System.out.println(new DateTime(lt.getMillisOfDay()));
     System.out.println(dt5.withMillisOfDay(lt.getMillisOfDay()));
 
-    System.out.println(new DateTime(1527433260000l));
+    System.out.println(new DateTime(1527433260000l));*/
+/*
+   DateTime dt = new DateTime(1530791110737l,DateTimeZone.forTimeZone(TimeZone.getTimeZone
+       ("Asia/Kolkata")));
+
+    System.out.println(dt);
+
+    DateTime dt2 = new DateTime(1530729000000l,DateTimeZone.forTimeZone(TimeZone.getTimeZone
+        ("Asia/Kolkata")));
+
+    System.out.println("NextDay="+new DateTime(1530729000000l+ 86400000,DateTimeZone.forTimeZone
+        (TimeZone.getTimeZone
+        ("Asia/Kolkata"))));
+
+    System.out.println(dt2);*/
+
+    System.out.println(new DateTime(1530999000000l,DateTimeZone.forTimeZone
+        (TimeZone.getTimeZone("Asia/Kolkata"))));
   }
 }
 //25/05/2018 12:09:13

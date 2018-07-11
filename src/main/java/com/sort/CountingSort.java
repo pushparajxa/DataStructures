@@ -4,6 +4,11 @@ package com.sort;
 import static com.general.ArrayUtils.*;
 
 //Stable
+//1,4,1,2,8,5,2
+//1,2,3,4,5,6,7,8
+//2,2,0,1,1,0,0,1
+//2,4,4,5,6,6,6,7
+//
 public class CountingSort {
 
     private static void sortArray(int[] input) {

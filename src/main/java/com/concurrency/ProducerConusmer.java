@@ -1,7 +1,7 @@
 package com.concurrency;
 
 import java.util.ArrayList;
-
+//ProducerConusmer can be implemented by BlockingQueue
 public class ProducerConusmer {
 
     public static void main(String[] args) {
