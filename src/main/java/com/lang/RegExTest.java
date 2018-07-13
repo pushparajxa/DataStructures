@@ -23,4 +23,9 @@ public class RegExTest {
     Boolean b2 = null;
     System.out.println(b1.equals(b2));
   }
+
+  public void ptre(Pattern pattern, String replacement, String replaceThis){
+    pattern.matcher(replaceThis).replaceAll(replacement);
+  }
+
 }
