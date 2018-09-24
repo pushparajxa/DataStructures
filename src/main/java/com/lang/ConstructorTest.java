@@ -30,10 +30,11 @@ class child extends ConstructorTest{
 
 
   public static void main(String[] args) {
-    child c  =new child();
+   /* child c  =new child();
     c.test();
     c.mth2();
-    c.mth();
+    c.mth();*/
+   test1 te = test1.getTest1();
   }
 
 
@@ -41,5 +42,17 @@ class child extends ConstructorTest{
 
 interface gh{
     void th();
+}
+
+
+class test1 {
+  private test1(){
+    System.out.println("test1 class constructor is called");
+  }
+
+  public static test1 getTest1(){
+    test1 te = new test1();
+    return te;
+  }
 }
 

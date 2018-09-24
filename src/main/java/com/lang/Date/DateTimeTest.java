@@ -1,7 +1,10 @@
 
 package com.lang.Date;
 
+import com.redisson.TimeUtils;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.TimeZone;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -110,8 +113,105 @@ public class DateTimeTest {
 
     System.out.println(dt2);*/
 
-    System.out.println(new DateTime(1530999000000l,DateTimeZone.forTimeZone
-        (TimeZone.getTimeZone("Asia/Kolkata"))));
+    DateTime present = new DateTime(System.currentTimeMillis(),DateTimeZone.forTimeZone
+        (TimeZone.getTimeZone("Asia/Kolkata")));
+
+    DateTime future =new DateTime(1534424977769l,DateTimeZone.forTimeZone
+        (TimeZone.getTimeZone("Asia/Kolkata")));
+
+   // System.out.println(future);
+
+
+    DateTime future1 =new DateTime(1534424978769l,DateTimeZone.forTimeZone
+        (TimeZone.getTimeZone("Asia/Kolkata")));
+
+   // System.out.println(future1);
+
+   /* long date2 = new DateTime(DateTime.now(DateTimeZone.forTimeZone
+        (TimeZone.getTimeZone("Asia/Kolkata"))).minusHours(18).getMillis(),DateTimeZone.UTC).getMillis();
+    System.out.println(date2);
+
+    long date3 = DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone("Asia/Kolkata")))
+        .minusHours(18).getMillis();
+
+    System.out.println(date2);
+
+    System.out.println(new DateTime(1533762814517l));
+    System.out.println(new DateTime(1533792600000l));
+    System.out.println(new DateTime(1535135400000l));
+
+    LocalTime localTime =
+        new LocalTime(DateTimeZone.forTimeZone(TimeZone.getTimeZone("Asia/Kolkata")));
+    LocalTime localTime1 = localTime.withMillisOfDay(2025047);
+
+    System.out.println(localTime1);
+   *//* System.out.println(localTime1.getMillisOfDay());*//*
+
+    System.out.println(14%-9);*/
+
+    System.out.println("DRS_DISPATHC_TIMEOUT="+new DateTime(1535826600000l,DateTimeZone.forTimeZone
+        (TimeZone.getTimeZone
+        ("Asia/Kolkata")
+    )));
+
+    //1535151287805
+    //1535567400000
+
+
+    System.out.println("OFD_Time="+new DateTime(1535793000000l,DateTimeZone.forTimeZone(TimeZone
+        .getTimeZone
+        ("Asia/Kolkata")
+    )));
+
+    System.out.println("Promised_Delivery_Time="+new DateTime(1535977800000l,DateTimeZone
+        .forTimeZone
+        (TimeZone
+        .getTimeZone
+        ("Asia/Kolkata")
+    )));
+
+    System.out.println("Delivery Time="+new DateTime(1535824049851l,DateTimeZone
+        .forTimeZone
+        (TimeZone
+        .getTimeZone
+        ("Asia/Kolkata")
+    )));
+
+    LocalTime localTime = new LocalTime(50460000);
+    LocalTime localTime1 = new LocalTime(32460000,TimeUtils.IST);
+
+    System.out.println(localTime.getMillisOfDay()-5*60*60*1000-30*60*1000);
+    System.out.println(new DateTime(1536911679291l,TimeUtils.IST));
+
+    System.out.println("PRD="+new DateTime(1537273800000l,TimeUtils.IST));
+    System.out.println("Arrival="+new DateTime(1536983022653l,TimeUtils.IST));
+    System.out.println("OFD="+new DateTime(1537263600000l,TimeUtils.IST));
+   // 1537468200000
+    System.out.println("Scheduled="+new DateTime(1537381800000l,TimeUtils.IST));
+
+
+   /* if(DateTimeZone.getDefault().equals(DateTimeZone.forTimeZone(TimeZone.getTimeZone
+        ("Asia/Kolkata")))){
+      System.out.println("This is IST");
+    }else{
+      System.out.println("This is UTC");
+    }*/
+   // System.out.println(localTime1.getMillisOfDay()-5*60*60*1000-30*60*1000);
+
+
+  /*  System.out.println(DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone
+        ("Asia/Kolkata"))).getMillis());*/
+
+   // System.out.println(present);
+//System.out.println(future);
+  }
+  static class a{
+
+  }
+
+  static class b extends a{
+
   }
 }
+
 //25/05/2018 12:09:13
