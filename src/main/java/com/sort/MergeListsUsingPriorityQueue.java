@@ -1,6 +1,6 @@
 package com.sort;
 
-import com.google.common.collect.Iterables;
+//mport com.google.common.collect.Iterables;
 
 import java.util.*;
 
@@ -32,7 +32,7 @@ public class MergeListsUsingPriorityQueue {
                 priorityQueue.add(list);
         }
 
-        Iterables.toString(mergedList);
+       // Iterables.toString(mergedList);
         System.out.println(mergedList.toString());
     }
 

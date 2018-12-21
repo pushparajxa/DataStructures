@@ -40,7 +40,7 @@ public class RedissonTest {
             ExecutorOptions.defaults().taskRetryInterval(0, TimeUnit.MINUTES));
 
     int delay = 60;
-    log.info("Scheduling task at Time={}, with delay ={}", DateTime.now(TimeUtils.IST), delay);
+    //log.info("Scheduling task at Time={}, with delay ={}", DateTime.now(TimeUtils.IST), delay);
     RScheduledFuture<String> schedule =
         executorService.schedule(new MyCallable(), delay, TimeUnit.SECONDS);
 

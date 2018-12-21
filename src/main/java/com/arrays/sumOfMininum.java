@@ -3,8 +3,8 @@ package com.arrays;
 
 import java.util.Random;
 import java.util.Stack;
-import org.testng.Assert;
-import org.testng.annotations.Test;
+/*import org.testng.Assert;
+import org.testng.annotations.Test;*/
 
 // Find the sum of minimum of all sub arrays
 // http://codeforces.com/blog/entry/47547
@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
 // http://codeforces.com/blog/entry/47547
 public class sumOfMininum {
   public static void main(String[] args) {
-      int [] input = new int []{0,0};
+      int [] input = new int []{4,5,2};
       sumOfMininum sumOfMininum = new sumOfMininum();
     System.out.println("Actual="+sumOfMininum.OrderOfNCube(input));
     System.out.println("Received="+sumOfMininum.OrderOfN(input));
@@ -70,18 +70,42 @@ public class sumOfMininum {
     return sum;
   }
 
+  int OrderOfNSquer(int arr[]){
+    int sum=0;
+    for(int i=0;i<arr.length;i++){
+      int min=arr[i];
+      for(int j=i;j<arr.length;j++){
+        min= Math.min(min,arr[j]);
+        sum = sum + min;
+      }
+    }
+    return sum;
+  }
+  /*
 
-  @Test
+  5,5,3,1,1
+
+Int sum = 0;
+Int min = Integer.MAX_VALUE;
+for(int i=0;i<n;i++){
+    Min = Math.min(min,arr[j]);
+    Sum +=(i+1)*min;
+}
+
+   */
+
+/*  @Test
   public void testMinSum(){
     Random random = new Random();
     int[] arraySizes = random.ints(10, 0, 30).toArray();
     for(int i=0;i<arraySizes.length;i++){
       int input[] = random.ints(arraySizes[i],0,Integer.MAX_VALUE).toArray();
-      int expectedResult = OrderOfNCube(input);
-      int actualResult = OrderOfN(input);
+     // int expectedResult = OrderOfNCube(input);
+      int expectedResult = OrderOfNSquer(input);
+      int actualResult = OrderOfNCube(input);
       Assert.assertEquals(expectedResult,actualResult);
     }
 
-  }
+  }*/
 
 }

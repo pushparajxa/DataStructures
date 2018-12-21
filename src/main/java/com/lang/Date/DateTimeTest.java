@@ -6,6 +6,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.TimeZone;
+import org.joda.time.Chronology;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalTime;
@@ -189,6 +190,11 @@ public class DateTimeTest {
    // 1537468200000
     System.out.println("Scheduled="+new DateTime(1537381800000l,TimeUtils.IST));
 
+
+    DateTimeZone.setDefault(DateTimeZone.UTC);
+    LocalTime time = new LocalTime(2*60*60*1000);
+    System.out.println(time);
+    System.out.println(time.getMillisOfDay());
 
    /* if(DateTimeZone.getDefault().equals(DateTimeZone.forTimeZone(TimeZone.getTimeZone
         ("Asia/Kolkata")))){

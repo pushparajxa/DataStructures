@@ -8,7 +8,7 @@ class MyCallable implements Callable {
 
   @Override
   public Object call() throws Exception {
-    log.info("From Intellij Redisson client");
+   // log.info("From Intellij Redisson client");
     return "hello";
   }
 }
