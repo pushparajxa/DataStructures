@@ -1,8 +1,11 @@
 
 package com.arrays;
 
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Stack;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 /*import org.testng.Assert;
 import org.testng.annotations.Test;*/
 
@@ -12,7 +15,7 @@ import org.testng.annotations.Test;*/
 // http://codeforces.com/blog/entry/47547
 public class sumOfMininum {
   public static void main(String[] args) {
-      int [] input = new int []{4,5,2};
+      int [] input = new int []{20, 68, 89, 38, 55, 15, 37, 77};//1401
       sumOfMininum sumOfMininum = new sumOfMininum();
     System.out.println("Actual="+sumOfMininum.OrderOfNCube(input));
     System.out.println("Received="+sumOfMininum.OrderOfN(input));
@@ -20,7 +23,7 @@ public class sumOfMininum {
 
   int  OrderOfN(int [] input){
     int len = input.length;
-    int sum=0;
+
     Stack<Integer> stck = new Stack<>();
     int nextRightMin[] = new int[input.length];
     nextRightMin[len-1] = len;
@@ -32,8 +35,9 @@ public class sumOfMininum {
       }
       if(stck.isEmpty()){
         nextRightMin[i] = len;
+        stck.push(i);
       }else{
-        nextRightMin[i] = stck.pop();
+        nextRightMin[i] = stck.peek();
         stck.push(i);
       }
     }
@@ -81,31 +85,21 @@ public class sumOfMininum {
     }
     return sum;
   }
-  /*
 
-  5,5,3,1,1
 
-Int sum = 0;
-Int min = Integer.MAX_VALUE;
-for(int i=0;i<n;i++){
-    Min = Math.min(min,arr[j]);
-    Sum +=(i+1)*min;
-}
-
-   */
-
-/*  @Test
+  @Test
   public void testMinSum(){
     Random random = new Random();
-    int[] arraySizes = random.ints(10, 0, 30).toArray();
+    int[] arraySizes = random.ints(10, 0, 10).toArray();
     for(int i=0;i<arraySizes.length;i++){
-      int input[] = random.ints(arraySizes[i],0,Integer.MAX_VALUE).toArray();
-     // int expectedResult = OrderOfNCube(input);
-      int expectedResult = OrderOfNSquer(input);
-      int actualResult = OrderOfNCube(input);
+      int input[] = random.ints(arraySizes[i],0,100).toArray();
+      System.out.println("Input::"+ Arrays.toString(input));
+      int expectedResult = OrderOfNCube(input);
+      int actualResult = OrderOfN(input);
+      System.out.println("Expected="+expectedResult+".. Actual Result="+actualResult);
       Assert.assertEquals(expectedResult,actualResult);
     }
 
-  }*/
+  }
 
 }

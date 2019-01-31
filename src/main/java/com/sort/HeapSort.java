@@ -20,6 +20,8 @@ public class HeapSort {
 
     /*
     returns array sorted in ascending order by building a max-heap.
+    //The link below explains why the binary-heap needs to be a complete binary tree.
+    https://courses.cs.washington.edu/courses/cse373/06sp/handouts/lecture10.pdf
      */
     private static void sortArray(int[] arr) {
         if(arr.length==0)
