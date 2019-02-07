@@ -24,6 +24,7 @@ public class sumOfMininum {
   int  OrderOfN(int [] input){
     int len = input.length;
 
+    //Find the next smallest element to the right
     Stack<Integer> stck = new Stack<>();
     int nextRightMin[] = new int[input.length];
     nextRightMin[len-1] = len;
