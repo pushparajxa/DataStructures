@@ -22,17 +22,14 @@ public class SynchronousQueueExample {
       }
     }.start();
 
-    new Thread(){
-      @Override
-      public void run(){
-          try {
-            System.out.println("Waiting for take");
-            System.out.println("Taking"+synchronousQueue.take());
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    new Thread(() -> {
+        try {
+          System.out.println("Waiting for take");
+          System.out.println("Taking"+synchronousQueue.take());
+        } catch (InterruptedException e) {
+          e.printStackTrace();
       }
-    }.start();
+    }).start();
 
   }
 }
