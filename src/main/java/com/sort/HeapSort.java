@@ -61,6 +61,7 @@ public class HeapSort {
         }
     }
 
+    //Bottom-up heap contruction takes O(n) time ..read Section 2.4.4 Goodrich (Algorithm Design)
     static void heapify_bottomup(int parentIndex, int[] arr) {
         if (parentIndex > arr.length - 1)
             return;

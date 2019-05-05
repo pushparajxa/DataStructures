@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.springframework.util.StringUtils;
 
 import static com.graph.utils.CommonGraphUtils.*;
 
@@ -28,7 +29,7 @@ public  class DirectedGraph {
             graph.num_edges = Integer.parseInt(bufferedReader.readLine());
             graph.edgeContianer = new ArrayList<>(graph.num_edges);
             int count = 0;
-            Pattern pattern = Pattern.compile("\\s*(\\d+)\\s+(\\d+)\\s+(\\d+)");
+            Pattern pattern = Pattern.compile("\\s*(\\d+)\\s+(\\d+)\\s*(\\d*)");
             Matcher matcher = pattern.matcher("");
             while(count<graph.num_edges) {
                 String line = bufferedReader.readLine();
@@ -38,7 +39,12 @@ public  class DirectedGraph {
                     int vertex2 = Integer.parseInt(matcher.group(2));
 
                     Vertex startVertex=null,endVertex=null;
-                    int value = Integer.parseInt(matcher.group(3));
+                    int value;
+                    if(StringUtils.isEmpty(matcher.group(3))){
+                        value =0;
+                    }else{
+                        value = Integer.parseInt(matcher.group(3));
+                    }
 
                     if(graph.containsVertex(vertex1)){
                         startVertex = graph.getVertex(vertex1);
@@ -172,6 +178,9 @@ public  class DirectedGraph {
             return outEdges;
         }
 
+        public List<DirectedEdge> getInEdges(){
+            return inEdges;
+        }
         public static int getStartTime(Vertex vertex) {
            return  (int)vertex.getProperty(START_TIME);
         }
