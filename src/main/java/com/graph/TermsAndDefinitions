@@ -1,0 +1,5 @@
+Forest: A graph with out cycles (Forest will have one or many trees)
+Tree: Connected components of a forest
+path: Trail without cycles
+Spanning Subgraph: A subgraph which contains all the vertices of the given graph
+Spanning tree of a graph: A spanning subgraph of the given graph which is a tree(no cycles)

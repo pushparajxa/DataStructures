@@ -7,6 +7,12 @@ public class EnumTest {
     if (!giveBoolean()) {
       System.out.println("No boolean");
     }
+    e = null;
+    if(e == null){
+      System.out.println("it is null");
+    }else {
+      System.out.println("it is not null");
+    }
   };
 
   static Boolean giveBoolean() {
