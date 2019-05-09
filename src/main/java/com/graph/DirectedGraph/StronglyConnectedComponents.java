@@ -59,14 +59,15 @@ public class StronglyConnectedComponents {
         for(DirectedEdge edge: vertex.getOutEdges()){
             Vertex otherEnd = edge.getOtherEnd(vertex);
             if(!Vertex.isVisited(otherEnd)){
-                clock = findSCCs(otherEnd,clock,new Stack<Vertex>(),sccs);
+                clock = findSCCs(otherEnd,clock,new Stack<>(),sccs);
                 int otherEndLowTime = Vertex.getLowTime(otherEnd);
                 lowTime = Math.min(lowTime,otherEndLowTime);
             }else if(Vertex.getOnStackFlag(vertex)){
                 int otherEndDiscoveryTime = Vertex.getDiscoveryTime(otherEnd);
                 lowTime = Math.min(otherEndDiscoveryTime,lowTime);
             }else{
-                //this is a cross-edge ignore.
+                //this is a cross-edge ignore(it is already visited).(as well as Vertex is not on
+                // stack)
             }
         }
         Vertex.setLowTime(vertex,lowTime);

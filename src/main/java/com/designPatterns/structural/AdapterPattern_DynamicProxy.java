@@ -1,5 +1,5 @@
 
-package com.designPatterns;
+package com.designPatterns.structural;
 
 
 import java.lang.reflect.InvocationHandler;
