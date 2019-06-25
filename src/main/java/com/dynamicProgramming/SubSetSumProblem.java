@@ -2,20 +2,60 @@
 package com.dynamicProgramming;
 
 //Find a subset in a given set with given sum
+//https://en.wikipedia.org/wiki/Partition_problem
 public class SubSetSumProblem {
 
   public static void main(String[] args) {
     //  int input[] =  {4, 1, 10, 12, 5, 2};
     int input[] = {1, 5, 6, 12};
 
-    isPresent(input, 20);
+    isPresent(input, 24);
 
-    boolean result = spaceOptimised(input, 20);
+    boolean result = spaceOptimised(input, 24);
     System.out.println(result);
+    System.out.println("******************");
+    result = spaceOptimised2(input, 24);
+    System.out.println(result);
+  }
 
+  //https://www.geeksforgeeks.org/subset-sum-problem-osum-space/
+  // Takes size of two arrays of size(O(sumOfInputElements))
+  public static boolean spaceOptimised2(int[] input, int sumToFind) {
+
+    int sum = 0;
+    for (int i = 0; i < input.length; i++) {
+      sum += input[i];
+    }
+
+    boolean[] temp1 = new boolean[sum + 1]; // Imagine a vertical array .. in regard to isPresent
+    // method
+    temp1[0] = true;
+
+    boolean[] temp2;
+
+    for (int i = 0; i < input.length; i++) {
+      temp2 = new boolean[sum + 1];
+      temp2[0] = true;
+      for (int j = 1; j < sum + 1; j++) {
+        if (input[i] > j) {
+          temp2[j] = temp1[j];
+        } else {
+          temp2[j] = temp1[j] || temp1[j - input[i]];
+        }
+      }
+      temp1 = temp2;
+    }
+
+    for (int i = 0; i < sum + 1; i++) {
+      System.out.println(i + " -- " + temp1[i]);
+    }
+
+    return temp1[sumToFind];
 
   }
 
+
+  //https://stackoverflow.com/a/51711581/1171533
   public static boolean spaceOptimised(int[] input, int sumToFind) {
 
     int sum = 0;
