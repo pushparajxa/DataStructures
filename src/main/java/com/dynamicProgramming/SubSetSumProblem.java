@@ -19,7 +19,7 @@ public class SubSetSumProblem {
   }
 
   //https://www.geeksforgeeks.org/subset-sum-problem-osum-space/
-  // Takes size of two arrays of size(O(sumOfInputElements))
+  // Takes size of two arrays of size = sumOfInputElements+1(for 0)
   public static boolean spaceOptimised2(int[] input, int sumToFind) {
 
     int sum = 0;
@@ -31,11 +31,11 @@ public class SubSetSumProblem {
     // method
     temp1[0] = true;
 
-    boolean[] temp2;
+    boolean[] temp,temp2 = new boolean[sum + 1];
+    temp2[0] = true;
 
     for (int i = 0; i < input.length; i++) {
-      temp2 = new boolean[sum + 1];
-      temp2[0] = true;
+
       for (int j = 1; j < sum + 1; j++) {
         if (input[i] > j) {
           temp2[j] = temp1[j];
@@ -43,7 +43,10 @@ public class SubSetSumProblem {
           temp2[j] = temp1[j] || temp1[j - input[i]];
         }
       }
+      temp= temp1;
       temp1 = temp2;
+      temp2= temp;
+
     }
 
     for (int i = 0; i < sum + 1; i++) {
@@ -56,6 +59,7 @@ public class SubSetSumProblem {
 
 
   //https://stackoverflow.com/a/51711581/1171533
+  //Requires only one array of size sumOfInputElements+1(for 0)
   public static boolean spaceOptimised(int[] input, int sumToFind) {
 
     int sum = 0;
