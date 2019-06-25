@@ -58,8 +58,5 @@ public class LongestCommonSubSequence {
 
   }
 
-  void printLCSStrings(char [] str1, char[] str2){
-
-  }
 
 }

@@ -53,7 +53,7 @@ public class PermutationAndCombinations {
     }
 
     public static void main(String[] args) {
-        printComibations(2,new int[]{2,3,4});
+        printComibations(3,new int[]{1,5,6,12});
        // generatePermutations(new int[]{2,3,4,5});
        // printSubSets(new int[]{2,3,4});
     }
