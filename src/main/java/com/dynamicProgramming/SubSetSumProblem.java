@@ -31,7 +31,7 @@ public class SubSetSumProblem {
     // method
     temp1[0] = true;
 
-    boolean[] temp,temp2 = new boolean[sum + 1];
+    boolean[] temp, temp2 = new boolean[sum + 1];
     temp2[0] = true;
 
     for (int i = 0; i < input.length; i++) {
@@ -43,9 +43,9 @@ public class SubSetSumProblem {
           temp2[j] = temp1[j] || temp1[j - input[i]];
         }
       }
-      temp= temp1;
+      temp = temp1;
       temp1 = temp2;
-      temp2= temp;
+      temp2 = temp;
 
     }
 
