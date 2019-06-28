@@ -96,7 +96,6 @@ public class LongestPathInAnAcyclicGraph {
         } else {
           maxSiblingHeight = cHeights.get(0);
         }
-
         next = 1 + Math.max(inHeight, 1 + maxSiblingHeight);
         dfs2(graph, visited, i, next, heights, outHeights);
       }
