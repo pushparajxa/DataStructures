@@ -6,7 +6,7 @@ import java.util.Arrays;
 public class CoinChange {
 
   public static void main(String[] args) {
-    int [] input = {2,5,3,6};
+    int [] input = {6,3,5,2};
     int sum = 10;
 
     int result = getResult(input,sum);
