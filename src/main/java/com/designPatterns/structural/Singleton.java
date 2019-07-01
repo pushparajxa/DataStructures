@@ -1,4 +1,4 @@
-package com.general;
+package com.designPatterns.structural;
 
 public class Singleton {
 
@@ -9,17 +9,17 @@ public class Singleton {
   }
 
   private static class Singleton_Retrieval {
-    static final Singleton singleton = new Singleton();
+    private static final Singleton singleton = new Singleton();
   }
 }
 
 class Singleton_instance {
 
-  private volatile Singleton_instance singleton_instance;
+  private static volatile Singleton_instance singleton_instance;
 
-  public Singleton_instance getSingletion() {
+  public static Singleton_instance getSingletion() {
     if (singleton_instance == null) {
-      synchronized (this) {
+      synchronized (Singleton_instance.class) {
         if (singleton_instance == null) {
           singleton_instance = new Singleton_instance();
         }
@@ -36,12 +36,12 @@ class Singleton_instance_high_performance {
    which can improve the method's overall performance by as much as 25 percent.[7]
     */
 
-  private volatile Singleton_instance_high_performance singleton;
+  private static volatile Singleton_instance_high_performance singleton;
 
-  public Singleton_instance_high_performance getSingletion() {
+  public static Singleton_instance_high_performance getSingletion() {
     Singleton_instance_high_performance localRef = singleton;
     if (localRef == null) {
-      synchronized (this) {
+      synchronized (Singleton_instance_high_performance.class) {
         localRef = singleton;
         if (localRef == null) {
           localRef = singleton = new Singleton_instance_high_performance();
