@@ -94,6 +94,8 @@ public class BayersMooreAlgorithm {
         j = pLen-1;
       }else{ //indices.get(input[i])> j  .. indices.get(input[i]) == j won't be possible since
         // in that case input[i] will be equal to pattern[j]
+        //We can't reset i so as to match indices.get(input[i]), otherwise we will be pattern
+        // matching previously completed one.
         j = pLen-1;
         i = i+pLen-1-j+1 ;// i = i+pLen-j
       }
