@@ -13,6 +13,15 @@ https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-refer
 https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references
  */
 
+/*
+Use of WeakReference in Java
+A third common source of memory leaks is listeners and other callbacks.
+If you implement an API where clients register callbacks but don’t deregister them explicitly, they will accumulate unless you take some action.
+ The best way to ensure that callbacks are garbage collected promptly is to store only weak refer- ences to them,
+  for instance, by storing them only as keys in a WeakHashMap.
+*/
+
+
 public class WeakHashMapTest {
 
   public static void main(String[] args) {
