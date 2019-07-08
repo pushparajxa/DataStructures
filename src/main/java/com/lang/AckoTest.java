@@ -17,8 +17,6 @@ public class AckoTest {
     integers.add(6);
     integers.add(2);
 
-
-
     finalPrice(integers);
 
   }

@@ -8,20 +8,23 @@ public class maximalSubArray {
     // https://www.geeksforgeeks.org/largest-sum-contiguous-subarray/
 
     static int printMaximumSum(int arr[]){
+      if(arr.length==1){
+        return arr[0];
+      }
+      int max_sum_so_far=Integer.MIN_VALUE;
+      int max_up_to_here=0;
+      for(int i = 0;i<arr.length;i++) {
+        max_up_to_here += arr[i];
 
-        int max_sum_so_far=0;
-        int max_up_to_here=0;
-        for(int i = 0;i<arr.length;i++) {
-            max_up_to_here += arr[i];
-            if(max_up_to_here<0){
-                max_up_to_here =0;
-            }
-            if(max_sum_so_far<max_up_to_here){
-                max_sum_so_far = max_up_to_here;
-            }
+        if(max_sum_so_far<max_up_to_here){
+          max_sum_so_far = max_up_to_here;
         }
+        if(max_up_to_here<0){
+          max_up_to_here =0;
+        }
+      }
 
-        return max_sum_so_far;
+      return max_sum_so_far;
 
     }
 
