@@ -98,6 +98,14 @@ public class UnDirectedGraph {
             this.number = vertex1;
         }
 
+        public static void setParent(Vertex child,Vertex parent) {
+            child.updateProperty(PARENT,parent);
+        }
+
+        public static Vertex getParent(Vertex vertex){
+            return (Vertex)vertex.getProperty(PARENT);
+        }
+
         @Override
         public boolean equals(Object other) {
             if(other instanceof Vertex) {
@@ -207,6 +215,13 @@ public class UnDirectedGraph {
             }else{
                 return false;
             }
+        }
+
+        public List<Vertex> getEnds(){
+            ArrayList<Vertex> ends = new ArrayList<>();
+            ends.add(end1);
+            ends.add(end2);
+            return ends;
         }
     }
 }

@@ -18,6 +18,7 @@ Ans :: 0 - 5 & 0 - 1
 */
 
 //https://www.hackerearth.com/practice/algorithms/graphs/articulation-points-and-bridges/tutorial/
+//http://web.iitd.ac.in/~bspanda/biconnectedMTL776.pdf -- Understoof from here on 11th July
 public class Bridges {
     public static void main(String[] args) {
         UnDirectedGraph graph = UnDirectedGraphUtils.readGraph("/tmp/unDirectedGraph5");
@@ -51,7 +52,8 @@ public class Bridges {
                 if(otherEndlowTime>discTime){
                     Edge.setBridgeFlag(edge,true);
                 }else{
-                    lowTime = otherEndlowTime;
+                   // lowTime = otherEndlowTime;
+                    lowTime = Math.min(lowTime,otherEndlowTime);
                     Edge.setBridgeFlag(edge,false);
                 }
             }

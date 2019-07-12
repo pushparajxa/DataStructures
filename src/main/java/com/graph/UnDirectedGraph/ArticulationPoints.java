@@ -9,6 +9,7 @@ import static com.graph.utils.UnDirectedGraph.*;
 https://www.hackerearth.com/practice/algorithms/graphs/articulation-points-and-bridges/tutorial/
 http://pisces.ck.tp.edu.tw/~peng/index.php?action=showfile&file=fb1f19a9be617037cb419c5d454b184bead47e243
 https://www.geeksforgeeks.org/articulation-points-or-cut-vertices-in-a-graph/
+http://web.iitd.ac.in/~bspanda/biconnectedMTL776.pdf
  */
 /*
 3
@@ -62,7 +63,7 @@ public class ArticulationPoints {
                 Vertex otherEnd = edge.getOtherEnd(vertex);
                 if(Vertex.isVisited(otherEnd)){
                     int discTime = Vertex.getDiscoveryTime(otherEnd);
-                    if(discTime<lowTime){
+                    if(discTime<discoveryTime){
                         lowTime=discTime;
                     }
                 }else{
@@ -76,9 +77,9 @@ public class ArticulationPoints {
                         int otherEndLowTime = Vertex.getLowTime(otherEnd);
                         if(otherEndLowTime>=discoveryTime){
                             Vertex.setArticularionPointFlag(vertex,true);
-                        }else{
-                            lowTime=otherEndLowTime;
                         }
+                        lowTime = Math.min(lowTime,Vertex.getLowTime(otherEnd));
+
                     }
                 }
             }
