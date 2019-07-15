@@ -15,7 +15,21 @@ public class GCD {
 
                         0 */
 
+    //Recursive solution
+
     int findGcd(int n1, int n2){
+        if(n1==0 || n2==0){
+            return n1>n2?n2:n2;
+        }
+        if(n1>n2){
+            return findGcd(n2,n1);
+        }else{
+            return findGcd(n2%n1,n1);
+        }
+    }
+
+   //Iterative solution
+    int findGcd2(int n1, int n2){
         int small = n1>n2 ? n2:n1;
         int large = n1<n2 ? n2:n1;
 
@@ -27,4 +41,6 @@ public class GCD {
         }
         return large;
     }
+
+
 }
