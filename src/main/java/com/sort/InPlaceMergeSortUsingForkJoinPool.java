@@ -2,6 +2,7 @@
 package com.sort;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveTask;
@@ -11,8 +12,8 @@ public class InPlaceMergeSortUsingForkJoinPool {
 
   public static void main(String[] args) {
 
-    //int input[] = new int[]{7,8,8,1,11,1,24,5};
-    int input[] = new int[]{7,8,1,24,5};
+    int input[] = new int[]{7,8,8,1,11,1,24,5};
+   // int input[] = new int[]{7,8,1,24,5};
     sort(input);
     System.out.println(Arrays.toString(input));
   }
@@ -20,8 +21,10 @@ public class InPlaceMergeSortUsingForkJoinPool {
   public static int [] sort(int [] input){
 
     ForkJoinPool forkJoinPool = ForkJoinPool.commonPool();
+    //ForkJoinTask.invokeAll(Collections.singletonList((new MergeSubTask(input, 0,input.length - 1))));
     int[] invoke = forkJoinPool.invoke(new MergeSubTask(input, 0, input.length - 1));
 
+   // return input;
     return invoke;
   }
 
