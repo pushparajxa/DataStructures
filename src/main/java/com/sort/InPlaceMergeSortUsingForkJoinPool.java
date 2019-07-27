@@ -64,7 +64,7 @@ public class InPlaceMergeSortUsingForkJoinPool {
               index--;
             }
             input[start]=temp;
-            start++;start2++;
+            start++;start2++;mid++; // The case of merge of [1,4,7] and [2,3,5]
           }
         }
 
