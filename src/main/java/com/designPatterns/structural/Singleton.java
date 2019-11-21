@@ -17,7 +17,7 @@ class Singleton_instance {
 
   private static volatile Singleton_instance singleton_instance;
 
-  public static Singleton_instance getSingletion() {
+  public static Singleton_instance getSingleton() {
     if (singleton_instance == null) {
       synchronized (Singleton_instance.class) {
         if (singleton_instance == null) {

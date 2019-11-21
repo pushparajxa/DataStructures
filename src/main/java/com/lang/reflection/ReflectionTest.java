@@ -4,15 +4,20 @@ package com.lang.reflection;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class RefelctionTest {
+public class ReflectionTest {
 
   public static void main(String[] args) {
-    RefelctionTest rt = new RefelctionTest();
+    ReflectionTest rt = new ReflectionTest();
     rt.doReflectionMagic();
+
 
   }
 
+  public enum myEnum{
+    val1,val2
+  }
    void doReflectionMagic() {
+
     try {
       Method method = getClass().getMethod("getify", new Class[]{Object.class});
       try {

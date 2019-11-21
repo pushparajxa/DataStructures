@@ -1,14 +1,14 @@
 package com.lang.streams;
 
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class CollectorsTest {
-  public static void main(String[] args) {
+  public  void main1() {
     List<Integer> integers = new ArrayList<>();
     integers.add(23);
     integers.add(45);
@@ -19,7 +19,7 @@ public class CollectorsTest {
     integers1.removeAll(integers);
     System.out.println("After"+integers1);
 
-    Map<Long,String> executionStatus  = new HashMap<>();
+    Map<Long, java.lang.String> executionStatus  = new HashMap<>();
     executionStatus.put(1l,"ONE");
     executionStatus.put(2l,"TWO");
     executionStatus.put(3l,"THREE");
@@ -41,4 +41,21 @@ public class CollectorsTest {
 
     System.out.println("\nSupplier result is ="+collect);
   }
+
+  public static void main(String[] args) {
+      List<Integer> integers = new ArrayList<>();
+    integers.add(1);
+    integers.add(2);
+    integers.add(3);
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder.append("Prefix ");
+    System.out.println(integers.stream().map(x->x.toString()).collect(
+            Collectors.joining(",",stringBuilder," suffix")));
+
+  }
+
+  public static final class FutureTest{
+
+  }
+
 }
