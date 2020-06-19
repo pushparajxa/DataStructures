@@ -4,15 +4,26 @@ package com.lang;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+// https://www.rexegg.com/regex-quantifiers.html
+// https://docs.oracle.com/javase/tutorial/essential/regex/quant.html
 public class RegExTest {
 
   public static void main(String[] args) {
 
     RegExTest regExTest = new RegExTest();
    // String result = regExTest.getCapitalisedUnderScoreString(args[0]);
-   // System.out.println(result);
+    //System.out.println(result);
+    regExTest.testReluctanct();
+  }
 
-    regExTest.reluctantQualifiers();
+  private  void testReluctanct() {
+   // Pattern pattern = Pattern.compile(".*E"); // Greedy
+   // Pattern pattern = Pattern.compile(".*?E"); // Reluctant
+    Pattern pattern = Pattern.compile(".*+E"); // Possessive
+    Matcher matcher = pattern.matcher("123EEE");
+    while (matcher.find()) {
+      System.out.println(matcher.start() +"--"+matcher.end());
+    }
 
   }
 
