@@ -1,5 +1,5 @@
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import com.general.DigitalAssetManager;
 import java.io.File;
@@ -39,5 +39,14 @@ public class DigitalAssetManagerTest {
     exception.expect(IllegalArgumentException.class);
     exception.expectMessage("Icon is null, not a file, or doesn't exist.");
     new DigitalAssetManager(null, null);
+  }
+
+  @Test
+  public void throwsIndexBoundsException() {
+    int [] arr = new int[2];
+    exception.expect(AssertionError.class);
+    //exception.expectMessage("Icon is null, not a file, or doesn't exist.");
+    assertEquals(1,0);
+    //System.out.println(arr[4]);
   }
 }

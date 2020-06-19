@@ -9,10 +9,29 @@ public class RegExTest {
   public static void main(String[] args) {
 
     RegExTest regExTest = new RegExTest();
-    String result = regExTest.getCapitalisedUnderScoreString(args[0]);
-    System.out.println(result);
+   // String result = regExTest.getCapitalisedUnderScoreString(args[0]);
+   // System.out.println(result);
+
+    regExTest.reluctantQualifiers();
+
   }
 
+  //https://docs.oracle.com/javase/tutorial/essential/regex/quant.html
+  public void reluctantQualifiers(){
+    Pattern pattern = Pattern.compile(".*+input");
+    Matcher matcher = pattern.matcher("inputinput");
+    boolean done = false;
+    while(!done){
+      if(matcher.find()){
+        System.out.println(matcher.start()+" ,"+ matcher.end() );
+      } else{
+        System.out.println("No match found");
+        done=true;
+      }
+    }
+
+
+  }
 
   public void ptre(Pattern pattern, String replacement, String replaceThis) {
     pattern.matcher(replaceThis).replaceAll(replacement);

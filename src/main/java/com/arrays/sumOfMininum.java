@@ -4,8 +4,8 @@ package com.arrays;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Stack;
-import org.testng.Assert;
-import org.testng.annotations.Test;
+/*import org.testng.Assert;
+import org.testng.annotations.Test;*/
 /*import org.testng.Assert;
 import org.testng.annotations.Test;*/
 
@@ -88,7 +88,7 @@ public class sumOfMininum {
   }
 
 
-  @Test
+ /* @Test
   public void testMinSum(){
     Random random = new Random();
     int[] arraySizes = random.ints(10, 0, 10).toArray();
@@ -101,6 +101,6 @@ public class sumOfMininum {
       Assert.assertEquals(expectedResult,actualResult);
     }
 
-  }
+  }*/
 
 }

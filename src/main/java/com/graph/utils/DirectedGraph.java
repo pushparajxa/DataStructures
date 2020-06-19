@@ -8,7 +8,6 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.springframework.util.StringUtils;
 
 import static com.graph.utils.CommonGraphUtils.*;
 
@@ -40,7 +39,7 @@ public  class DirectedGraph {
 
                     Vertex startVertex=null,endVertex=null;
                     int value;
-                    if(StringUtils.isEmpty(matcher.group(3))){
+                    if(matcher.group(3).isEmpty()){
                         value =0;
                     }else{
                         value = Integer.parseInt(matcher.group(3));
