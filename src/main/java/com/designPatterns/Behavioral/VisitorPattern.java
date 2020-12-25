@@ -10,6 +10,8 @@ https://en.wikipedia.org/wiki/Visitor_pattern
 look for double dispatch
 
 https://www.javaworld.com/article/2077602/learn-java/java-tip-98--reflect-on-the-visitor-design-pattern.html
+
+https://dzone.com/articles/visitor-design-pattern-in-java?edition=630291&utm_medium=email&utm_source=dzone&utm_content=Visitor%20design%20pattern%20in%20Java&utm_campaign=
  */
 
 public class VisitorPattern {
