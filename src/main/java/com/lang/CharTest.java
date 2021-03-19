@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 public class CharTest {
 
@@ -27,7 +27,7 @@ public class CharTest {
     System.out.println(isLatin1(null));
     System.out.println(isLatin1(""));
     System.out.println(isLatin1("\u20AC"));
-    System.out.println(isLatin1(Character.toString(0x24B62)));
+    System.out.println(isLatin1(Character.toString((char) 0x24B62)));
     System.out.println(isLatin1("adasd"));
 
     char [] isChars = new char[20];
@@ -69,7 +69,7 @@ public class CharTest {
     System.out.println(x);
     System.out.println((int)x);
     System.out.println("€€");
-    System.out.println(Character.toString(0x24B62));
+    System.out.println(Character.toString((char) 0x24B62));
     char [] repres = Character.toChars(0x24B62);
     StringBuffer stringBuffer = new StringBuffer();
     stringBuffer.appendCodePoint(0x24B62);
