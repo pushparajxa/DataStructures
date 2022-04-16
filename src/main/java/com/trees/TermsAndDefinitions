@@ -1,0 +1,9 @@
+External Node: A node that doesn't have any children
+
+Internal Node: A node that has at least one child.
+
+An ancestor of a node is either the node itself or an ancestor of the parent of the node
+
+Level: For root level is 0
+
+Height: For an external node it is zero.

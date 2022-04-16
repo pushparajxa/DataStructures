@@ -1,0 +1,19 @@
+A Process memory layout is as below
+
+STACK :: It grows downwards
+=====
+
+HEAP  :: It grows upwards
+======
+BSS  :: Un-Initialized static variables;
+======
+DATA :: Initialized static variables;
+=====
+TEXT
+
+References: https://manybutfinite.com/post/anatomy-of-a-program-in-memory/
+https://gist.github.com/CMCDragonkai/10ab53654b2aa6ce55c11cfc5b2432a4
+
+
+
+           1

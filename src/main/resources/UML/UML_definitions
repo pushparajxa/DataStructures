@@ -1,0 +1,31 @@
+Reference: UML Distilled ... Martin Fowler
+
+
+Association:  A solid line, can be bi-directional
+
+  An association is a solid line between two classes, directed from the source class to the target class.
+  The name of the property goes at the target end of the association, together with its multiplicity.
+  The target end of the association links to the class that is the type of the property.
+
+
+Dependency: Uni directional, represented by dashed lines with arrow at the end.
+
+    The important thing here is that the dependency is in only one direction and goes from the presentation class to the domain class.
+
+
+Constraint:
+
+    {disallow incest: husband and wife must not be siblings}.
+
+
+Visibility:
+
+    + -> Public
+    - -> Private
+    # -> protected
+    ~ -> Package-protected
+
+
+Abstract:
+
+    Mark it in italics.

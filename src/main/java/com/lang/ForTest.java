@@ -21,5 +21,15 @@ public class ForTest {
             System.out.println(i);
         }
         System.out.println(i);
+        
+        int[] arr = new int[]{2,3,4};
+        for(int l: arr) {
+            if(l%2==0){
+                continue;
+            }
+            else {
+                System.out.println(l);
+            }
+        }
     }
 }

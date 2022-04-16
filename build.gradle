@@ -40,17 +40,17 @@ sourceSets {
         java {
             srcDirs = ['src/main/java']
         }
-        scala{
+   /*     scala{
             srcDirs = ['src/main/scala']
-        }
+        }*/
     }
     test {
         scala {
            // srcDirs = ['test/scala']
         }
-        java {
+       /* java {
             srcDirs = ['src/test/java']
-        }
+        }*/
     }
 }
 

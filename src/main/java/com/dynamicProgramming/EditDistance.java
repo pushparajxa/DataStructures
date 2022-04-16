@@ -1,4 +1,7 @@
 
+// https://afteracademy.com/blog/edit-distance-problem
+// http://bioinfo.ict.ac.cn/~dbu/AlgorithmCourses/Lectures/Lec6-EditDistance.pdf
+// https://www.javacodegeeks.com/2014/03/easy-to-understand-dynamic-programming-edit-distance.html
 package com.dynamicProgramming;
 
 import java.util.Arrays;

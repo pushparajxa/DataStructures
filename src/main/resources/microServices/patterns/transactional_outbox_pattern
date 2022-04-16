@@ -1,0 +1,4 @@
+https://medium.com/groupon-eng/varnish-to-redis-migration-887ad6d805d2
+
+client-side caching in redis: https://redis.io/docs/manual/client-side-caching/
+   -- Better for used for use cases where the top 1% of the keys get >90% of the traffic in our service.

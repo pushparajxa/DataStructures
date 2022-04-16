@@ -1,0 +1,11 @@
+Virtual Memory is a technique where we use secondary memory along with primary memory for processes.
+* Virtual Memory reference: https://www.geeksforgeeks.org/virtual-memory-in-operating-system/
+
+
+* Paging and Segmentation are both used to implement Virtual Memory.
+* Pages are of fixed size but segment size can vary.
+* Both support implementing security.
+* We can combine segmentation and paging.
+* In segmentation we map computer addresses to physical address by adding offset + base.
+
+* Segmentation Reference: https://en.wikipedia.org/wiki/Memory_segmentation

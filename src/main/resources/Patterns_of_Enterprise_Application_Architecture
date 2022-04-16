@@ -1,0 +1,8 @@
+Value Object:
+
+    Value Objects are class which are immutable. Use them when we are basing equality other than
+    identity. Examples are Date, Money
+
+    References:
+      1. Book: Page 486
+      2. Wikipedia: https://en.wikipedia.org/wiki/Value_object
