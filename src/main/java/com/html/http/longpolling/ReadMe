@@ -1,0 +1,10 @@
+
+1. In the apache directory place both the index.php and long-polling.php files, make sure that there
+ are no other files with names prefixed with index.
+2. Create a file called file.txt.
+3. Start the apache server.
+4.
+
+
+
+* Example is taken from https://supunkavinda.blog/php/ajax-long-polling

@@ -1,0 +1,21 @@
+Apache is HTTP server which is very good at serving static files such as images, audio etc.
+
+* Apache forwards the servlet requests to Tomcat
+
+Tomcat is a servlet container.
+  * It does authentication
+  * Servlet request processing.
+
+* Reference: https://www.youtube.com/watch?v=XABDkzxA6hM
+
+
+Three tired Enterprise Application Architecture
+
+* Client Tier :: Web browser talking to Apache servers for pages (static ..including HTML, JavaScript, audio, images, videos)
+* Business Tier :: Tomcat
+* Database/Backend  Tier:: Mysql, Oracle or Message queues.
+
+* Reference:
+  * https://www.youtube.com/watch?v=XABDkzxA6hM
+  * https://www.techtarget.com/searchsoftwarequality/definition/3-tier-application
+  * https://www.ibm.com/in-en/cloud/learn/three-tier-architecture

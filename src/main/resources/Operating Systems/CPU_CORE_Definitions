@@ -1,0 +1,23 @@
+* You run processes ("programs") on your linux system. Each process consists of one or more threads
+
+* Each thread is a separate sequence of instructions. Two threads can be executed in parallel.
+
+* Each instruction is given to a CPU to be executed. A CPU has logic that figures out what the bits
+of an instruction mean and decides what to do with it.
+
+* There are different types of instructions. The decision logic inside a CPU will dispatch the
+different instructions to different hardware units. For instance,
+arithmetic instructions are actually performed by an ALU (arithmetic/logic unit), while instructions that load/store from memory are executed by some sort of memory unit.
+
+* A core refers to a set of actual execution hardware (i.e. every core has an ALU, a memory unit,
+etc...) You can have multiple CPUs that share one core - this is called hyperthreading.
+
+        * The idea: thread A is currently doing arithmetic, while thread B is loading something from
+         memory.When that's true, threads A and B can efficiently share a single core without getting in each other's way (A uses the ALU, B uses the memory unit).
+          Of course, sometimes both programs will want the ALU, and then they have to wait for each other...
+
+* A socket is the physical slot on the motherboard into which a chip is inserted. This chip has a certain number of cores on it
+
+Reference:
+* https://unix.stackexchange.com/a/351743/286953
+* https://unix.stackexchange.com/questions/218074/how-to-know-number-of-cores-of-a-system-in-linux

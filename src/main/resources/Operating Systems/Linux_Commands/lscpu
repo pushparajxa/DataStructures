@@ -1,0 +1,7 @@
+lscpu
+=======
+* This command gives the number of CPUs on the machine.
+* Reference:
+  1. https://www.baeldung.com/linux/get-number-of-processors
+  2. https://unix.stackexchange.com/questions/218074/how-to-know-number-of-cores-of-a-system-in-linux
+  3. https://unix.stackexchange.com/a/351743/286953

@@ -1,0 +1,23 @@
+uptime command
+--------------
+This command is used to get the system load averages.
+
+uptime  gives  a  one line display of the following information.  The current time, how long the system has been running, how many users are currently logged on,
+and the system load averages for the past 1, 5, and 15 minutes.
+
+System load averages is the average number of processes that are either in a runnable or uninterruptable state.  A process in a runnable state is either using the CPU or
+waiting to use the  CPU. A process in uninterruptable state is waiting for some I/O access, eg  waiting for disk.  The averages are taken over the three time intervals.
+Load averages are not normalized for the number of CPUs in a system, so a load average of 1 means a single CPU system is loaded all the time while on a 4 CPU system
+it means it was idle 75% of the time.
+
+Unix uptime includes only CPU usage.
+
+Linux uptime include CPU Usages +  processes in uninterruptible state on either locks or disk.
+
+[motamari@romeo39]~/ActiveMQ/logs% uptime
+ 12:09:54 up 6 days,  7:01, 90 users,  load average: 3.54, 4.10, 4.42
+
+
+References:
+1. https://www.brendangregg.com/blog/2017-08-08/linux-load-averages.html
+2.  https://www.howtogeek.com/194642/understanding-the-load-average-on-linux-and-other-unix-like-systems/

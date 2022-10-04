@@ -3,13 +3,16 @@ A Process memory layout is as below
 STACK :: It grows downwards
 =====
 
+Memory Mapping Segment  :: File mappings(including dynamic libraries) and anonymous mappings. i.e.  /lib/libc.so (It also grows downwards)
+======================
+
 HEAP  :: It grows upwards
 ======
 BSS  :: Un-Initialized static variables;
 ======
 DATA :: Initialized static variables;
 =====
-TEXT
+TEXT :: Stores the binary image of the process.
 
 References: https://manybutfinite.com/post/anatomy-of-a-program-in-memory/
 https://gist.github.com/CMCDragonkai/10ab53654b2aa6ce55c11cfc5b2432a4

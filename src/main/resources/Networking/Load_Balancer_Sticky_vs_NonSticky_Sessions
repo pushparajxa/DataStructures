@@ -1,0 +1,62 @@
+Layer-4 TCP Layer Load Balancing
+---------------------------------
+TCP layer balancing without inspecting the contents of the packet. Based on the source ip, port
+requests are forwarded to the servers..typically on round-robin fashion.
+
+
+Layer-7 Application Layer Balancing
+-----------------------------------
+* Here load balancer decrypts the packets and inspects the packet to find cookies which are used in
+sticky-sessions.
+* Since it performs decryption, it incurs performance penalty.
+
+Reference:
+* https://avinetworks.com/glossary/layer-4-load-balancing/
+
+
+HTTP Session
+-------------
+* HTTP is a statelss protocol, we need a way to remember the client state across the requests, i.e,
+  logged in time, ip address etc.. for which server creates a Http Session object.
+
+* Reference:
+  - https://stackoverflow.com/a/17227882/1171533
+
+
+How load balancer finds with which actual physical server a client session is held?
+------------------------------------------------------------------------------------
+* Load balancer will do TLS decryption and find the session cookie/ session id which it used to
+route to the actual physical server.
+
+* Reference
+  - https://stackoverflow.com/a/13641836/1171533
+  - https://stackoverflow.com/questions/10494431/sticky-and-non-sticky-sessions/13641836#13641836
+
+
+Sticky Session vs Non-Sticky Session
+------------------------------------
+* In Sticky session load balacner will always direct requests from user to single physical app  server.
+* In Non sticky sessions load balancer can direct requests from client to any of the app servers
+behind the load balancer.
+
+
+* Reference
+  - https://stackoverflow.com/questions/10494431/sticky-and-non-sticky-sessions/13641836#13641836
+  - https://aws.amazon.com/blogs/aws/new-elastic-load-balancing-feature-sticky-sessions/
+  - https://stackoverflow.com/questions/17227813/stateful-session-bean-and-http-session
+
+
+Sticky Session vs Session Replication
+-------------------------------------
+* In Session replication, user session is replicated across all the tomcat instances running behind
+load balancer.
+* In Sticky session load balacner will always direct requests from user to single physical app  server.
+* In Tomcat Session replication is used with Sticky session.
+
+* Reference
+  * https://stackoverflow.com/a/11045462/1171533
+
+
+Cloud load balancing in long-lived TCP streams
+-------------------------------------------------
+* https://www.mux.com/blog/network-virtualization-cloud-load-balancing-and-long-lived-tcp-streams

@@ -1,0 +1,31 @@
+
+
+Proxy or Open Proxy or Reverse Proxy
+------------------------------------
+* It is a server which takes a request from client and forwards to the destination.
+* There are two types of it
+  # Anonymous Proxy:
+     - Proxy will not reveal the originating IP or the IP of the client who made the request.
+     - It will reveal itself as proxy server to the destination.
+
+  # Transparent Proxy:
+     - It will also reveal itself as a proxy server to the destination.
+     - This will reveal the ip of the client by providing it in the
+          X-Forwarded-For Header request variable.
+
+
+Reverse Proxy
+---------------
+* It hides the application servers from the clients.
+* It presents it self as an ordinary server to the client. It accepts request from the client and
+forwards it to the application server. The response from the application server is sent back to the
+client. This way client is un-aware of the application server.
+* It can load-balance.
+* It can do SSL encryption.
+* It can cache static content.
+
+
+
+Reference:
+---------
+* https://en.wikipedia.org/wiki/Proxy_server

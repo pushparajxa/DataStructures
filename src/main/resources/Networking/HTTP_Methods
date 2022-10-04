@@ -1,0 +1,36 @@
+
+
+Definitions of PUT, HEAD, GET, POST and DELETE are mentioned here
+=================================================================
+https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.1.2
+
+Idempotent Methods
+===================
+* GET, HEAD, PUT and DELETE
+
+* Reference
+  - Section 9.1.2 * Section 9.1.2 https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.1.2
+
+Non-Idempotent Methods
+======================
+* POST
+
+* Reference
+  - Section 9.1.2 https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.1.2
+
+Safe Methods
+=============
+* GET, HEAD
+
+* Reference
+  - Section 9.1.2 https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.1.2
+
+
+Difference between POST and PUT
+========================================
+The fundamental difference between the POST and PUT requests is reflected in the different meaning of the Request-URI.
+The URI in a POST request identifies the resource that will handle the enclosed entity. That resource might be a
+data-accepting process, a gateway to some other protocol, or a separate entity that accepts annotations.
+In contrast, the URI in a PUT request identifies the entity enclosed with the request -- the user agent knows what URI
+is intended and the server MUST NOT attempt to apply the request to some other resource. If the
+server desires that the request be applied to a different URI,

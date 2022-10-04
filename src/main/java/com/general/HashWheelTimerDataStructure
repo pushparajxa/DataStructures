@@ -1,0 +1,40 @@
+Hash Wheel Data Structure
+=========================
+
+List-2: Hour   ==> 24 slots
+List-3: Minute ==> 60 slots
+List-4: Second ==> 60 slots
+
+*  With hardware clock tick, we will move the pointer in List-4 by 1 and
+rotating it to the beginning once reaches slot 60. When it reaches slot-60 in List-4, we will move
+the pointer in List-3 by 1. When the pointer in List-3 reaches slot-60, then we will move the
+pointer in List-2 by 1.
+
+
+* Let us say current time is 2:30 (24 hour clock). We want a timer at 3:30:25. In the list-2, at
+  slot-3 we will place "30:25" in the list associated it. When pointer in List-2 comes at slot-3, we
+  will remove "30:25" and place it in slot-30 in List-3 with "25". When pointer in List-3 reaches
+  slot-30, we will remove "25" and place it in the slot-25 in the list-4. When the pointer in list-4
+  reaches slot-24, we will execute the call-back associated with the timer.
+
+
+    API
+=================
+
+STARTTIMER (Interval, RequestId, ExpiryAction):
+          The client calls this routine to start a timer that will expire after “Interval” units of time.
+          The client supplies a RequestId which is used to distinguish this timer from other timers that the client has outstanding. Finally, the client can
+          specify what action must be taken on expiry: for instance, calling a client-specified routine, or setting an event flag.
+
+
+STOPTIMER (RequestId): This routine uses its knowledge of the client and RequestId to locate the timer and stop it.
+
+PERTICKBOOKKEEPING: Let the granularity of the timer be units. Then every   units this routine checks whether any outstanding timers have expired;
+                    if this is the case, it calls STOPTIMER, which in turn calls the next routine.
+
+EXPIRYPROCESSING: This routine does the ExpiryAction specified in the STARTTIMER call.
+
+
+
+Reference:
+1. http://www.cs.columbia.edu/~nahum/w6998/papers/ton97-timing-wheels.pdf

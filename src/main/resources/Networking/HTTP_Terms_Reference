@@ -1,0 +1,129 @@
+Below file is the content of  http://nadirmuzaffar.blogspot.com/2013/03/polling-long-polling-comet-server-side.html
+
+
+
+Polling, Long Polling, Comet, Server-sent Events (SSE), and WebSockets
+I've been asked about these concepts multiple times. Not being known for the most concise and easily understood explanations, I thought this would be an apt opportunity for sharpening my Yoda.
+
+Challenge: provide the best explanation, to a software engineer with little understanding of HTTP, for Polling, Long Polling, Comet, Server-sent Events (SSE), and WebSockets.
+
+But of course you're free to skip sections you're familiar with. However, if you're new to all this,
+ then I really do think that you should just pucker up and read it all.
+
+A little on HTTP
+
+Why? Because its the reason that Long Polling, Comet, SSE and WebSockets exist. But you need to know very little. If you don't care about the why, and only the what, then I hope I never work with you. But you still shouldn't skip this part.
+
+The internet is built in layers. More technically, its known as the OSI model which is something you can read more about, later.
+
+Heres what's pertinent:
+
+The HTTP layer is the simplest of 'em all. To get to the HTTP layer, an HTTP connection requires a few layers before it.
+Physical
+
+You do need something, like cable wires, to connect computers together. So this is the first layer.
+
+IP (Internet Protocol)
+
+This layer is responsible knowing where the browser's computer and web server are and how to get your data from either one to the other.
+
+TCP (Transport Control Protocol)
+
+Transport Control Protocol (TCP). This layer is responsible for providing a reliable/stable connection between the browser and web server. TCP says that, to make a connection, the web server and the browser need to make a "3 way handshake". As an example, when you go to www.google.com, a 3-way handshake means that your browser starts by sending a message to the Google web server asking for a connection, then the web server sends your browser a message saying your request has been granted, and finally you're browser needs to send a message saying thanks.
+
+HTTP
+
+It's almost a kiddish layer. No binary numbers, or bytes or flags. It's literally some human readable text with some commas in between. And it gets more kiddish because a single HTTP connection consists of only one request then one response, after which the connection is terminated.
+
+
+The good stuff
+
+Polling, Long Polling, Comet, Server-sent Events and WebSockets exist to solve the problem of real time updates in web applications.
+
+WebSockets, however, can help solve some other problems. When it comes to real time updates though, this isn't an advantage it has over the others. I just don't want you to throw away WebSockets as an option to solve another problem, at some later point, because you've gotten it in your head that its exclusively for real time updates.
+Polling
+
+It sucks ass.
+
+Every few seconds your web application makes a HTTP request, usually GET or POST, to the server checking for updates. That means that we'll never speak of it again.
+Long Polling
+
+It's polling, but it doesn't suck ass.
+
+The browser still makes requests to the server for updates, but the nature of when and why is very different.
+
+The idea is that each request, by the web app, to the server will have something like a timestamp with it. The timestamp value is then used to compare the data's current timestamp on the server. If the server sees that the request's timestamp is lower/older than the current timestamp for the data, then the server responds with the updated data and new timestamp immediately and ends the response. However, if the server sees that the timestamp is the same as the data's current time stamp, then it simply holds off on responding to it until the data's timestamp changes. When the web app gets the response, it will immediately make another request with the new timestamp.
+
+That means that I have a secret crush on the person who thought of that. Because its brilliant. Its completely HTTP, without anything new. And because, a very long time ago, HTTP/1.1 introduced a field ( referred to as the "Keep-Alive" mechanism ) as part of the request headers asking the server to keep the TCP connection alive, each of those requests will usually be able to recycle the same TCP connection. Which means, in the most common case, no 3-way handshake overhead.
+
+If well implemented, it can be very effective at providing genuinely real time updates to users.
+Comet
+
+It's not polling.
+
+The idea is to make a single, regular, HTTP request from your web app and rely on a "never ending" response from the web server.
+
+So the web app, on the initial page load, starts by making a HTTP request to the web server.
+
+The web server will take the new incoming request and start the response with the current data. BUT, the web server will not end the response so the browser will keep the connection open expecting more data. Whenever there's an update, the web server will write and flush the updated data to that response stream. The web server will also send some unique string or set of characters, to signify to the web app, that its the end of the particular update message. Eg. "EndOfCometMessage\n".
+
+The web app keeps reading out data from the same Ajax request using a "on progress event". When the  web app reads the unique string signifying the end of update message (in our example, "EndOfCometMessage\n" ), it knows that it has the entire message data. Any data after that will be considered part of the new message.
+
+An example of the data that a web server might send over a series of update messages, using the same response stream to a client's browser, might look like this:
+//First update
+{
+   messageId: "stockTicker",
+   stocks: [
+      { GOOG: 723.42 },
+      { AAPL: 665.25 }
+   ]
+}
+"EndOfCometMessage\n"
+
+//Second update
+{
+   messageId: "stockTicker",
+   stocks: [
+      { GOOG: 822.47 },
+      { AAPL: 465.89 }
+   ]
+}
+"EndOfCometMessage\n"
+Note: the comments aren't actually part of the data that gets sent.
+
+That means that this approach allows us to create a persistent "push only" or "single directional" connection from the web server to the web app.
+
+Why is it only a one way connection? Remember that part about how an entire HTTP connection consists of only a single request and then a single response?  Thats why.
+
+Server-sent Events (SSE)
+
+It's Comet.
+
+With HTTP, proxies/servers along the route of the request/response often buffer the data for the request or response under heavy network traffic. They can do this quite easily, again, because of that single request then single response thing in HTTP. Servers proxying HTTP data know that until they see the end of the HTTP message, more data should be on its way.
+
+Now if it wasn't already clear, buffering data by waiting for the rest of the HTTP message to show up is a no-bueno with realtime events. It's for this reason that often implementations of realtime updates end up being a compromise between Comet and Long-Polling.
+
+So Server-sent Events is really just HTTP acknowledging Comet. And if HTTP acknowledges Comet, then so must the proxies that stand between a web server and browser.
+
+Comet was standardized as Server-sent Events with the following request header field:
+Content-type: text/event-stream
+To make it easier for browser-side developers, JavaScript wrapped up the generic logic for parsing out the server sent messages by exposing EventSource. But don't be fooled because, apart from some optimizations the browser can make, there is no magic involved. It's still very much a XMLHttpRequest underneath. Which means that even if the browser doesn't support EventSource, it could support Server-sent events. Remy Sharp has a nice blog post about a few good EventSource polyfills, including his own.
+
+That mean's that Server-sent Events are boring but necessary.
+WebSockets
+
+It's all about latency.
+
+Arguably, latency as due to distance and medium, regardless of which protocol, would be the same since bits sent over the wire are all sent at the same speed. But the latency as due to bandwidth and latency as due to processing overhead is your biggest and most practical concern. The thing is that, though there are multiple contributing factors to latency, the effects are exactly the same.
+
+If your web server has to manage thousands of persistent connections then you eventually have to deal with the very real concerns of physics limiting how much data can be communicated at any given time and the amortized costs of processing all that data.
+
+We already know about the extra overhead involved with long-polling. But if that buffering issue with Comet is being addressed with SSE, then where's the extra data?  It depends. If you're making a application with stock tickers, then arguably the main overhead is really just the two headers: one from the HTTP request and the other from the never-ending HTTP response.
+
+But suppose you have an application that requires bi-directional realtime communication. For example, an application for realtime collaboration like Google Documents. For me, that's the reason to consider WebSockets: a easy to use protocol that defines a full-duplex channel. The alternative is to fake a full-duplex channel with some combination of SSE and AJAX request every time the client wants to make an update. With SPDY, you could remove the overhead of building up another TCP/IP connection by multiplexing on an existing one, but that still leaves the overhead of all the extra data in the HTTP request headers. And at scale, with thousands of connections to manage, thats a lot of extra data.
+
+But wait, there's more. WebSockets also has support for being able to send raw bits. This opens the door for being able to send very compacted data using MongoDB's BSON or Google's Protobufs. I'm definitely not going to go into them much here, but rather simply note that they can offer alternatives to JSON, for example, that can significantly reduce the size of your data, to optimize bandwidth, as well as faster serialization/deserialization, to optimize CPU usage. I'll leave it up to you to Google the rest.
+
+Nonetheless, because long polling and HTTP streaming offer very good alternatives, the adoption and maturation of WebSockets has been slow and is only just starting to gain traction. And because SPDY, a protocol by Google which will be part of HTTP 2.0, has wider support for HTTP 1.1, SSE ends up having another potential advantage worth considering.
+
+That means that it's possible that WebSockets is an overkill. However, it could also be the perfect solutions for your needs.
