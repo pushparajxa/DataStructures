@@ -1,0 +1,29 @@
+id  name	          category	price
+--------------------------------------
+105	Country Living	lifestyle	1.70
+108	News Magazine	  news	3.35
+115	Decibel	        music	6.50
+123	Drum Magazine	  music	6.50
+145	Sunset	        lifestyle	12.00
+155	World	          lifestyle	9.50
+158	Keyboard        music     8.45
+
+Problem:
+---------
+Let’s group magazines according to category and rank each group in descending order by price. Display the ranking position, name, category, and price for each magazine.
+
+Solution
+--------
+SELECT
+  category,
+  name,
+  price,
+  RANK() OVER (PARTITION BY category
+                    ORDER BY price DESC
+                    ) AS price_rank
+FROM magazine;
+
+
+References:
+    1. https://learnsql.com/cookbook/how-to-rank-rows-within-a-partition-in-sql/
+    2. https://www.sqlshack.com/overview-of-sql-rank-functions/

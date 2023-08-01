@@ -159,6 +159,12 @@ public  class DirectedGraph {
                 return false;
             }
         }
+        
+        @Override
+        public int hashCode()
+        {
+            return this.number;
+        }
 
         @Override
         public String toString(){

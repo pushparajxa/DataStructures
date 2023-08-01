@@ -1,7 +1,7 @@
 https://en.wikipedia.org/wiki/Connectivity_(graph_theory)#Connected_vertices_and_graphs
 ======================================================================================
 Forest: A graph without cycles (Forest will have one or many trees)
-Tree: Connected components of a forest
+Tree: Connected components of a forest or a forest which is connected.
 
 https://en.wikipedia.org/wiki/Glossary_of_graph_theory_terms#subgraph
 =====================================================================
@@ -12,10 +12,13 @@ The vertex subset must include all endpoints of the edge subset, but may also in
 supergraph:
 A graph formed by adding vertices, edges, or both to a given graph. If H is a subgraph of G, then G is a supergraph of H.
 
-Spanning Subgraph: A subgraph which contains all the vertices of the given graph
-Spanning tree of a graph: A spanning subgraph of the given graph which is a tree(no cycles)
+Spanning Subgraph:         A subgraph which contains all the vertices of the given graph.
+Spanning tree of a graph:  A spanning subgraph of the given graph which is a tree(no cycles).
 Spanning tree T of an undirected graph G is a subgraph that is a tree which includes all of the
 vertices of G, with minimum possible number of edges.
+
+Cycle: A sequence of vertices and edges in which starting vertex and ending vertex are same.
+Simple Cycle: A cycle in which starting and ending vertex are same.
 
 https://en.wikipedia.org/wiki/Component_(graph_theory)
 ======================================================
@@ -23,9 +26,8 @@ Connected Component: ==> Used for undirected graph. For directed graph, it is ca
 In graph theory, a component, sometimes called a connected component, of an undirected graph is a
 subgraph in which any two vertices are connected to each other by paths, and which is connected to no additional vertices in the supergraph.
 
-https://en.wikipedia.org/wiki/Path_(graph_theory)
-==================================================
-Walk : sequence of edges and vertices (both of them can be repeated)
+https://en.wikipedia.org/wiki/Path_(graph_theory) && Goodrich
+==============================================================-
+Walk & Path : sequence of edges and vertices (both of them can be repeated)
 Trail: A walk in which all the edges are distinct
-Path: A walk in which all vertices (therefore all edges are distinct)
-Simple path: A path in which all vertices are not distinct
+Simple path: A path in which all vertices are distinct(and therefore all edges).

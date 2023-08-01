@@ -3,7 +3,7 @@
  are no other files with names prefixed with index.
 2. Create a file called file.txt.
 3. Start the apache server.
-4.
+4. sudo apachectl restart
 
 
 

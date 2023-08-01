@@ -1,0 +1,11 @@
+https://www.youtube.com/watch?v=Ka8vG5miErk (Hussein Nasser)
+
+  -- CORS is for browsers to tell them whether to display the response from a server.
+
+    -- Open browser and type www.B.com/index.html, Let's say we have call to www.A.com/display to
+    fetch an image and show it in index.html(B.com). Browser will display the image only if CORS
+    header sent in the response from A.com contains * or B.com
+
+    -- If you call url A from url B in a browser, the response from url A can  only be shown in
+    browser if response from url A has Access-Control-Allow-Origin: * or
+    Access-Control-Allow-Origin:www.B.com

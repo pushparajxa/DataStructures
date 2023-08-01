@@ -1,0 +1,78 @@
+Employee Table:
+==================
+
+id, name, salary, dept_id
+--------------------------
+
+'1','Candice','12','1'
+'2','Julia','13','2'
+'3','Bob','17','4'
+'4','Scarlet','15','1'
+'5','Ileana','15','4'
+
+
+Department Table
+=================
+
+id, name, location
+------------------
+'1','Executive','Hyderabad'
+'2','Production','RR'
+'3','Resources','KD'
+'4','Technical','SDPT'
+'5','Management','MNCHL'
+
+
+Question:  Give department name followed by number of employees in it. They shall be ordered from
+high to lower number of employees. In scenario where number of employees are same are sort based on
+name of the department. If there are no employees, then give 0. Below is the result for the above
+data.
+
+Executive 2
+Technical 2
+Production 1
+Management 0
+Resources 0
+
+
+Solution-1:
+-----------
+# Define common table.
+With emp_cnt_tab as (
+Select dept.name as dept_name, count(emp.id) as emp_cnt
+From department dept left outer join employee emp on (dept.id = amp.dept_id)
+Group by dept.name )
+
+Select dept_name, emp_cnt
+From emp_cnt_tab
+Order by 2 desc, 1 asc
+
+
+Solution-2:
+-----------
+select d.name, count(Employee.id) as cnt
+ from department as d
+ left outer join Employee
+on d.id = Employee.dept_id
+group by d.name
+order by cnt desc,d.name asc;
+
+
+CREATE TABLE `department` (
+  `id` int(11) NOT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  `location` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+
+
+CREATE TABLE `Employee` (
+  `id` int(11) NOT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  `salart` int(11) DEFAULT NULL,
+  `dept_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `dept_id_idx` (`dept_id`),
+  CONSTRAINT `dept_id` FOREIGN KEY (`dept_id`) REFERENCES `department` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci

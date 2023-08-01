@@ -13,8 +13,10 @@ import com.graph.utils.UnDirectedGraphUtils;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 /*
 8
 8
@@ -80,10 +82,44 @@ public class DirectedGraphProblems {
         return vertices;
 
     }
-
+    
+    private static void iterativeDFS() {
+        // https://www.geeksforgeeks.org/iterative-depth-first-traversal/
+    }
+    
+    //A graph is acyclic if it doesn't have any back-edges.
+    
+    //Instead of marking egdes .. we can just pass the visiting hierarchy and check the visited vertex is in that or not. If yes
+    // then return that cycle exists[see GeeksForGeeks
+    private static void dfsWithoutMarkingEdges(DirectedGraph directedGraph,boolean isAForest, int startVertex) {
+        if(isAForest){
+            for(DirectedGraph.Vertex vert : directedGraph.getVertices()) {
+                if(!Vertex.isVisited(vert))
+                    doDfsWithoutMarkingEdges(vert,null, Set.of());
+            }
+        }else{
+            Vertex startVertexNode  = directedGraph.getVertex(startVertex);
+            doDfsWithoutMarkingEdges(startVertexNode,null, Set.of());
+        }
+    }
+    
+    private static void doDfsWithoutMarkingEdges(Vertex vertex, Vertex parent, Set<Vertex> hierarchy) {
+        hierarchy.add(vertex);
+        Vertex.setParent(vertex, parent);
+        for(DirectedEdge edge : vertex.getOutEdges()) {
+            if(!Vertex.isVisited(edge.getOtherEnd(vertex))) {
+                doDfsWithoutMarkingEdges(edge.getOtherEnd(vertex),vertex, new HashSet(hierarchy));
+            }
+            else if (hierarchy.contains(edge.getOtherEnd(vertex))) {
+                System.out.println("There is a cycle.");
+            }
+        }
+    }
+    
     //A graph is acyclic if it doesn't have any back-edges.
 
-    //Instead of marking egdes .. we can just pass the visiting hierarchy and check the visited vertex is in that or not. If yes
+    //Instead of marking edges .. we can just pass the visiting hierarchy and check the visited
+    // vertex is in that or not. If yes
     // then return that cycle exists[see GeeksForGeeks
     private static void dfs(DirectedGraph directedGraph,boolean isAForest,int startVertex) {
         int clock = 0;

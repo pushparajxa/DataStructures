@@ -1,0 +1,4 @@
+* It is not a distributed database. It is designed for single node.
+* The main idea is to use the higher number IOPS offered by the latest hardware. Typically for
+relational databases performance is not scaling linearly with increase in number of cores.
+  -- Reference: https://www.facebook.com/notes/10158791582997200/

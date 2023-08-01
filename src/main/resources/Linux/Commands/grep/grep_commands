@@ -1,0 +1,21 @@
+- To search with look ahead and look behind, use below commands
+
+  Input data:
+  
+  [_confluent-ksql-default_query_TCS_KSQL_TEST_20COL_TABLE_165-64dc8f76-6e10-450d-abee-bdacc2ebc257-StreamThread-3-consumer]
+  [_confluent-ksql-default_query_TCS_KSQL_TEST_20COL_TABLE_165-64dc8f76-6e10-450d-abee-bdacc2ebc257-StreamThread-3-consumer]
+  [_confluent-ksql-default_query_TCS_TABLE_TARF_PUBLIC_TEST_SET_TOPIC_157-dfa38879-cd14-4141-a4d0-86d2fac55772-StreamThread-4-consumer]
+  [_confluent-ksql-default_query_TCS_TABLE_TARF_PUBLIC_TEST_SET_TOPIC_157-dfa38879-cd14-4141-a4d0-86d2fac55772-StreamThread-4-consumer]
+  [_confluent-ksql-default_query_TCS_TABLE_TARF_PUBLIC_TEST_SET_TOPIC_157-dfa38879-cd14-4141-a4d0-86d2fac55772-StreamThread-4-consumer]
+  [_confluent-ksql-default_query_TCS_TABLE_TARF_PUBLIC_TEST_SET_TOPIC_157-dfa38879-cd14-4141-a4d0-86d2fac55772-StreamThread-4-consumer]
+  [_confluent-ksql-default_query_TCS_TABLE_TARF_PUBLIC_TEST_SET_TOPIC_157-dfa38879-cd14-4141-a4d0-86d2fac55772-StreamThread-2-consumer]
+  [_confluent-ksql-default_query_TCS_TABLE_TARF_PUBLIC_TEST_SET_TOPIC_157-dfa38879-cd14-4141-a4d0-86d2fac55772-StreamThread-2-consumer]
+  
+
+  Grep query:
+    
+    grep -Po "(?<=_confluent-ksql-default_query_)\w+(?=.*consumer)" | sort | uniq
+
+  References:
+    - https://javascript.info/regexp-lookahead-lookbehind#negative-lookahead
+    - https://unix.stackexchange.com/a/271657/286953

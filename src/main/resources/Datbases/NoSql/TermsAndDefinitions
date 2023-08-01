@@ -1,0 +1,14 @@
+Document Oriented Databases
+-----------------------------
+* MongoDB
+* Couchbase
+
+
+Column Stores
+--------------
+* Cassandra
+* HBase
+
+
+* Differences between document-oriented and Column store databases
+  * https://stackoverflow.com/questions/7565012/how-does-column-oriented-nosql-differ-from-document-oriented

@@ -67,6 +67,10 @@ Client makes a request. Server never ends the response. Will keep on sending mes
 message is identified with an identifier.
 
 * Refer:
+  * https://en.wikipedia.org/wiki/Comet_%28programming%29
+  * https://infrequently.org/wp-content/LowLatencyData.pdf
+  * Comet: Low Latency Data for the Browser (Alex Russel)
+    - https://infrequently.org/2006/03/comet-low-latency-data-for-the-browser/
   * http://nadirmuzaffar.blogspot.com/2013/03/polling-long-polling-comet-server-side.html
 
 
@@ -105,6 +109,7 @@ Server Sent Events
     * http://nadirmuzaffar.blogspot.com/2013/03/polling-long-polling-comet-server-side.html
     * https://medium.com/javarevisited/building-scalable-facebook-like-notification-using-server-sent-event-and-redis-9d0944dee618
     * https://www.baeldung.com/spring-server-sent-events
+    * https://javascript.info/server-sent-events
 
 
 Web Sockets
@@ -125,6 +130,13 @@ https://www.youtube.com/watch?v=a-sBfyiXysI
   * Each stream is independent of other streams.
   * It is used by 25% of websites.
 
+Difference between Long-Polling, Websockets, Server-Sent Events (SSE) and Comet
+-------------------------------------------------------------------------------
+* https://stackoverflow.com/a/12855533
+* https://stackoverflow.com/a/67758338
+* * My Understanding of HTTP Polling, Long Polling, HTTP Streaming and WebSockets
+    https://stackoverflow.com/questions/12555043/my-understanding-of-http-polling-long-polling-http-streaming-and-websockets
+
 References:
 -------------
 * Does CometD (Comet with Bayeux Protocol) use HTTP streaming or HTTP long polling?
@@ -140,6 +152,9 @@ References:
   * https://stackoverflow.com/questions/10800282/server-client-communication-long-polling-comet-server-sent-events-sse
 
 
+HTTP Pipelining
+----------------
+https://www-archive.mozilla.org/projects/netlib/http/pipelining-faq
 
 
 

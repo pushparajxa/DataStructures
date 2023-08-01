@@ -1,0 +1,8 @@
+When hard links are used?
+* In rsync/snapshot implementations.
+
+* When du command is used hardlinks are counted against its size. (Reference#2)
+
+References:
+ 1. https://unix.stackexchange.com/questions/20670/why-do-hard-links-exist
+ 2. https://stackoverflow.com/questions/19951883/du-counting-hardlinks-towards-filesize

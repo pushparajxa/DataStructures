@@ -1,3 +1,5 @@
+https://microservices.io/patterns/data/transactional-outbox.html
+
 https://medium.com/groupon-eng/varnish-to-redis-migration-887ad6d805d2
 
 client-side caching in redis: https://redis.io/docs/manual/client-side-caching/
