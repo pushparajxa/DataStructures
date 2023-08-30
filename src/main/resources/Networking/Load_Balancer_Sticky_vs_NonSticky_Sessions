@@ -35,7 +35,8 @@ route to the actual physical server.
 
 Sticky Session vs Non-Sticky Session
 ------------------------------------
-* In Sticky session load balacner will always direct requests from user to single physical app  server.
+* In Sticky session load balancer will always direct requests from user to single physical app
+server.
 * In Non sticky sessions load balancer can direct requests from client to any of the app servers
 behind the load balancer.
 

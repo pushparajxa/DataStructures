@@ -26,6 +26,8 @@ for example deferring allocation of a large amount of memory (e.g., a large imag
 https://en.wikipedia.org/wiki/Phantom_reference
 
 http://pawlan.com/monica/articles/refobjs/
+
+https://www.baeldung.com/java-phantom-reference August-2023
  */
 
 public class PhantomReferenceTest {
