@@ -1,3 +1,8 @@
+Layer-3 IP Layer Load Balancing
+---------------------------------
+Load balancing based on IP Address at network layer.
+
+
 Layer-4 TCP Layer Load Balancing
 ---------------------------------
 TCP layer balancing without inspecting the contents of the packet. Based on the source ip, port
@@ -16,7 +21,7 @@ Reference:
 
 HTTP Session
 -------------
-* HTTP is a statelss protocol, we need a way to remember the client state across the requests, i.e,
+* HTTP is a stateless protocol, we need a way to remember the client state across the requests, i.e,
   logged in time, ip address etc.. for which server creates a Http Session object.
 
 * Reference:
@@ -56,6 +61,20 @@ load balancer.
 
 * Reference
   * https://stackoverflow.com/a/11045462/1171533
+
+
+Load balancer vs reverse proxy
+------------------------------
+Reverse proxy hides the actual server ip and port to the client. You can deploy a reverse proxy
+ for a single backend server.
+
+Load balancer distributed load among a group of backend servers.
+It doesn't make sense to deploy loadbalancer for a single server.
+
+
+Reference: https://stackoverflow.com/questions/65174175/how-do-websocket-connections-work-through-a-load-balancer
+
+
 
 
 Cloud load balancing in long-lived TCP streams

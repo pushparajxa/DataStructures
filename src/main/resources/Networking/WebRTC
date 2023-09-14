@@ -1,0 +1,13 @@
+webRTC is used for browser to browser communication.
+
+Does it use webSockets?
+-----------------------
+Yes and No.
+
+ Signalling/ Signal Channel : In initial setup of communication with another browser, a
+ client/browser first need to make communication with server. This will happen over HTTP or
+ webSockets
+
+ Data Channel:  Here a client/browser communicates with another browser using webRTC.
+
+Reference: https://bloggeek.me/webrtc-vs-websockets/
