@@ -158,4 +158,27 @@ https://www-archive.mozilla.org/projects/netlib/http/pipelining-faq
 
 
 
+Stream multiplexing [https://cloud.google.com/blog/products/identity-security/how-it-works-the-novel-http2-rapid-reset-ddos-attack]
+-------------------
 
+HTTP/2 uses "streams", bidirectional abstractions used to transmit various messages, or "frames", between the endpoints.
+“Stream multiplexing” is the core HTTP/2 feature which allows higher utilization of each TCP connection.
+Streams are multiplexed in a way that can be tracked by both sides of the connection while only using one Layer 4 connection.
+Stream multiplexing enables clients to have multiple in-flight requests without managing multiple individual connections.
+One of the main constraints when mounting a Layer 7 DoS attack is the number of concurrent transport connections.
+Each connection carries a cost, including operating system memory for socket records and buffers, CPU time for the TLS handshake,
+as well as each connection needing a unique four-tuple, the IP address and port pair for each side of the connection, constraining the number of concurrent
+connections between two IP addresses.
+
+In HTTP/1.1, each request is processed serially. The server will read a request, process it, write a response, and only then read and process the next request.
+In practice, this means that the rate of requests that can be sent over a single connection is one request per round trip,
+where a round trip includes the network latency, proxy processing time and backend request processing time. While HTTP/1.1 pipelining is available in some clients
+ and servers to increase a connection's throughput, it is not prevalent amongst legitimate clients.
+
+With HTTP/2, the client can open multiple concurrent streams on a single TCP connection, each stream corresponding to one HTTP request.
+The maximum number of concurrent open streams is, in theory, controllable by the server, but in practice clients may open 100 streams per request and the servers
+process these requests in parallel. It’s important to note that server limits can not be unilaterally adjusted.
+For example, the client can open 100 streams and send a request on each of them in a single round trip; the proxy will read and process each stream serially,
+but the requests to the backend servers can again be parallelized. The client can then open new streams as it receives responses to the previous ones.
+This gives an effective throughput for a single connection of 100 requests per round trip, with similar round trip timing constants to HTTP/1.1 requests.
+This will typically lead to almost 100 times higher utilization of each connection.

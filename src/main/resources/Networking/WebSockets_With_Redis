@@ -1,0 +1,18 @@
+Client makes a upgrade(to websockets) request(HTTP) to server. If server supports websockets then it
+ responds yes and on that tcp connection they can use webcokets.
+
+
+If Client connects to reverse proxy or load balancer, there will two connections, one from client to
+ reverse proxy server and reverse proxy server to backend server.
+ -- Here reverse proxy server acts as L4 load balancer, it streams data between client and backend
+ server.
+ -- Here reverse proxy server at L7 protocol, deciphers the request and reads the headers for client
+  requests.
+ -- Sometimes it can acts as gateway, such as router
+ -- Reverse proxy servers also terminates TLS to decode the information in the request.
+
+
+
+
+
+Reference: https://www.youtube.com/watch?v=gzIcGhJC8hA
