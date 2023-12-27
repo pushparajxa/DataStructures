@@ -34,3 +34,17 @@ data-accepting process, a gateway to some other protocol, or a separate entity t
 In contrast, the URI in a PUT request identifies the entity enclosed with the request -- the user agent knows what URI
 is intended and the server MUST NOT attempt to apply the request to some other resource. If the
 server desires that the request be applied to a different URI,
+
+
+HEAD
+=======
+The HEAD method is used to ask only for information about a document, not for the document itself.
+HEAD is much faster than GET, as a much smaller amount of data is transferred.
+It's often used by clients who use caching, to see if the document has changed since it was last accessed.
+If it was not, then the local copy can be reused, otherwise the updated version must be retrieved with a GET.
+The metainformation contained in the HTTP headers in response to a HEAD request should be identical to the information sent in response to a GET request.
+This method can be used for obtaining metainformation about the resource identified by the request URI without transferring the data itself.
+This method is often used for testing hypertext links for validity, accessibility, and recent modification.
+
+Refer:
+  - https://condor.depaul.edu/dmumaugh/readings/handouts/SE435/HTTP/node14.html

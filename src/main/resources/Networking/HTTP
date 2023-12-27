@@ -2,19 +2,58 @@ HTTP is a single request and response protocol.
 
 Main Reference: http://nadirmuzaffar.blogspot.com/2013/03/polling-long-polling-comet-server-side.html
 
+HTTP Persistence Connection
+----------------------------
+* It is also called as HTTP Keep-alive. Using this a single TCP connection is used to send multiple
+http requests. Without this for each request from client to server, a connection is opened and is
+closed after server sends the response. Persistence connection enables pipelining of requests
+(multiple requests over single connection)
+
+* Refer https://en.wikipedia.org/wiki/HTTP_persistent_connection
+
+HTTP 1.0
+---------
+* Connections are not persistent. However un-officially it is supported by the used of header
+
+  Connection: keep-alive
+
+Client should send request with ahove header and if sever supports it then it will send response
+with the same header. After this, connection is not dropped until client sends a request with the
+header
+
+
+  Connection:
+
+  Connection: close
+
+
 HTTP 1.1
 --------
 * All connections are persistent by-default (with timeout).
+
+* HTTP/1.1 Spec limit number of keep-alive connections to only 2 per server by the client.
+
 * Timeout: connection timeout of Apache httpd 1.3 and 2.0 is as little as 15 seconds and just 5
   seconds for Apache httpd 2.2 and above.
-     * Refer: https://en.wikipedia.org/wiki/HTTP_persistent_connectio
+     * Refer: https://en.wikipedia.org/wiki/HTTP_persistent_connection
 
 HTTP Pipelining
 ---------------
 * It is available with HTTP-1.1
 
-* Client sends requests more the persistent connection and the server should return the responses in
- correct order the requests are received.
+* It allows more than one requests to be sent over single TCP connection without waiting for their
+responses. Server should send responses non-pipelined, i.e., serially in the order it has received
+the requests. This may result in HOL (head of line blocking) as the initial request received by the
+server may be take lot of time than others. For example, if the data is present in the server
+cache then it can send immediately, otherwise, it has to query database and send the result while
+other requests's data is available in the cache and can be sent quickly.
+
+
+* Client sends multiple requests over the persistent connection and the server should return the
+responses in the correct order the requests are received. Server need not to handle requests
+concurrently.
+
+* Idempotent requests shall only be pipelined.
 
 * Non-Idempotent requests like POST shall not be pipelined. As per standards specification.
   - Section 8.1.1.2 Pipelining
@@ -35,12 +74,19 @@ HTTP Pipelining
   - https://en.wikipedia.org/wiki/HTTP_pipelining
 
 
-HTTP Persistent Connections
-----------------------------
-* It is the idea of using single TCP connection to send and receive multiple HTTP
-  requests/responses, as opposed to opening a new connection for every single request/response pair.
 
-* Refer https://en.wikipedia.org/wiki/HTTP_persistent_connection
+HTTP/2 Streams
+-------------------
+The HTTP/2 specification defines a stream as “an independent, bidirectional sequence of frames exchanged between the client and server within an HTTP/2 connection.”
+You can think of a stream as a series of frames making up an individual HTTP request/response pair on a connection.
+When a client wants to make a request it initiates a new stream. The server will then reply on that same stream.
+This is simi‐ lar to the request/response flow of h1 with the important difference that because of
+the framing, multiple requests and responses can interleave together without one blocking another.
+The Stream Identifier (bytes 6–9 of the frame header) is what indi‐ cates which stream a frame belongs to.
+
+
+Ref: Page 47, Book: Learning HTTP/2, A Practical guide for begineers. Tech/Networking folder.
+
 
 HTTP Long Polling:
 -------------------

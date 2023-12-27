@@ -35,7 +35,7 @@ public class TopologicalSortGoodRich {
       Vertex vertex = verticesStack.pop();
       vertex.updateProperty(TOPOLOGICAL_ORDER_COUNT,topoOrder++);
       for(DirectedEdge edge: vertex.getOutEdges()){
-        Vertex destination = edge.getEnd();
+        Vertex destination = edge.getEndVertex();
         int inDegree = (Integer)destination.getProperty(IN_DEGREE_COUNT);
         destination.updateProperty(IN_DEGREE_COUNT,inDegree-1);
         if(inDegree-1==0){

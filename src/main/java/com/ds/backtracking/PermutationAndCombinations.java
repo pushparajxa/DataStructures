@@ -1,4 +1,4 @@
-package com.ds.math;
+package com.ds.backtracking;
 
 import java.util.Arrays;
 import static com.general.ArrayUtils.*;

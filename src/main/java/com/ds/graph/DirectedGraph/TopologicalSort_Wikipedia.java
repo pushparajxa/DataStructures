@@ -84,7 +84,7 @@ public class TopologicalSort_Wikipedia {
     }
     vertex.updateProperty(TOPO_VISIT_STATUS,TOPOLOGICAL_ORDER_VISIT_STATUS.TEMPORARY);
      for(DirectedEdge directedEdge: vertex.getOutEdges()){
-       Vertex destination = directedEdge.getEnd();
+       Vertex destination = directedEdge.getEndVertex();
        doDFsAndToTopoList(destination, topoOrder);
      }
      vertex.updateProperty(TOPO_VISIT_STATUS,TOPOLOGICAL_ORDER_VISIT_STATUS.PERMANENT);

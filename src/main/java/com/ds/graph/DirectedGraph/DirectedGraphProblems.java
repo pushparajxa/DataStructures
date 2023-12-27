@@ -154,19 +154,19 @@ public class DirectedGraphProblems {
         for(DirectedEdge edge: directedGraph.getEdges()){
 
             if(!edge.isPropertyDefined(EDGE_TYPE)){
-                Vertex begin = edge.getBegin();
-                Vertex end = edge.getEnd();
+                Vertex begin = edge.getBeginVertex();
+                Vertex end = edge.getEndVertex();
 
                 int beginStartTime=Vertex.getStartTime(begin),beginEndTime=Vertex.getEndTime(begin);
                 int endStartTime=Vertex.getStartTime(end),endEndTime =Vertex.getEndTime(end);
 
                 if(beginStartTime>endStartTime && beginEndTime<endEndTime){
                     DirectedEdge.markEdge(edge,BACK_EDGE);
-                }else if(beginStartTime<endStartTime && beginEndTime>endEndTime && !Vertex.isParent(edge.getBegin(),edge.getEnd())){
+                }else if(beginStartTime<endStartTime && beginEndTime>endEndTime && !Vertex.isParent(edge.getBeginVertex(),edge.getEndVertex())){
                     DirectedEdge.markEdge(edge,FORWARD_EDGE);
                 }else if(beginStartTime>endStartTime && beginEndTime>endEndTime){
                     DirectedEdge.markEdge(edge,CROSS_EDGE);
-                }else if(beginStartTime<endStartTime && beginEndTime>endEndTime && Vertex.isParent(edge.getBegin(),edge.getEnd())){
+                }else if(beginStartTime<endStartTime && beginEndTime>endEndTime && Vertex.isParent(edge.getBeginVertex(),edge.getEndVertex())){
                     DirectedEdge.markEdge(edge,TREE_EDGE);
                 }
             }

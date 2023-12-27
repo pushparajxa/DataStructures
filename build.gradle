@@ -45,14 +45,14 @@ sourceSets {
             srcDirs = ['src/main/scala']
         }*/
     }
-    test {
+  /*  test {
         scala {
            // srcDirs = ['test/scala']
         }
        /* java {
             srcDirs = ['src/test/java']
         }*/
-    }
+    //}
 }
 
 jar{
@@ -80,6 +80,14 @@ task copyJarsToLib (type: Copy) {
     from configurations.compile
     into toDir
 }
+
+tasks.withType(ScalaCompile) {
+    enabled = false
+}
+tasks.withType(ProcessResources) {
+    enabled = false
+}
+
 /*
 
 

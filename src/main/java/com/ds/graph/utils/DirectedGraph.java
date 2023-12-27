@@ -267,11 +267,11 @@ public  class DirectedGraph {
                 return begin;
         }
 
-        public Vertex getBegin(){
+        public Vertex getBeginVertex(){
             return begin;
         }
 
-        public Vertex getEnd(){
+        public Vertex getEndVertex(){
             return end;
         }
 
