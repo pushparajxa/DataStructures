@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 //http://winterbe.com/posts/2014/07/31/java8-stream-tutorial-examples/
+// https://www.baeldung.com/java-stream-reduce
 //ForkJoinPool is used for parallelStream
 
 public class CombinerTest {
@@ -43,4 +44,34 @@ public class CombinerTest {
      }
 
    }
+   
+   static int combinerTest2(List<Person> persons) {
+   
+/*       return  persons
+           .stream()
+           .reduce(0,
+               (sum, p) -> sum + p.age);
+        Gives compilation error as the accumulator is this invocation of reduce function is
+        expected to be of signature BiFunction<T, T, T>
+               
+                T reduce(T identity, BinaryOperator<T> accumulator);
+                
+                public interface BinaryOperator<T> extends BiFunction<T,T,T>
+                
+                where T in this case is Person. This is not the case when we use combiner as
+                below, the accumulator definition changes to
+                
+                <U> U reduce(U identity,
+                             BiFunction<U, ? super T, U> accumulator,
+                             BinaryOperator<U> combiner);
+          */
+
+      
+      return  persons
+           .stream()
+           .reduce(0,
+               (sum, p) -> sum + p.age,
+               Integer::sum);
+   }
+   
 }

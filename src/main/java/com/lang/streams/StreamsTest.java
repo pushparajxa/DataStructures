@@ -27,4 +27,10 @@ public class StreamsTest {
     }
     System.out.println(res);
   }
+  
+/*  static int listSum(List<Integer> list) {
+    
+    return list.stream().filter(x-> x<10).sorted().red
+    
+  }*/
 }
