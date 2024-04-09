@@ -18,7 +18,7 @@ public class BellmanFordSingleSourceShortestPaths
         String previous = "PREVIOUS_VERTEX";
         
         // Why we do n -1 times loop over all edges?
-        // Check the example run of algorithm in Algorithm design book
+        // Ans: Check the example run of algorithm in Algorithm design book
     
         for (Vertex vertex: directedGraph.getVertices()) {
             vertex.updateProperty(distance, Integer.MAX_VALUE);

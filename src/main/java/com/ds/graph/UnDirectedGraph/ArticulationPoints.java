@@ -29,6 +29,22 @@ Ans :: 1
 4 1 0
 1 6 0
 Ans :: 1
+
+8
+11
+0 1 0
+0 2 0
+1 2 0
+1 3 0
+1 4 0
+3 4 0
+3 5 0
+4 5 0
+6 5 0
+7 5 0
+6 7 0
+Ans :: 1,5
+// This graph is from articulation points section in the slides at https://web.iitd.ac.in/~bspanda/biconnectedMTL776.pdf
  */
 //Running time : O(V+E)
 public class ArticulationPoints {
@@ -62,9 +78,11 @@ public class ArticulationPoints {
         for(Edge edge: vertex.getEdges()){
                 Vertex otherEnd = edge.getOtherEnd(vertex);
                 if(Vertex.isVisited(otherEnd)){
-                    int discTime = Vertex.getDiscoveryTime(otherEnd);
-                    if(discTime<discoveryTime){
-                        lowTime=discTime;
+                    if (!otherEnd.equals(parent)) {
+                        int discTime = Vertex.getDiscoveryTime(otherEnd);
+                        if (discTime < discoveryTime) {
+                            lowTime = discTime;
+                        }
                     }
                 }else{
                     childrenCount++;
