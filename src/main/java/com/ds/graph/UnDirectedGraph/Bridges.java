@@ -57,12 +57,14 @@ public class Bridges {
                     Edge.setBridgeFlag(edge,false);
                 }
             }
-            else if(Vertex.isVisited(otherEnd) && !otherEnd.equals(parent)){
-                int discoveryTime = Vertex.getDiscoveryTime(otherEnd);
-                if(lowTime>discoveryTime){
-                    lowTime=discoveryTime;
+            else if(Vertex.isVisited(otherEnd) ){
+                if (!otherEnd.equals(parent)) {
+                    int discoveryTime = Vertex.getDiscoveryTime(otherEnd);
+                    if(lowTime>discoveryTime){
+                        lowTime=discoveryTime;
+                    }
+                    Edge.setBridgeFlag(edge,false);
                 }
-                Edge.setBridgeFlag(edge,false);
             }
         }
         Vertex.setLowTime(vertex,lowTime);
