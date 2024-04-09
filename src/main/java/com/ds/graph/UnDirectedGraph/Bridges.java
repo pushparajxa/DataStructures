@@ -18,7 +18,7 @@ Ans :: 0 - 5 & 0 - 1
 */
 
 //https://www.hackerearth.com/practice/algorithms/graphs/articulation-points-and-bridges/tutorial/
-//http://web.iitd.ac.in/~bspanda/biconnectedMTL776.pdf -- Understood from here on 11th July
+//http://web.iitd.ac.in/~bspanda/biconnectedMTL776.pdf -- Understood from here on 11th July -- The pdf file is saved in DataStructures/Graphs/UndirectedGraphs_Reference.pdf
 public class Bridges {
     public static void main(String[] args) {
         UnDirectedGraph graph = UnDirectedGraphUtils.readGraph("/tmp/unDirectedGraph5");

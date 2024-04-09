@@ -21,6 +21,7 @@ import java.util.Stack;
  * 7 8 0
  *
  * Implemented based on this http://web.iitd.ac.in/~bspanda/biconnectedMTL776.pdf
+ *  The pdf file is saved in DataStructures/Graphs/UndirectedGraphs_Reference.pdf
  */
 
 public class BiConnected_Components {
