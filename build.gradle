@@ -32,7 +32,9 @@ dependencies {
     // , 'org.apache.commons:commons-lang3:3.7'
             // 'com.amazonaws:aws-java-sdk:1.7.4','org.apache.hadoop:hadoop-aws:2.7.3'
     testCompile "org.scala-lang:scala-library:2.12.3",'org.testng:testng:6.11'
-    testCompile group: 'junit', name: 'junit', version: '4.10'
+    testCompile("org.junit.jupiter:junit-jupiter-engine:5.2.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.2.0")
+    testRuntime("org.junit.platform:junit-platform-console:1.2.0")
     zinc 'com.typesafe.zinc:zinc:0.3.15'
 }
 
@@ -45,14 +47,11 @@ sourceSets {
             srcDirs = ['src/main/scala']
         }*/
     }
-  /*  test {
-        scala {
-           // srcDirs = ['test/scala']
-        }
-       /* java {
+    test {
+        java {
             srcDirs = ['src/test/java']
-        }*/
-    //}
+        }
+    }
 }
 
 jar{
@@ -70,6 +69,12 @@ jar{
         println sourceSets.getByName("main").output.dirs
     }
 }
+
+test {
+    useJUnitPlatform()
+}
+
+
 task copyJarsToLib (type: Copy) {
     def toDir = "build/libs/dependency-jars"
 

@@ -1,0 +1,7 @@
+1. How client request is translated to Pojo at controller --> RequestBody
+    https://www.baeldung.com/spring-request-response-body
+2. How do we validate request body? Some parameters could have come null.
+    https://medium.com/@tericcabrel/validate-request-body-and-parameter-in-spring-boot-53ca77f97fe9
+3. How OAuth tokens are decrypted
+    --> Using server certificate or public key.
+4. Give a list with repeated strings, using streams output only repeated strings.
