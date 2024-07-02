@@ -34,7 +34,7 @@ public class CoinChange {
         }else{
           int l = j;
           while(l>=0){
-            dp[j][i] += dp[l][i-1];
+            dp[j][i] += dp[j][i-1];
             l = l - input[i-1];
           }
         }

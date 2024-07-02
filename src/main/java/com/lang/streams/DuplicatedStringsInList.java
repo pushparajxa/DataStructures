@@ -40,7 +40,6 @@ public class DuplicatedStringsInList {
     
         System.out.println(vals.stream().collect(Collectors.counting()));
         
-        vals.stream().collect(toMap())
     }
     
 }

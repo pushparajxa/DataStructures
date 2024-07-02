@@ -65,7 +65,7 @@ public  class DirectedGraph {
                     startVertex.outEdges.add(edge);
                     endVertex.inEdges.add(edge);
 
-                    graph.addEdge(edge);
+                    graph.addEdgeInternal(edge);
                 }
                 count++;
             }
@@ -81,7 +81,7 @@ public  class DirectedGraph {
             return vertexContainer.containsKey(vertex1);
     }
 
-    private void addEdge(DirectedEdge edge) {
+    private void addEdgeInternal(DirectedEdge edge) {
         edgeContianer.add(edge);
     }
 
@@ -117,8 +117,20 @@ public  class DirectedGraph {
     public Vertex getVertex(int startVertex) {
         return vertexContainer.get(startVertex);
     }
-
-
+    
+    public void removeEdge(DirectedEdge directedEdge) {
+        edgeContianer.remove(directedEdge);
+        vertexContainer.get(directedEdge.begin.number).outEdges.remove(directedEdge);
+        vertexContainer.get(directedEdge.end.number).inEdges.remove(directedEdge);
+    }
+    
+    public void addEdge(DirectedEdge directedEdge) {
+        edgeContianer.add(directedEdge);
+        vertexContainer.get(directedEdge.begin.number).outEdges.add(directedEdge);
+        vertexContainer.get(directedEdge.end.number).inEdges.add(directedEdge);
+    }
+    
+    
     public static class Vertex extends Decorator {
         private int number;
         private List<DirectedEdge> inEdges = new ArrayList<>();
