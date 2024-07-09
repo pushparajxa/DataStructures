@@ -1,0 +1,38 @@
+Transactions handled by a database  running on a datacenter node
+-----------------------------------------------------------------
+    A realtional database running on a typical data center node can support a few thousand trans-
+    actions per second.
+
+
+In the API design, we take amount to be string because different systems have different
+serialization mechanisms.
+
+  - It is recommended ot keep numbers ni string format during transmission and storage. They are
+  only parsed to numbers when used for display or calculation.
+
+
+Does Redis support distributed transactions?
+
+
+
+    What Do Participants Do When They Receive a "Prepare" Request?
+
+    Upon receiving a "prepare" request from the coordinator, each participant performs the following actions:
+      1	Validation:
+      ◦	The participant checks if it can successfully commit the transaction based on its current state and resources.
+      ◦	This involves validating the transaction’s integrity, ensuring no conflicting transactions are being processed, and verifying that it has all the necessary data and permissions to commit the transaction.
+      2	Logging:
+      ◦	The participant logs the fact that it is in the prepared state. This is critical for recovery purposes in case of failures.
+      ◦	The log entry indicates that the participant has agreed to commit the transaction if instructed by the coordinator.
+      3	Resource Locking:
+      ◦	The participant may lock the necessary resources to ensure the transaction can be committed without conflicts. This prevents other transactions from interfering and ensures data consistency.
+      ◦	This could involve locking rows in a database, reserving memory, or any other resources specific to the transaction.
+      4	Response:
+      ◦	The participant sends a response back to the coordinator indicating its decision.
+      ▪	Vote Yes: If the participant is ready and able to commit the transaction.
+      ▪	Vote No: If the participant is unable to commit the transaction, perhaps due to a conflict, lack of resources, or any other reason.
+    Summary of Participant Actions Upon Receiving "Prepare" Request
+      •	Validate: Check if the transaction can be committed.
+      •	Log: Record the prepared state for recovery.
+      •	Lock: Secure necessary resources to ensure commitment.
+      •	Respond: Inform the coordinator of readiness with a "yes" or "no" vote.

@@ -1,0 +1,19 @@
+Timeuuid
+--------
+  - now()
+    - You can generate this in cassandra using now() function. It basically returns a unique
+        value similar to UUID.
+    - Sample return value of now() functions looks like this 49d59e61-961b-11e8-9854-134d5b3f9cf8
+
+  - Cassandra provides two functions to compare timeuuids
+    - SELECT * FROM myTable
+         WHERE t > maxTimeuuid('2013-01-01 00:05+0000') --> Constructs a UUID at this timestamp
+         AND t < minTimeuuid('2013-02-02 10:00+0000')
+
+         -- This query gives all the results where t is greater than given TimeUUID and lesser than
+            given TimeUUID by the minTimeUUID function.
+
+
+
+  - Reference:
+      1. https://docs.datastax.com/en/cql-oss/3.1/cql/cql_reference/timeuuid_functions_r.html
