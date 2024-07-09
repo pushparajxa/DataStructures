@@ -3,6 +3,8 @@ https://en.wikipedia.org/wiki/Connectivity_(graph_theory)#Connected_vertices_and
 Forest: A graph without cycles (Forest will have one or many trees)
 Tree: Connected components of a forest or a forest which is connected.
 
+Simple Graph: Graph with no self-loops and no parallel edges.
+
 https://en.wikipedia.org/wiki/Glossary_of_graph_theory_terms#subgraph
 =====================================================================
 subgraph:
