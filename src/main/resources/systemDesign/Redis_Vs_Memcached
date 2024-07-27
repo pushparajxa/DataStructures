@@ -1,0 +1,49 @@
+Redis vs Memcached
+==================
+  Reference:
+      1. https://stackoverflow.com/a/11257333/1171533
+
+
+  1. Redis key/values can be upto 512 MB, where as Memcached can handle only upto 1 MB.
+
+  2. Memory usage: Redis is better.
+
+         memcached: You specify the cache size and as you insert items the daemon quickly grows to a little more than this size.
+         There is never really a way to reclaim any of that space, short of restarting memcached.
+         All your keys could be expired, you could flush the database, and it would still use the full chunk of RAM you configured it with.
+
+         redis: Setting a max size is up to you. Redis will never use more than it has to and will give you back memory it is no longer using.
+
+         I stored 100,000 ~2KB strings (~200MB) of random sentences into both. Memcached RAM usage grew to ~225MB.
+         Redis RAM usage grew to ~228MB. After flushing both, redis dropped to ~29MB and memcached stayed at ~225MB.
+         They are similarly efficient in how they store data, but only one is capable of reclaiming it.
+
+  3. Persistence: Redis offers persistence and can restart with data saved on to disk. This is not
+                  possible in Memcached.
+
+  4. Redis has master-slave cluster mode and offers high avaailability through sentinel mode.
+
+
+
+High availability with Redis Sentinel
+======================================================
+
+
+High availability for non-clustered Redis
+
+Redis Sentinel provides high availability for Redis when not using Redis Cluster.
+
+Redis Sentinel also provides other collateral tasks such as monitoring, notifications and acts as a configuration provider for clients.
+
+This is the full list of Sentinel capabilities at a macroscopic level (i.e. the big picture):
+
+    1. Monitoring. Sentinel constantly checks if your master and replica instances are working as
+    expected.
+    2. Notification. Sentinel can notify the system administrator, or other computer programs, via
+    an API, that something is wrong with one of the monitored Redis instances.
+    3. Automatic failover. If a master is not working as expected, Sentinel can start a failover
+            process where a replica is promoted to master, the other additional replicas are reconfigured to use the new master,
+              and the applications using the Redis server are informed about the new address to use when connecting.
+    4. Configuration provider. Sentinel acts as a source of authority for clients service discovery:
+             clients connect to Sentinels in order to ask for the address of the current Redis master responsible for a given service.
+             If a failover occurs, Sentinels will report the new address.

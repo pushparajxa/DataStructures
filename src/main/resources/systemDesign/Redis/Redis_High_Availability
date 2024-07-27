@@ -1,0 +1,57 @@
+Master - Replica Model
+======================
+
+  If the primary goes down after acknowledging a write but before the write can be replicated, then you might have data loss.
+  To avoid this, the client can use the WAIT command. This command blocks the current client until all of the previous write commands are
+  successfully transferred and acknowledged by at least some specified number of replicas.
+
+  For example, if we send the command WAIT 2 0, the client will block (will not return a response to the client) until
+   all of the previous write commands issued on that connection have been written to at least 2 replicas.
+    The second argument - 0 - will instruct the server to block indefinitely, but we could set it to a number (in milliseconds)
+    so that it times out after a while and returns the number of replicas that successfully acknowledged the commands.
+
+
+  Replicas are read-only. This means that you can configure your clients to read from them, but you cannot write data to them.
+  If you need additional read throughput, you can configure your Redis client to read from replicas as well as from your primary node.
+
+  # Reference:
+    - https://redis.io/learn/operate/redis-at-scale/high-availability/basic-replication
+
+
+Sentinel Model
+==============
+
+  # Reference:
+    - https://redis.io/learn/operate/redis-at-scale/high-availability/understanding-sentinels
+
+
+
+Redis Cluster with hash slots
+=============================
+
+
+  # Hash slots: 16834 slots are there. They can distributed among multiple masters
+    Each cluster has 16384 hash slots that can be distributed across all the nodes, and during all operations,
+    the Redis client uses the key to calculate the hash by taking the CRC16 of the key modulo 16384.
+    Then, it uses it to route the command to the correct node.
+
+  # Hash Tags
+
+    This mechanism helps users guarantee a group of keys go to the same hash slot. To define a hash tag,
+     the user has to add a substring between brackets in a key. For instance, the keys app1{user:123}.mykey1 and app1{user:123}.mykey2 would go to the same hash lot.
+
+    By doing this, Redis only uses the substring to generate the hash of the key and, consequently, for routing all keys to the same hash slot.
+
+  # Failover model:
+    - Gossip protocol
+
+     Redis Cluster can detect when a primary shard fails and promote a replica to a primary without any manual intervention from the outside.
+      How does it do it? How does it know that a primary shard has failed, and how does it promote its replica to be the new primary shard?
+      We need to have replication enabled. Say we have one replica for every primary shard. If all our data is divided between three Redis servers,
+      we would need a six-member cluster, with three primary shards and three replicas.
+
+     All 6 shards are connected to each other over TCP and constantly PING each other and exchange messages using a binary protocol.
+     These messages contain information about which shards have responded with a PONG, so are considered alive, and which haven’t.
+
+  # Reference:
+    - https://redis.io/learn/operate/redis-at-scale/scalability/clustering-in-redis

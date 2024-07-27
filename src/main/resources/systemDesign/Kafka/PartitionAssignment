@@ -1,0 +1,31 @@
+* Range Assignor
+
+
+* Round robin assignor
+
+
+* Sticky Assignor
+
+
+* Cooperative Sticky Assignor
+
+
+
+Key Differences between Sticky Assignor and Cooperative Sticky Assignor
+================
+
+    Rebalancing Approach:
+        StickyAssignor: Uses a traditional approach to rebalancing, where all consumers stop consuming, partitions are reassigned, and then consumers resume consuming. This can lead to a significant downtime during rebalancing, especially in large consumer groups.
+        CooperativeStickyAssignor: Uses an incremental approach to rebalancing, where partitions are reassigned in a step-by-step manner. This minimizes downtime and allows consumers to continue consuming from their current partitions while the rebalancing process is ongoing. It achieves this by having consumers revoke only a subset of their partitions at a time.
+
+    Consumer Downtime:
+        StickyAssignor: Potential for longer downtime during rebalances, as all consumers stop and start at the same time.
+        CooperativeStickyAssignor: Reduces consumer downtime by allowing a more gradual transition during rebalances.
+
+    Partition Movement:
+        StickyAssignor: Attempts to minimize partition movement but can still lead to all consumers stopping and reassigning partitions in a disruptive manner.
+        CooperativeStickyAssignor: Not only minimizes partition movement but also reduces the impact of rebalances by doing them incrementally, leading to a smoother experience.
+
+    Configuration:
+        StickyAssignor: Configured by setting partition.assignment.strategy to org.apache.kafka.clients.consumer.StickyAssignor.
+        CooperativeStickyAssignor: Configured by setting partition.assignment.strategy to org.apache.kafka.clients.consumer.CooperativeStickyAssignor.

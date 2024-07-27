@@ -1,0 +1,15 @@
+- DynamoDB is good for writes and reads with high throughput.
+
+- RockDB, BigTable, Cassandra are good for write throughput. They use WAL, MemTable and SSTable
+architectures.
+
+- Sloppy Quorum:
+  If Dynamo used a traditional quorum approach it would be
+  unavailable during server failures and network partitions, and
+  would have reduced durability even under the simplest of failure
+  conditions. To remedy this it does not enforce strict quorum
+  membership and instead it uses a “sloppy quorum”; all read and
+  write operations are performed on the first N healthy nodes from
+  the preference list, which may not always be the first N nodes
+  encountered while walking the consistent hashing ring.
+

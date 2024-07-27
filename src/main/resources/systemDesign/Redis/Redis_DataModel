@@ -1,0 +1,2 @@
+- In Redis all keys are Strings.
+  + They are binary safe meaning, you can use any binary sequence as a key, from a string like "foo" to the content of a JPEG file.

@@ -230,7 +230,7 @@ This gives an effective throughput for a single connection of 100 requests per r
 This will typically lead to almost 100 times higher utilization of each connection.
 
 
-X-Forwarded For
+X-Forwarded-For
 ----------------
 The X-Forwarded-For request header helps you identify the IP address of a client when you use an HTTP or HTTPS load balancer.
  Because load balancers intercept traffic between clients and servers, your server access logs only contain the IP address of the load balancer.

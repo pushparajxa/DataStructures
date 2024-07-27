@@ -1,0 +1,36 @@
+# Slow replica:
+  A follower replica that is consistently not able to catch up with the writes on the
+  leader for a certain period of time. One of the most common reasons for this is an I/O bottleneck on the
+  follower replica causing it to append the copied messages at a rate slower than it can consume from the leader.
+
+# Stuck replica:
+  A follower replica that has stopped fetching from the leader for a certain period
+  of time. A replica could be stuck either due to a GC pause or because it has failed or died.
+
+# Bootstrapping replica:
+  When the user increases the replication factor of the topic, the new follower replicas are out-of-sync until they are
+  fully caught up to the leader’s log.
+
+# How replica's state whether being stuck or slow is calculated?
+ - replica.lag.time.max.ms
+  What we realized is that there is only one thing that really matters in order to detect
+  either a stuck or a slow replica and that’s the time for which a replica has been out-of-sync
+  with the leader. Removing the lag definition in terms of number of messages gets rid of the
+  need to guess the right value based on the expected traffic for the topic. Now there is only one
+  value you need to configure on the server which is replica.lag.time.max.ms. The interpretation of
+  this has changed to be the time for which a replica has been out-of-sync with the leader.
+  Stuck or failed replicas are detected the same way as before–if a replica fails to send a
+  fetch request for longer than replica.lag.time.max.ms, it is considered dead and is removed from the ISR.
+  The mechanism of detecting slow replicas has changed–if a replica starts lagging behind the
+  leader for longer than replica.lag.time.max.ms, then it is considered too slow and is removed
+  from the ISR. So even if there is a spike in traffic and large batches of messages are written on the leader,
+  unless the replica consistently remains behind the leader for replica.lag.time.max.ms, it will not shuffle in and out of the ISR.
+
+  This new model for detecting out-of-sync replicas puts an upper bound on the message commit latency
+  and also removes the need for any guesswork.
+
+
+
+
+# Reference
+  - https://www.confluent.io/blog/hands-free-kafka-replication-a-lesson-in-operational-simplicity/

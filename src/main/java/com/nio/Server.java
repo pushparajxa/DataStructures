@@ -11,6 +11,10 @@ import java.util.Iterator;
 
 /*
 Accept connection from a single client then send a buffer.
+
+Reference:
+    1. https://rolandvarga-io.pages.dev/posts/http-server-java-nio/
+    2. https://docs.oracle.com/en/java/javase/21/core/java-nio.html
  */
 public class Server {
     public static void main(String[] args) {

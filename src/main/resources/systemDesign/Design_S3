@@ -17,3 +17,29 @@ Timeuuid
 
   - Reference:
       1. https://docs.datastax.com/en/cql-oss/3.1/cql/cql_reference/timeuuid_functions_r.html
+
+
+
+Sharding vs Partitioning vs Striping
+----------------------------------------
+
+	In sharding, we divide data into multiple database instances spread across different machines. A table can be shared across multiple database instances.
+
+	In case of striping, we divide a file into multiple blocks and store it in different machines. We can combine with RAID to get durability
+
+	In case of  partitioning, we divide a table into mutliple sub-parts on a single database instance on a single machine.
+
+
+  Refer: https://chatgpt.com/share/1ddd8ae0-63a6-403e-b8d6-56406aa31512
+
+
+Durability or handling failure of disks
+----------------------------------------
+	As of 2023, modern data storage systems can be designed to tolerate the complete failure of a few disks without data loss, using one of 3 approaches:
+    ⁃	Replication
+    ⁃	RAID
+    ⁃	Erasure Coding
+	While technically RAID can be seen as a kind of erasure code,"RAID" is generally applied to an array attached to a single host computer (which is a single point of failure), while "erasure coding" generally implies multiple hosts, sometimes called a Redundant Array of Inexpensive Servers 		(RAIS). The erasure code allows operations to continue when any one of those hosts stops.
+	Compared to block-level RAID systems, object storage erasure coding has some significant differences that make it more resilient.
+
+    Refer: https://en.wikipedia.org/wiki/Erasure_code

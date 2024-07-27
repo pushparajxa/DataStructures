@@ -1,0 +1,12 @@
+# acks=0,
+  Producer will immediately returns from send call. It will not wait for broker to reply.
+
+# acks=1,
+  Producer will wait for ACK from leader of the topic-parition
+
+# ack=-1 or ack=ALL
+  Producer will wait for acks from all the replicas in ISR.
+
+# min.isr:
+  This can be set at broker level or producer level. When set, producer will not move forward or the
+  write request will fail when min.isr number of in-sync replicas doesn't exist.

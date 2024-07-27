@@ -1,0 +1,43 @@
+Does Kafka broker to flush/fsync for rach write? If not, how does it ensure fault-tolerance or
+recovery upon crashes?
+=====================================
+
+# Reference:
+  - https://jack-vanlightly.com/blog/2023/4/24/why-apache-kafka-doesnt-need-fsync-to-be-safe
+
+
+# Last standing replica problem:
+    https://jack-vanlightly.com/blog/2023/8/17/kafka-kip-966-fixing-the-last-replica-standing-issue
+
+
+
+
+Zero Copy
+=========
+
+# Zero copy reduces CPU times. But this has little effect on Kafka performance since Kafka is IO
+intensive. NIC Buffer is the contention point.
+
+# Zero copy is achieved by transferTo method,
+
+  public abstract long transferTo(long position,
+                                  long count,
+                                  WritableByteChannel target)
+                           throws IOException
+
+  Transfers bytes from this channel's file to the given writable byte channel.
+
+
+  This method is potentially much more efficient than a simple loop that reads from this channel and writes to the target channel.
+  Many operating systems can transfer bytes directly from the filesystem cache to the target channel without actually copying them.
+
+  * Refer:
+    - https://docs.oracle.com/javase/8/docs/api/java/nio/channels/FileChannel.html#transferTo-long-long-java.nio.channels.WritableByteChannel-
+    - https://www.linkedin.com/pulse/tuning-kafka-high-performance-scalability-mostafa-ghadimi/
+    - https://2minutestreaming.beehiiv.com/p/apache-kafka-zero-copy-operating-system-optimization
+    - https://gist.github.com/dstuebe/28fdbed439a6a73d8b2e08f11fea38d3
+    - https://medium.com/@kaixin667689/zero-copy-principle-and-implementation-9a5220a62ffd
+    - https://www.youtube.com/watch?v=SLkRYqj6d4E&t=260s
+    - http://varnish-cache.org/docs/trunk/phk/notes.html --Using memory mapped file idea used in Varnish
+    - https://docs.confluent.io/platform/7.1/kafka/design.html
+    - https://www.sahilmalhotra.com/blog/kafka-storage

@@ -1,0 +1,11 @@
+
+- Wth in the application isolate threads by configuring different thread pools for each one so that
+one doesn't consume all the resources allotted to the process/application.
+- Isolate applications through containers,
+- Isolate host failures,
+- Isolate rack failures,
+- Isolate datacenter or availability zone failures
+
+# Reference
+  - https://developers.redhat.com/blog/2017/05/16/it-takes-more-than-a-circuit-breaker-to-create-a-resilient-application
+  - https://resilience4j.readme.io/docs/bulkhead

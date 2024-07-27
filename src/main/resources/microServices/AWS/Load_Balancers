@@ -1,0 +1,62 @@
+Elastic Load Balancing supports the following types of load balancers:
+
+    Application Load Balancers
+
+    Network Load Balancers
+
+    Gateway Load Balancers
+
+    Classic Load Balancers
+
+There is a key difference in how the load balancer types are configured. With Application Load Balancers,
+Network Load Balancers, and Gateway Load Balancers, you register targets in target groups, and route traffic to the target groups.
+With Classic Load Balancers, you register instances with the load balancer.
+
+
+Application Load Balancers (ALBs)
+==================================
+
+# These operate at L7.
+# They have listeners, each listener looks at each request and based on the configured rules, it
+  routes requests to a target in the target group.
+# One or many target groups registers with a load balancer. Each target groups contains one or many
+  targets.
+# A target can be part of many target groups.
+# Each target group also has a health checker which checks the health of the targets in the group
+  and notifies load balancer.
+
+
+
+    Cross-zone load balancers
+    =========================
+    * There can be many load balancer nodes in a load balancer. Each load balancer can be attached to an
+      availability zone. A load balancer node can distribute requests to targets in other availability
+      zones which are under another load balancer node.
+    * When a client requests comes, it goes to ROUTE 53, which resolves it to a load balancer. Then
+      request is forwarded to that load balancer.
+    * Before a client sends a request to your load balancer, it resolves the load balancer's domain name using a Domain Name System (DNS) server.
+      The DNS entry is controlled by Amazon, because your load balancers are in the amazonaws.com
+      domain. The Amazon DNS servers return one or more IP addresses to the client. These are the IP
+       addresses of the load balancer nodes for your load balancer.
+     * Reference: https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html
+
+
+# ALBs supports WebSockets apart from HTTP and HTTPS
+  - https://stackoverflow.com/questions/39336033/does-an-application-load-balancer-support-websockets/40423241#40423241
+  - https://www.reddit.com/r/aws/comments/z0o47i/comment/ixdnv8m/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+
+# Reference:
+  - https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html
+  - https://www.reddit.com/r/aws/comments/z0o47i/what_is_the_difference_between_an_application/
+  - https://dashbird.io/blog/can-api-gateway-act-load-balancer/
+  - https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html
+
+
+Classic Load Balancers (ALBs)
+==================================
+
+
+
+
+# Reference:
+  - https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/introduction.html

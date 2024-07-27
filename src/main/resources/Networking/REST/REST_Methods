@@ -1,0 +1,72 @@
+PUT   :: MUST be idemppotent
+====
+ - PUT operations should be idempotent. Even if we call PUT request n-times it should create or
+ replace only one time
+
+ - The URL should include the resource name
+
+
+   Used to create a resource, or overwrite it, while you specify the resources URL.
+
+   For a new resource:
+
+   PUT /questions/<new_question> HTTP/1.1
+   Host: whateverblahblah.com
+
+   To overwrite an existing resource:
+
+   PUT /questions/<existing_question> HTTP/1.1
+   Host: whateverblahblah.com
+
+   ...Yes, they are the same. PUT is often described as the 'edit' method, as by replacing the entire resource with a slightly altered version,
+    you have edited what clients will GET when they next do.
+
+
+
+    RFC 7231 Section 4.3.4 PUT
+    ---------------------------------------
+
+    The PUT method requests that the state of the target resource be created or replaced with the state defined by the representation enclosed
+     in the request message payload.
+
+
+
+POST : Used to create a resource
+================================
+ - This is not idempotent. Calling POST n times will create n resources
+ - We should not include a resource that doesn't exist already in the URL.
+ - We use this to create new resources given that resource id is specified.
+
+
+   Note that the following is an error:
+
+   POST /questions/<new_question> HTTP/1.1
+   Host: whateverblahblah.com
+
+   If the URL is not yet created, you should not be using POST to create it while specifying the name.
+   This should result in a resource not found error because does not exist yet. You should PUT the resource on the server first.
+   You could argue that by creating a new question, you are also updating the /questions resource as it would now return one more question
+   in its list of questions.
+
+   You should do something like this to create a resource using POST:
+
+   POST /questions HTTP/1.1
+   Host: whateverblahblah.com
+
+   Note that in this case the resource name is not specified, the new objects URL path would be returned to you.
+
+
+Reference:
+    1. https://stackoverflow.com/questions/256349/what-are-the-best-common-restful-url-verbs-and-actions/256359#256359
+    2. https://stackoverflow.com/questions/630453/what-is-the-difference-between-post-and-put-in-http
+
+
+While chossing between POST and PUT, think in terms of idempotency. PUT operations must be
+idempotent.
+
+
+Updating a value RESTfully with Post
+======================================
+
+Reference:
+  1. https://stackoverflow.com/a/1575047/1171533

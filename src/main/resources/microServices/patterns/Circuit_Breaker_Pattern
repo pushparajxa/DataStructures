@@ -1,0 +1,18 @@
+# It has three states,
+  - Closed
+  - Open
+  - Half-Open
+
+# Libraries providing circuit breaker implementation
+  - resilience4j
+
+# Asynchronous circuit breakers
+ - Most circuit breakers are synchronous in nature.
+ - In asynchronous systems, consumer read messages through queue. This way upstream and downstream
+ are decoupled.
+ - In this setup, we can put synchronous circuit breaker before the queue, which stops inserting
+ elements into the queue when the consumer is also and queue start getting full.
+
+
+ # Reference
+  - https://stackoverflow.com/a/72508426/1171533

@@ -1,0 +1,44 @@
+High watermark: The offset until which log is replicated across all in-sync replicas
+
+Log End Offset: The offset where broker will persists next message received from producer.
+
+LOE is generally greater than High watermark.
+
+# Reference:
+  - https://stackoverflow.com/a/67806069/1171533
+  - https://rongxinblog.wordpress.com/2016/07/29/kafka-high-watermark/
+
+
+# How to get high watermark of a topic partition
+
+  public Map<TopicPartition,Long> endOffsets(Collection<TopicPartition> partitions)
+
+  Get the end offsets for the given partitions. In the default read_uncommitted isolation level,
+  the end offset is the high watermark (that is, the offset of the last successfully replicated message plus one).
+  For read_committed consumers, the end offset is the last stable offset (LSO), which is the minimum
+  of the high watermark and the smallest offset of any open transaction.
+  Finally, if the partition has never been written to, the end offset is 0.
+
+  This method does not change the current consumer position of the partitions.
+
+  * Refer:
+      https://kafka.apache.org/31/javadoc/org/apache/kafka/clients/consumer/KafkaConsumer.html#endOffsets(java.util.Collection)
+
+
+# How to get LEO of a topic partition
+
+  * set Kafka consumer isolation mode to read_uncommitted which is default value.
+    - consumerProps.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed")
+
+  * public void seekToEnd(Collection<TopicPartition> partitions)
+    Seek to the last offset for each of the given partitions. This function evaluates lazily,
+    seeking to the final offset in all partitions only when poll(Duration) or position(TopicPartition) are called.
+     If no partitions are provided, seek to the final offset for all of the currently assigned partitions.
+
+    If isolation.level=read_committed, the end offset will be the Last Stable Offset, i.e., the offset of the first message with an open transaction.
+
+  * The call this method,
+   - public long position(TopicPartition partition)
+
+  * Reference:
+    - https://kafka.apache.org/31/javadoc/org/apache/kafka/clients/consumer/KafkaConsumer.html#seekToEnd(java.util.Collection)

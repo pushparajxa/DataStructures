@@ -4,8 +4,8 @@ package com.ds.graph.DirectedGraph;
 //There are two algorithms to do this. 1.Tarjan Algorithm 2. Kosaraju Algorithm
 /*
 
-Strongly connected component: A component in which for any given vertex A to any vertex B, there
-will be paths in both the directions. It means there is a cycle among all the vertices of the
+Strongly connected component: a component is said to be strongly connected if every vertex is
+reachable from every other vertex. It means there is a cycle among all the vertices of the
 component.
 
 This algorithm outputs strongly connected components in such a way that a vertex is part of only

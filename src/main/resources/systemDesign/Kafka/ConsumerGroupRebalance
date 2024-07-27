@@ -1,0 +1,36 @@
+* Rebalancing happens in following scenarios
+  - When a consumer dies
+  - When a consumer is added
+  - When number of paritions were increased on the topics
+
+* There are two modes of rebalancing
+  - Eager Rebalancing
+  - cooperative rebalancing
+
+* Eager Rebalacing
+  - It is done in two phases
+  - Eager rebalances have two distinct phases:
+     + first, all consumers give up their assigned partitions and stop consuming
+     + second, they rejoin the group, get new partition assignments, and resume consuming messages
+     and processing.
+  - Reference:
+    + https://www.conduktor.io/blog/kafka-partition-assignment-strategy/
+
+* Cooperative Rebalancing
+  - The rebalance is done in two or more phases.
+    + In the first phase, the leader informs all the consumers that they will lose ownership of some
+       partitions, then the consumer will give up their ownership of these partitions.
+    + In the next phase, the coordinator will assign these orphaned partitions to their new
+      Consumers. The Cooperative rebalance may take a few iterations until a stable partition assignment is achieved,
+      but it avoids the unavailability that occurs with the eager approach.
+      This is very important in the significantly large consumer groups where rebalance takes more time.
+  - Reference:
+    + https://www.conduktor.io/blog/kafka-partition-assignment-strategy/
+
+
+* Consumer Group Rebalance Listener
+  - https://kafka.apache.org/25/javadoc/org/apache/kafka/clients/consumer/ConsumerRebalanceListener.html
+  - https://www.perplexity.ai/search/in-this-documentation-of-consu-DCFKZ2VISxWczac6VzQy_Q
+
+* Reference
+  - https://www.conduktor.io/blog/kafka-partition-assignment-strategy/

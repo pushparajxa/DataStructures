@@ -22,9 +22,23 @@ from one application to another across a network, while maintaining the quality-
 
 Layer-5 Session Layer
 ---------------------
-* DNS, Sockets
-* establishes procedures for checkpointing, suspending, restarting, and terminating a session between two related streams of data,
+* Sockets, SOCKS
+* Establishes procedures for checkpointing, suspending, restarting, and terminating a session between two related streams of data,
   such as an audio and a video stream in a web-conferencing application.
+* At the minimum, the session layer allows the two sides to establish and use a connection, called a session, and allows orderly release of the connection.
+
+   -  In the OSI model, the transport layer is not responsible for an orderly release of a
+      connection. Instead, the session layer is responsible for that.
+      However, in modern TCP/IP networks, TCP already provides orderly closing of connections at the
+       transport layer.
+
+   -  After a session connection is released, the underlying transport connection may be reused for
+      another session connection.
+
+   -  Also, a session connection may make use of multiple consecutive transport connections. For
+      example, if, during a session, the underlying transport connection has a failure, the session layer may try to re-establish a
+      transport connection to continue the session.
+
 
 Layer-6 Presentation Layer
 --------------------------
@@ -34,6 +48,6 @@ Layer-6 Presentation Layer
 Layer-7 Application Layer
 -------------------------
 * A way for client to send files, send mails to servers.
-* HTTP, SMTP, FTP, SCP, SSH
+* HTTP, SMTP, FTP, SCP, SSH, DNS
 
 Reference: https://en.wikipedia.org/wiki/OSI_model

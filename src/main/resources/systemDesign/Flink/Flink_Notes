@@ -1,0 +1,21 @@
+Flink is aimed for real-time streaming. It supports both Bath and Streaming.
+
+ * Flink offers native streaming, while Spark uses micro batches to emulate streaming.
+     - Unlike Spark which ismade for ETL or batch executions (it simulates real-time by having small
+            batch window size).
+
+ * Spark optimizes Map Reduce by having data in memory after Map Phase and using it in Reduce phase.
+  In normal Map Reduce, after Map phase we write data to disk and then again read it during Reduce
+  phase.
+
+
+ * Flink supports checkpointing the state of data so far processed to locally at file or RocksDB
+ locally or to a distributed storage such as HDFS.
+
+ * Based on the input partitions Flink can generate as many tasks as required and can use YARN or
+ MESOS or Kubernetes to schedule the jobs. JobManager handles the job status.
+
+ * References
+  - Bookmarked in firefox.
+  - Flink vs Spark comparision
+      - https://www.macrometa.com/event-stream-processing/spark-vs-flink

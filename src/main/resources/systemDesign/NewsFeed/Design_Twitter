@@ -1,0 +1,4 @@
+Fan out service:
+================
+    1. Do we need to build that many caches as that many users?
+      Yes, https://stackoverflow.com/a/74567665/1171533

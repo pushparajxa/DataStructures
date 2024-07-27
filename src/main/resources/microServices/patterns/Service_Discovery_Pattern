@@ -1,0 +1,12 @@
+# Service Registry
+  - Registration and deregistration of services :: Services register with registry with their
+  address
+  - Registry checks the health of registered services
+
+# Clients can directly talk to service registry and get the address of the required service.
+
+# Or, clients connect to load balancer, which asks registry for address and forwards that address to
+ the client.
+
+- Reference:
+  - https://www.designgurus.io/course-play/grokking-microservices-design-patterns/doc/service-discovery-pattern-a-solution

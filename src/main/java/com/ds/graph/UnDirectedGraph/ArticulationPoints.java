@@ -98,12 +98,12 @@ public class ArticulationPoints {
                         if(otherEndLowTime>=discoveryTime){
                             Vertex.setArticularionPointFlag(vertex,true);
                         }
-                        lowTime = Math.min(lowTime,Vertex.getLowTime(otherEnd));
+                        lowTime = Math.min(lowTime,otherEndLowTime);
 
                     }
                 }
             }
         Vertex.setLowTime(vertex,lowTime);
-        return clock;
+        return clock; // do we need to do clock++? Check this.
     }
 }

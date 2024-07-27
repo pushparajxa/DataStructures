@@ -1,0 +1,53 @@
+DynamoDB uses a non-relational (NoSQL) data model that is significantly different from traditional relational databases. Here are the key aspects of DynamoDB's data model:
+
+    Tables:
+    =======
+        Data is organized into tables, similar to other databases. However, DynamoDB tables are schemaless,
+              meaning items in the same table can have different attributes.
+
+    Items:
+    ======
+          Each table contains items, which are analogous to rows or records in relational databases. Items in DynamoDB are schema-less
+            and can have a varying number of attributes.
+
+    Attributes:
+    ===========
+        These are the data elements associated with each item, similar to columns in relational databases. Attributes in DynamoDB are name-value pairs.
+
+    Primary Key:
+    ============
+        Every item in a table is uniquely identified by a primary key. DynamoDB supports two types of primary keys:
+          Partition Key: A simple primary key composed of a single attribute.
+          Composite Key: Composed of two attributes - a partition key and a sort key.
+
+    Secondary Indexes:
+    ==================
+        These allow you to query the data in the table using an alternate key, in addition to queries against the primary key.
+                        DynamoDB supports two types of secondary indexes:
+
+        Global Secondary Index (GSI): An index with a partition key and optional sort key that can be different from those on the base table.
+        ----------------------------
+        Local Secondary Index (LSI):   An index that has the same partition key as the base table, but a different sort key.
+        ----------------------------
+
+    Item Collections:
+    ================
+        In tables with a composite primary key, all items with the same partition key value are grouped together as an item collection.
+
+    Single-Table Design:
+    ====================
+          Unlike relational databases where data is typically spread across multiple tables, DynamoDB often uses
+                            a single-table design where multiple entity types are stored in the same table.
+
+    Denormalization:
+    ===============
+          Data is often duplicated or denormalized to optimize for query performance, as DynamoDB doesn't support joins.
+
+    Sparse Indexes:
+    ===============
+          Not all items in a table need to have every attribute, allowing for flexible and efficient data storage.
+
+    Document Model:
+    ===============
+          DynamoDB supports storing complex nested attributes using JSON-like documents.
+

@@ -1,0 +1,44 @@
+
+
+
+
+Transactional Consumer
+======================
+
+# If consumer sets isolation.level to read_committed
+  consumerProps.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed")
+
+  it will not read messages any non-transactional messages produced while there are any on-going
+  transactions. After transactions are committed, it will read transaction messages and then
+  non-transaction messages.
+
+# If isolation level is read_uncommitted.
+
+  It will read messages of transactions that are on-going, i.e., transactions that are yet to
+  committed or may be aborted. It will read any non-transaction related messages written to it as
+  well.
+
+
+# From https://kafka.apache.org/documentation/#consumerconfigs_isolation.level
+  Controls how to read messages written transactionally. If set to read_committed,
+  consumer.poll() will only return transactional messages which have been committed. If set
+  to read_uncommitted (the default), consumer.poll() will return all messages, even
+  transactional messages which have been aborted. Non-transactional messages will be
+  returned unconditionally in either mode.
+
+  Messages will always be returned in offset order. Hence, in read_committed mode,
+  consumer.poll() will only return messages up to the last stable offset (LSO), which is the
+  one less than the offset of the first open transaction. In particular any messages appearing
+  after messages belonging to ongoing transactions will be withheld until the relevant
+  transaction has been completed. As a result, read_committed consumers will not be
+  able to read up to the high watermark when there are in flight transactions.
+
+  Further, when in read_committed the seekToEnd method will return the LSO
+
+# LSO: which is the minimum of the high watermark and the smallest offset of any open transaction.
+  - https://kafka.apache.org/31/javadoc/org/apache/kafka/clients/consumer/KafkaConsumer.html#endOffsets(java.util.Collection)
+
+# References
+  - https://stackoverflow.com/a/60151360/1171533
+  - https://stackoverflow.com/a/75856680/1171533
+  - https://www.confluent.io/blog/transactions-apache-kafka/

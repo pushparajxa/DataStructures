@@ -1,0 +1,55 @@
+# REST must be stateless.
+  - Each request from the client is independent. Server do not need to keep state of previous
+  interactions with the client.
+
+# RPC can be both stateful and stateless
+  - gRPC is an implementation of RPC and is used for streaming. It performs better for some
+  use cases than REST.
+
+  gRPC (gRPC Remote Procedure Call) offers several advantages over traditional RPC (Remote Procedure Call) and REST (Representational State Transfer) for specific use cases, primarily due to its use of HTTP/2, protocol buffers, and bi-directional streaming. Here are some scenarios where gRPC performs better:
+
+  1. **Low Latency and High Throughput Applications**:
+     - gRPC is optimized for low latency and high throughput communication. Its use of HTTP/2 allows for multiplexing multiple requests over a single connection,
+     reducing latency and increasing throughput compared to traditional HTTP/1.1 used by REST.
+
+  2. **Real-Time Communication**:
+     - Applications requiring real-time updates, such as chat applications, live gaming, or real-time analytics,
+      benefit from gRPC's support for bi-directional streaming. This allows both client and server to send messages independently over a single connection.
+
+  3. **Microservices Architecture**:
+     - In a microservices architecture, services often need to communicate with each other frequently.
+        gRPC’s efficient binary serialization (protocol buffers) and performance optimizations make it well-suited for inter-service communication, reducing overhead and improving response times.
+
+  4. **Mobile and IoT Applications**:
+     - For mobile and IoT devices with limited bandwidth and processing power, gRPC’s compact binary format reduces the payload size,
+        leading to faster communication and reduced network usage.
+
+  5. **Polyglot Environments**:
+     - gRPC supports multiple programming languages, making it easier to develop services in a polyglot environment where different services
+        might be written in different languages. This facilitates easier integration and maintenance of a diverse set of services.
+
+  6. **Service-to-Service Communication in Cloud-Native Environments**:
+     - In cloud-native environments, where services might be dynamically scaled, gRPC’s support for efficient load balancing,
+        connection pooling, and resiliency features make it a good choice for reliable and scalable communication.
+
+  7. **Secure Communication**:
+     - gRPC provides built-in support for SSL/TLS, making it easier to secure communication between services compared to traditional
+        REST APIs where security configurations might need to be managed separately.
+
+  8. **Streaming Large Data Sets**:
+     - When dealing with large data sets that need to be streamed, such as media streaming or large file transfers, gRPC’s
+        support for streaming data helps manage large payloads efficiently without overloading the network or the client/server.
+
+  9. **Backward Compatibility and Versioning**:
+     - gRPC’s use of protocol buffers supports backward and forward compatibility, making it easier to evolve APIs without breaking existing clients.
+
+  10. **Interoperability with Legacy Systems**:
+      - gRPC can interoperate with legacy systems through its support for different data serialization formats,
+        making it easier to integrate modern services with older systems.
+
+   These advantages make gRPC particularly suitable for performance-critical applications, complex microservices environments,
+    and systems requiring efficient, real-time communication.
+
+
+# References:
+  - https://aws.amazon.com/compare/the-difference-between-rpc-and-rest/
