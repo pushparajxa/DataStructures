@@ -53,6 +53,11 @@ public class FlattenMultiLevelLinkedList {
         return head;
     }
     
+    
+    /*
+        For the given input node, flatten the lists below it and return the last element of that
+        flattened list.
+     */
    static  Node flattenDown(Node node) {
         Node head = node.down;
         
@@ -61,7 +66,6 @@ public class FlattenMultiLevelLinkedList {
         Node nLast = null;
         
         while (temp != null) {
-    
             if (temp.down != null) {
                 Node next = temp.next;
                 Node last = flattenDown(temp);
@@ -93,6 +97,8 @@ public class FlattenMultiLevelLinkedList {
  
     
     public static void main(String[] args) {
+       // Built this example for this source https://media.geeksforgeeks.org/wp-content/cdn-uploads/flattenList.png
+        // The example is not exactly same. It has been trimmed down.
        int l1[] = new int[] {10,5,12,7,11};
        int l2[] = new int[] {4, 20, 13};
        int l3[] = new int[] {2};
