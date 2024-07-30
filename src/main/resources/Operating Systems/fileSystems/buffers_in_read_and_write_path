@@ -1,0 +1,34 @@
+
+Appliction buffer, --> Write 100 characters or read 100 characters.
+
+C-Standard library --> It has internal buffer of 4kB. When this fills up it will call system call as
+                        below
+
+read() or write() system call  --> Puts data into Buffer cache
+      - bdflush runs in the background which is started by update command. bdflush will
+      automatically flush this data
+      - You need to call fsync or fseek or close so that data in buffer cache will be written to
+      next layer ,i.e., disk storage.
+
+
+Disk/Storage cache: --> Cache of storage device. Caching can be enabled or disable through command.
+    - Storage can have caches.
+    - We have to do fsync to make this data writen to disk from its(disk cache).
+
+    - This article says that fsync doesn't guarantee that writes are flushed to the disk after fsync
+        - https://fgiesen.wordpress.com/2015/10/25/reading-and-writing-are-less-symmetric-than-you-probably-think/
+
+    - But we go with the understanding that fysnch will flush the data through disk cache to the
+    disk as well as any metadata about the file such as access time and mtime (modification time).
+
+      - https://man7.org/linux/man-pages/man2/fsync.2.html
+
+# Reference:
+  1. https://fgiesen.wordpress.com/2015/10/25/reading-and-writing-are-less-symmetric-than-you-probably-think/
+  2. https://www.slideshare.net/slideshow/eat-my-data/9002060#43
+  3. https://man7.org/linux/man-pages/man2/fsync.2.html
+  4. https://stackoverflow.com/a/63334067/1171533
+  5. https://www.percona.com/blog/fsync-performance-storage-devices/
+
+
+

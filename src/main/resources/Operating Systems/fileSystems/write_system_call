@@ -1,0 +1,37 @@
+# Does write system call access user space memory?
+  - Yes
+  - https://www.perplexity.ai/search/can-kernel-access-user-space-d-ffW5AgbeSeK9jHAZXmyg4A#1
+  - Yes, system calls like write() do need access to user space memory. Here's how this works:
+
+    1. When a user process calls write(), it provides a pointer to a buffer in user space that contains the data to be written[1][3].
+
+    2. The kernel cannot directly access this user space memory for security reasons. There's a strict separation between user space and kernel space memory[2][3].
+
+    3. To safely access the user space data, the kernel uses special functions designed for this purpose:
+
+       - copy_from_user(): Copies data from user space to kernel space[1][3].
+       - copy_to_user(): Copies data from kernel space to user space[1][3].
+
+    4. For the write() system call, the kernel would use copy_from_user() to safely copy the data from the user space buffer into a kernel space buffer[1][3].
+
+    5. The kernel then performs the actual write operation using the copied data in kernel space.
+
+    6. Any results or return values are then copied back to user space using copy_to_user() if necessary[1][3].
+
+    This mechanism ensures that:
+
+    - The kernel can safely access user space data without compromising system security or stability.
+    - User processes cannot directly access or manipulate kernel memory.
+    - Data can be safely transferred between user space and kernel space when needed for system calls.
+
+    These safeguards are crucial for maintaining the integrity and security of the operating system while still allowing user processes to interact with the kernel through system calls.
+
+    Citations:
+    [1] https://stackoverflow.com/questions/9662193/how-to-accessif-possible-kernel-space-from-user-space
+    [2] https://www.baeldung.com/linux/kernel-system-call-implementation
+    [3] https://unix.stackexchange.com/questions/597241/syscalls-how-does-a-user-processs-pass-receive-data-to-from-the-kernel
+    [4] https://yannik520.github.io/user_space_memory_access_from_kernel.html
+    [5] https://linux-kernel-labs.github.io/refs/pull/282/merge/lectures/syscalls.html
+    [6] https://www.reddit.com/r/C_Programming/comments/17o95m9/is_a_system_call_the_first_last_and_only_way_for/
+    [7] https://www.codeinsideout.com/blog/linux/system-call/
+    [8] https://www.form3.tech/blog/engineering/linux-fundamentals-user-kernel-space

@@ -1,0 +1,88 @@
+Reference: https://medium.com/@chandanbaranwal/spark-streaming-vs-flink-vs-storm-vs-kafka-streams-vs-samza-choose-your-stream-processing-91ea3f04675b
+
+
+Two Types of Stream Processing:
+
+Now being aware of the terms we just discussed, it is now easy to understand that there are 2 approaches to implement a Streaming framework:
+
+Native Streaming :
+Also known as Native Streaming. It means every incoming record is processed as soon as it arrives, without waiting for others.
+There are some continuous running processes (which we call as operators/tasks/bolts depending upon the framework) which
+run for ever and every record passes through these processes to get processed. Examples : Storm, Flink, Kafka Streams, Samza.
+
+Micro-batching :
+Also known as Fast Batching. It means incoming records in every few seconds are batched together and then processed
+in a single mini batch with delay of few seconds. Examples: Spark Streaming, Storm-Trident.
+
+Micro-batching , on the other hand, is quite opposite. Fault tolerance comes for free as it is essentially
+a batch and throughput is also high as processing and checkpointing will be done in one shot for group of records.
+But it will be at some cost of latency and it will not feel like a natural streaming. Also efficient state management will be a challenge to maintain.
+
+#Storm :
+Storm is the hadoop of Streaming world. It is the oldest open source streaming framework and one of the most mature
+nd reliable one. It is true streaming and is good for simple event based use cases. I have shared details about Storm at length in these posts: part1 and part2.
+
+Advantages:
+
+    Very low latency,true streaming, mature and high throughput
+    Excellent for non-complicated streaming use cases
+
+Disadvantages
+
+    No state management
+    No advanced features like Event time processing, aggregation, windowing, sessions, watermarks, etc
+    Atleast-once guarantee
+
+
+
+Spark Streaming :
+
+Spark has emerged as true successor of hadoop in Batch processing and the first framework to fully support the Lambda Architecture (where both Batch and Streaming are implemented; Batch for correctness, Streaming for Speed). It is immensely popular, matured and widely adopted. Spark Streaming comes for free with Spark and it uses micro batching for streaming. Before 2.0 release, Spark Streaming had some serious performance limitations but with new release 2.0+ , it is called structured streaming and is equipped with many good features like custom memory management (like flink) called tungsten, watermarks, event time processing support,etc. Also Structured Streaming is much more abstract and there is option to switch between micro-batching and continuous streaming mode in 2.3.0 release. Continuous Streaming mode promises to give sub latency like Storm and Flink, but it is still in infancy stage with many limitations in operations.
+
+Advantages:
+
+    Supports Lambda architecture, comes free with Spark
+    High throughput, good for many use cases where sub-latency is not required
+    Fault tolerance by default due to micro-batch nature
+    Simple to use higher level APIs
+    Big community and aggressive improvements
+    Exactly Once
+
+Disadvantages
+
+    Not true streaming, not suitable for low latency requirements
+    Too many parameters to tune. Hard to get it right. Have written a post on my personal experience while tuning Spark Streaming
+    Stateless by nature
+    Lags behind Flink in many advanced features
+
+Samza :
+
+Will cover Samza in short. Samza from 100 feet looks like similar to Kafka Streams in approach. There are many similarities.
+ Both of these frameworks have been developed from same developers who implemented Samza at LinkedIn and then founded Confluent where
+  they wrote Kafka Streams. Both these technologies are tightly coupled with Kafka, take raw data from Kafka and then put back
+   processed data back to Kafka. Use the same Kafka Log philosophy. Samza is kind of scaled version of Kafka Streams.
+ While Kafka Streams is a library intended for microservices , Samza is full fledge cluster processing which runs on Yarn.
+
+ Spark Streaming :
+
+ Spark has emerged as true successor of hadoop in Batch processing and the first framework to fully support
+  the Lambda Architecture (where both Batch and Streaming are implemented; Batch for correctness, Streaming for Speed).
+  It is immensely popular, matured and widely adopted. Spark Streaming comes for free with Spark and it uses micro batching
+   for streaming. Before 2.0 release, Spark Streaming had some serious performance limitations but with new release 2.0+ ,
+   it is called structured streaming and is equipped with many good features like custom memory management (like flink)
+    called tungsten, watermarks, event time processing support,etc. Also Structured Streaming is much more abstract and
+    there is option to switch between micro-batching and continuous streaming mode in 2.3.0 release.
+ Continuous Streaming mode promises to give sub latency like Storm and Flink, but it is still in infancy stage with many limitations in operations.
+
+Kafka Streams :
+
+Kafka Streams , unlike other streaming frameworks, is a light weight library. It is useful for streaming data from Kafka ,
+doing transformation and then sending back to kafka. We can understand it as a library similar to Java Executor Service Thread pool,
+ but with inbuilt support for Kafka. It can be integrated well with any application and will work out of the box.
+
+Due to its light weight nature, can be used in microservices type architecture. There is no match in terms of performance with
+Flink but also does not need separate cluster to run, is very handy and easy to deploy and start working . Internally uses
+Kafka Consumer group and works on the Kafka log philosophy.
+This post thoroughly explains the use cases of Kafka Streams vs Flink Streaming.
+
+One major advantage of Kafka Streams is that its processing is Exactly Once end to end. It is possible because the source as well as destination, both are Kafka and from Kafka 0.11 version released around june 2017, Exactly once is supported. For enabling this feature, we just need to enable a flag and it will work out of the box. For more details shared here and here.

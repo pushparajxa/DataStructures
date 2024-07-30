@@ -1,0 +1,78 @@
+#Usage
+
+  #!/usr/bin/python
+
+  import os, sys, mmap
+
+  # Open a file
+  fd = os.open( "testfile", os.O_RDWR|os.O_CREAT|os.O_DIRECT )
+
+# It avoids buffering at OS level.
+  - From user-space data is directly copied to the storage device.
+  - It doesn't mean that data is persisted on the disk, it would be in the disk cache if disk
+    caching is enabled. Further details, refer below
+
+    - https://stackoverflow.com/a/63334067/1171533
+    - https://www.percona.com/blog/fsync-performance-storage-devices/
+
+     With O_DIRECT, the OS is not buffering anything along the way. So the data should be persisted right?
+     Actually, the OS is not buffering but the device very likely is. Here are a few results to highlight
+     the point using a 7.2k rpm SATA drive:
+
+            Test                              rate	    latency
+     O_DIRECT, drive Write cache enabled	    4651/s	    0.22ms
+     O_DIRECT, drive Write cache disabled	    101/s	      9.9ms
+     ASYNC + fdatasync, Write cache enabled	  119/s	      8.4ms
+     ASYNC + fdatasync, Write cache disabled  117/s	      8.5ms
+
+
+
+     The drive write cache was enabled/disabled using the hdparm command. Clearly, there’s no way the drive
+     can persist 4651 writes per second. O_DIRECT doesn’t send the SATA flush command to the disk, so we are
+     only writing to the drive write cache. If the drive write cache is disabled, the rate falls to a more reasonable
+     value of 101/s. What is interesting — and I don’t really understand why — is that opening the file in async mode
+     and performing fdatasync is significantly faster. As expected, the presence of the drive write cache has no
+      impacts on ASYNC + fdatasync. When the fdatasync call occurs, the data is still in the OS file cache.
+
+     If you want to use only O_DIRECT, you should make sure all the storage write caches are crash safe.
+      That’s why MySQL adds a fsync call after a write to a file opened with O_DIRECT.
+
+# fsync:: does it guarantee that data is flushed from the disk cache?
+
+    - Some articles says true and some not. We go with that it does flush to the disk from disk
+    cache.
+
+    - https://man7.org/linux/man-pages/man2/fsync.2.html
+
+           fsync() transfers ("flushes") all modified in-core data of (i.e.,
+           modified buffer cache pages for) the file referred to by the file
+           descriptor fd to the disk device (or other permanent storage
+           device) so that all changed information can be retrieved even if
+           the system crashes or is rebooted.  This includes writing through
+           or flushing a disk cache if present.  The call blocks until the
+           device reports that the transfer has completed.
+
+           As well as flushing the file data, fsync() also flushes the
+           metadata information associated with the file (see inode(7)).
+
+           Calling fsync() does not necessarily ensure that the entry in the
+           directory containing the file has also reached disk.  For that an
+           explicit fsync() on a file descriptor for the directory is also
+           needed.
+
+           fdatasync() is similar to fsync(), but does not flush modified
+           metadata unless that metadata is needed in order to allow a
+           subsequent data retrieval to be correctly handled.  For example,
+           changes to st_atime or st_mtime (respectively, time of last
+           access and time of last modification; see inode(7)) do not
+           require flushing because they are not necessary for a subsequent
+           data read to be handled correctly.  On the other hand, a change
+           to the file size (st_size, as made by say ftruncate(2)), would
+           require a metadata flush.
+
+           The aim of fdatasync() is to reduce disk activity for
+           applications that do not require all metadata to be synchronized
+           with the disk.
+
+
+
