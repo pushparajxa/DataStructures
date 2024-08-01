@@ -1,0 +1,99 @@
+# Ephemeral nodes are removed when the client disconnects. This feature is useful for leader
+  election, locking etc..
+
+### Use Cases of Ephemeral Nodes in ZooKeeper
+
+Ephemeral nodes in ZooKeeper are znodes that exist only as long as the session that created them is active.
+When the session ends, either due to a client disconnect or a crash, the ephemeral node is automatically deleted.
+This unique characteristic makes ephemeral nodes particularly useful for several scenarios in distributed systems. Here are some common use cases:
+
+  ### **1. Service Discovery and Registration**
+
+      Ephemeral nodes are widely used for service discovery and registration. When a service starts, it registers itself by creating an
+      ephemeral node in ZooKeeper. This node contains metadata about the service, such as its host and port.
+
+      - **Automatic Deregistration**: If the service crashes or becomes unavailable, the ephemeral node is automatically deleted,
+       ensuring that clients do not attempt to connect to an unavailable service.
+      - **Dynamic Updates**: Clients can watch the parent node for changes, allowing them to dynamically update their list of available services.
+
+      Example:
+      ```plaintext
+      /services/serviceA/instance1
+      /services/serviceA/instance2
+     ```
+
+  ### **2. Leader Election**
+
+      Ephemeral nodes are crucial in implementing leader election algorithms. Each candidate for leadership creates an
+      ephemeral node with a sequence number. The node with the smallest sequence number is the leader.
+
+      - **Automatic Failover**: If the leader node's session ends, the ephemeral node is deleted, triggering a new leader election process.
+      - **Reduced Herd Effect**: By watching the next smallest sequence node, clients can avoid the herd effect, where all clients react simultaneously to a leader failure.
+
+      Example:
+      ```plaintext
+      /election/leader-000000001
+      /election/leader-000000002
+    ```
+
+  ### **3. Distributed Locks**
+
+    Ephemeral nodes can be used to implement distributed locks. A client creates an ephemeral node to acquire a lock.
+     If the node is successfully created, the client holds the lock. If the client crashes, the node is deleted, and other clients can attempt to acquire the lock.
+
+    - **Automatic Lock Release**: The lock is automatically released if the client holding it disconnects or crashes.
+    - **Fairness**: Using sequential ephemeral nodes can ensure fairness in lock acquisition.
+
+    Example:
+    ```plaintext
+    /locks/lock-000000001
+    ```
+
+  ### **4. Presence Detection**
+
+    Ephemeral nodes are useful for detecting the presence of clients or services. Each client creates an ephemeral node when
+     it connects to ZooKeeper. The existence of these nodes indicates active clients or services.
+
+    - **Real-Time Monitoring**: Other clients can watch these nodes to monitor the presence or absence of specific clients or services.
+    - **Automatic Cleanup**: Nodes are automatically removed when a client disconnects, ensuring an accurate representation of active entities.
+
+    Example:
+    ```plaintext
+    /presence/client1
+    /presence/client2
+    ```
+
+  ### **5. Barriers and Synchronization**
+
+    Ephemeral nodes can be used to implement barriers and synchronization primitives. A barrier can be created by having clients
+    create ephemeral nodes under a common parent node. The barrier is lifted when all clients have created their nodes.
+
+    - **Dynamic Coordination**: Clients can dynamically coordinate their actions based on the presence or absence of ephemeral nodes.
+    - **Automatic Barrier Removal**: If a client fails, its ephemeral node is deleted, potentially lifting the barrier.
+
+    Example:
+    ```plaintext
+    /barrier/client1
+    /barrier/client2
+    ```
+
+  ### **Conclusion**
+
+    Ephemeral nodes in ZooKeeper provide a powerful mechanism for managing transient state and ensuring automatic cleanup in distributed systems.
+     They are particularly useful for service discovery, leader election, distributed locking, presence detection, and synchronization.
+      By leveraging ephemeral nodes, developers can build robust and fault-tolerant distributed applications.
+
+References:
+1. [ZooKeeper Documentation - Nodes and Ephemeral Nodes](https://zookeeper.apache.org/doc/r3.4.6/zookeeperOver.html)
+2. [Expero Blog - ZooKeeper Usage: Ephemeral Nodes](https://www.experoinc.com/insights/blog/zookeeper-usage-1-ephemeral-nodes)
+3. [ZooKeeper Recipes and Solutions](https://zookeeper.apache.org/doc/r3.5.7/recipes.html)
+
+Citations:
+[1] https://zookeeper.apache.org/doc/r3.4.6/zookeeperOver.html
+[2] https://www.experoinc.com/insights/blog/zookeeper-usage-1-ephemeral-nodes
+[3] https://groups.google.com/g/prometheus-users/c/gk2qrcZGWaQ
+[4] https://zookeeper.apache.org/doc/r3.5.7/recipes.html
+[5] https://github.com/etcd-io/etcd/issues/174
+[6] https://www.elastic.co/blog/found-zookeeper-king-of-coordination
+[7] https://zookeeper.apache.org/doc/current/zookeeperProgrammers.html
+[8] https://supportportal.juniper.net/s/article/Contrail-How-Zookeeper-ephemeral-node-is-used?language=en_US

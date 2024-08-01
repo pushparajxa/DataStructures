@@ -1,0 +1,37 @@
+The key differences between a data warehouse and a data lake are:
+
+1. Data Structure:
+   - Data Warehouse: Stores structured, processed data with a predefined schema[1][2].
+   - Data Lake: Stores raw, unstructured, semi-structured, and structured data in its native format without a predefined schema[1][2].
+
+2. Schema Enforcement:
+   - Data Warehouse: Employs a "schema-on-write" approach, where data is organized, defined, and metadata is applied before storage[1][2].
+   - Data Lake: Uses a "schema-on-read" approach, allowing data to be stored in its raw form without enforcing a schema during ingestion[1][2][3].
+
+3. Data Processing:
+   - Data Warehouse: Data undergoes ETL (Extract, Transform, Load) before storage, ensuring it's cleaned and structured[1][3].
+   - Data Lake: Supports ELT (Extract, Load, Transform), where data is stored first and transformed only when needed[3].
+
+4. Use Cases:
+   - Data Warehouse: Optimized for business intelligence, reporting, and structured querying[2].
+   - Data Lake: Suitable for big data analytics, machine learning, and handling diverse data types[2].
+
+5. Users:
+   - Data Warehouse: Primarily used by business analysts and professionals for specific analytical reports and dashboards[2].
+   - Data Lake: Used by data scientists and engineers for detailed analysis and experimentation with raw data[2].
+
+6. Scalability and Cost:
+   - Data Warehouse: Scalable but can be more expensive and complex to scale[2].
+   - Data Lake: Highly scalable and generally more cost-effective for storing large volumes of data[2][3].
+
+To answer your specific question: Yes, a data lake typically doesn't enforce any schema while writing data. It allows for the storage of raw data in its original format without requiring a predefined structure or schema during ingestion[1][2][3]. This flexibility is one of the key advantages of a data lake, enabling organizations to store diverse data types and volumes without the need for upfront data modeling or transformation.
+
+Citations:
+[1] https://panoply.io/data-warehouse-guide/data-warehouse-vs-data-lake/
+[2] https://www.simplilearn.com/data-lake-vs-data-warehouse-article
+[3] https://aws.amazon.com/compare/the-difference-between-a-data-warehouse-data-lake-and-data-mart/
+[4] https://www.splunk.com/en_us/blog/learn/data-warehouse-vs-data-lake.html
+[5] https://www.montecarlodata.com/blog-data-lake-vs-data-warehouse/
+[6] https://www.snowflake.com/trending/data-lake-vs-data-warehouse/
+[7] https://www.coursera.org/articles/data-lake-vs-data-warehouse
+[8] https://www.netwitness.com/blog/data-warehouse-vs-data-lake/

@@ -1,0 +1,2 @@
+With this service, it can provide single digit millisecond latency in single availability zone.
+It can handle 100k requests per second with that latency.

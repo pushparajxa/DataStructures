@@ -1,0 +1,84 @@
+Wacthes are removed after they are triggered and notification is sent to the client.
+
+
+### Various Watches in ZooKeeper
+
+ZooKeeper watches are a powerful mechanism for clients to get notifications about changes to znodes (ZooKeeper nodes).
+A watch can be set on a znode to monitor changes to its data, its existence, or its children.
+ Here are the different types of watches that can be set in ZooKeeper:
+
+### **1. Data Watches**
+
+Data watches are set to monitor changes to the data of a specific znode.
+
+- **Trigger Events**: Data watches are triggered when the data of the znode changes.
+- **API Methods**:
+  - `getData(String path, boolean watch, Stat stat)`: Retrieves the data of the specified znode and sets a watch.
+  - `setData(String path, byte[] data, int version)`: Updates the data of the specified znode, potentially triggering a watch.
+
+Example:
+```java
+ZooKeeper zk = new ZooKeeper("localhost:2181", 3000, new Watcher() {
+    public void process(WatchedEvent event) {
+        if (event.getType() == Event.EventType.NodeDataChanged) {
+            System.out.println("Data changed for node: " + event.getPath());
+        }
+    }
+});
+zk.getData("/exampleNode", true, null);
+```
+
+### **2. Existence Watches**
+
+Existence watches are set to monitor the creation or deletion of a znode.
+
+- **Trigger Events**: Existence watches are triggered when the specified znode is created or deleted.
+- **API Methods**:
+  - `exists(String path, boolean watch)`: Checks if the specified znode exists and sets a watch.
+  - `create(String path, byte[] data, List<ACL> acl, CreateMode createMode)`: Creates a znode, potentially triggering a watch.
+  - `delete(String path, int version)`: Deletes a znode, potentially triggering a watch.
+
+Example:
+```java
+ZooKeeper zk = new ZooKeeper("localhost:2181", 3000, new Watcher() {
+    public void process(WatchedEvent event) {
+        if (event.getType() == Event.EventType.NodeCreated) {
+            System.out.println("Node created: " + event.getPath());
+        } else if (event.getType() == Event.EventType.NodeDeleted) {
+            System.out.println("Node deleted: " + event.getPath());
+        }
+    }
+});
+zk.exists("/exampleNode", true);
+```
+
+### **3. Child Watches**
+
+Child watches are set to monitor changes to the children of a znode.
+
+- **Trigger Events**: Child watches are triggered when the children of the specified znode are created or deleted.
+- **API Methods**:
+  - `getChildren(String path, boolean watch)`: Retrieves the list of children of the specified znode and sets a watch.
+  - `create(String path, byte[] data, List<ACL> acl, CreateMode createMode)`: Creates a child znode, potentially triggering a watch.
+  - `delete(String path, int version)`: Deletes a child znode, potentially triggering a watch.
+
+Example:
+```java
+ZooKeeper zk = new ZooKeeper("localhost:2181", 3000, new Watcher() {
+    public void process(WatchedEvent event) {
+        if (event.getType() == Event.EventType.NodeChildrenChanged) {
+            System.out.println("Children changed for node: " + event.getPath());
+        }
+    }
+});
+zk.getChildren("/exampleNode", true);
+```
+
+### **Watch Characteristics**
+
+- **One-Time Trigger**: Each watch is a one-time trigger. Once a watch is triggered, it must be re-established if continued monitoring is required.
+- **Asynchronous Notifications**: Watch events are delivered asynchronously to the client that set the watch.
+- **Session Awareness**: If a client disconnects and reconnects, all existing watches are considered triggered, and the client must re-establish them.
+
+# Reference:
+  https://www.perplexity.ai/search/what-is-the-difference-between-y8nj_8LDSrOZMsoFc8IGXQ#11

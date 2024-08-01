@@ -1,0 +1,76 @@
+1. DataNode/Persistent Node
+
+2. Ephemeral Node
+
+3. TTL Node
+
+4. Container Node
+
+5. Persistent Sequential Node
+
+
+
+### Different Node Types in ZooKeeper
+
+ZooKeeper uses a hierarchical namespace much like a file system, where each node is called a znode. Znodes can store data and have children, making them versatile for various use cases in distributed systems. Here are the different types of znodes in ZooKeeper:
+
+### **1. Persistent Nodes**
+
+- **Description**: Persistent nodes exist until explicitly deleted by a client. They remain in the ZooKeeper ensemble even if the client that created them disconnects or crashes.
+- **Use Cases**: Suitable for storing configuration data, metadata, or any information that should persist beyond the lifetime of the client session.
+
+### **2. Ephemeral Nodes**
+
+- **Description**: Ephemeral nodes are temporary and exist only as long as the session that created them is active. When the session ends, the ephemeral node is automatically deleted.
+- **Use Cases**: Ideal for scenarios requiring temporary state, such as service registration, leader election, and presence detection.
+
+### **3. Sequential Nodes**
+
+- **Description**: Sequential nodes are either persistent or ephemeral nodes with a unique, monotonically increasing counter appended to their names. This counter is unique within the parent znode.
+- **Use Cases**: Useful for creating unique identifiers, implementing distributed queues, and ensuring ordered processing of tasks.
+
+### **4. Container Nodes**
+
+- **Description**: Container nodes are special-purpose znodes that are automatically deleted by the server when the last child is deleted. They are designed for use cases like leader election and distributed locks.
+- **Use Cases**: Suitable for scenarios where znodes should be automatically cleaned up when no longer needed, reducing manual management.
+
+### **5. TTL Nodes**
+
+- **Description**: TTL (Time-To-Live) nodes are persistent nodes with a specified lifespan. If a TTL node is not modified within the TTL period and has no children, it becomes a candidate for automatic deletion by the server.
+- **Use Cases**: Useful for temporary data that should be automatically cleaned up after a certain period, such as cache entries or temporary configurations.
+
+### **Examples and Usage**
+
+#### **Persistent Node Example**
+```java
+// Create a persistent node
+zk.create("/persistentNode", data, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+```
+
+#### **Ephemeral Node Example**
+```java
+// Create an ephemeral node
+zk.create("/ephemeralNode", data, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
+```
+
+#### **Sequential Node Example**
+```java
+// Create a sequential node
+zk.create("/sequentialNode", data, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT_SEQUENTIAL);
+```
+
+#### **Container Node Example**
+```java
+// Create a container node (requires ZooKeeper 3.5.3 or later)
+zk.create("/containerNode", data, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.CONTAINER);
+```
+
+#### **TTL Node Example**
+```java
+// Create a TTL node (requires ZooKeeper 3.5.3 or later)
+zk.create("/ttlNode", data, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT_WITH_TTL, ttl);
+```
+
+# Reference:
+  1. https://www.perplexity.ai/search/what-is-the-difference-between-y8nj_8LDSrOZMsoFc8IGXQ#10
+
