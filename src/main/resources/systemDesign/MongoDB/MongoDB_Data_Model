@@ -1,0 +1,42 @@
+MongoDB Data Model Fundamentals
+
+    Documents:
+        Basic unit of data in MongoDB.
+        JSON-like structure (BSON) that can contain nested documents and arrays.
+
+    Collections:
+        Groups of documents.
+        Equivalent to tables in relational databases, but schema-less.
+
+    Embedded Documents:
+        Documents within documents.
+        Useful for denormalizing data and reducing the need for joins.
+
+    Arrays:
+        Lists of values or documents within a document.
+        Suitable for storing multiple related items.
+
+    Indexes:
+        Improve query performance by creating data structures that store a subset of fields.
+        Types:
+            Single Field Index: Indexes a single field in a collection.
+            Compound Index: Indexes multiple fields within a single index.
+            Multikey Index: Indexes the content of arrays.
+            Text Index: Indexes text content for text search.
+            Geospatial Index: Supports queries for geospatial data.
+            Hashed Index: Indexes the hash of a field's value for shard key.
+            Wildcard Index: Indexes all fields or a subset of fields specified by a wildcard specifier.
+
+    Sharding:
+        Distributes data across multiple servers.
+        Uses a shard key to determine the distribution of documents.
+
+    Replication:
+        Copies data across multiple servers to ensure high availability.
+        Configured using replica sets.
+
+    Schema Design Principles:
+        Schema Flexibility: Documents in a collection can have different fields.
+        Denormalization: Embed related data within a document to optimize read performance.
+        Data Locality: Store related data together to reduce the need for joins.
+        Referencing: Use references to link documents in different collections when embedding is not practical.
