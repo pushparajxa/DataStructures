@@ -21,6 +21,62 @@ People choose MongoDB over Cassandra for various reasons, depending on the speci
 
  # DynamoDB like Cassandra doesn't support nested documents like Cassandra.
 
+Difference in Index & query support
+============================
+https://www.mongodb.com/resources/compare/mongodb-dynamodb
+
+########################################################### Transaction Support ######################################################
+
+Based on the information provided in the search results and my knowledge, here's a comparison of
+ transaction support among Cassandra, DynamoDB, and MongoDB:
+
+ MongoDB > Dynamo DB > Cassandra
+
+    #Reference: https://www.perplexity.ai/search/among-read-heavy-high-throughp-6i13p.R7TxaIxiKT8hXZhg#7
+
+1. MongoDB:
+MongoDB has the strongest support for transactions among the three databases. Key points:
+
+- MongoDB introduced multi-document ACID transactions from version 4.0 (and for sharded clusters from version 4.2)[5].
+- It supports fully ACID-compliant cross-document transactions, allowing for all-or-nothing operations[5].
+- This feature is one of the main differentiators between MongoDB and Cassandra[5].
+- MongoDB's transaction support is comparable to traditional relational databases, making it suitable
+ for applications that require strong consistency and transactional integrity.
+
+2. DynamoDB:
+DynamoDB offers limited transaction support:
+
+- It provides support for transactions, but with some limitations compared to traditional relational databases.
+- DynamoDB supports ACID transactions across multiple items within a single table or across tables.
+- However, the scope of these transactions is more limited compared to MongoDB's cross-document transactions.
+
+3. Cassandra:
+Cassandra has the weakest transaction support among the three:
+
+- Cassandra does not support multi-row ACID transactions[5].
+- It only allows isolation and durability to be tuned based on single-row operations[5].
+- Cassandra's consistency model, by default, favors availability over consistency[5].
+- It's more suitable for use cases where strong transactional guarantees are not a primary requirement.
+
+In conclusion, if strong transaction support is a critical requirement for your application,
+ MongoDB would be the best choice among these three databases. It offers the most robust and
+  comprehensive transaction support, similar to what you might expect from traditional
+  relational databases. DynamoDB provides some transaction capabilities but with more limitations,
+  while Cassandra is not designed for use cases requiring strong transactional guarantees.
+
+Citations:
+[1] https://db-engines.com/en/system/Amazon%2BDynamoDB%3BApache%2BCassandra%3BMongoDB
+[2] https://stackoverflow.com/questions/2892729/mongodb-vs-cassandra
+[3] https://www.openlogic.com/blog/cassandra-vs-mongodb
+[4] https://www.sprinkledata.com/blogs/cassandra-vs-dynamodb-a-comprehensive-comparison
+[5] https://www.mongodb.com/resources/compare/cassandra-vs-mongodb
+
+
+######################################################################################################################
+
+
+
+
 # Below is from ChatGPT --> https://chatgpt.com/share/0fc6718a-1f55-43e2-8bb6-37eba2981d7c
 
 ### 1. **Data Model and Flexibility**

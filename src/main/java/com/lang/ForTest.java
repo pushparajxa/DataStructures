@@ -15,6 +15,11 @@ public class ForTest {
                 }
             }
         }
+    
+        for(int i=0;i<5;i++){
+            System.out.println("Executing i="+i);
+            continue;
+        }
 
         int i,j=10;
         for( i=0,j=10;j<0;i++){

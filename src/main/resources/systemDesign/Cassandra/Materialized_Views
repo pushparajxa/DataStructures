@@ -1,0 +1,36 @@
+Materialized views are suited for high cardinality data. The data in a materialized view is arranged serially
+based on the view's primary key. Materialized views cause hotspots when low cardinality data is inserted.
+
+Secondary indexes are suited for low cardinality data. Queries of high cardinality columns on secondary indexes require
+ Cassandra to access all nodes in a cluster, causing high read latency.
+
+
+  Restrictions for materialized views:
+
+    1. Include all of the source table's primary keys in the materialized view's primary key.
+    2. Only one new column can be added to the materialized view's primary key. Static columns are
+         not allowed.
+    3. Exclude rows with null values in the materialized view primary key column.
+
+  You can create a materialized view with its own WHERE conditions and its own properties.
+
+
+
+
+ Base Table
+ ----------
+  CREATE TABLE cyclist_mv (cid UUID PRIMARY KEY, name text, age int, birthday date, country text);
+
+
+ Materialized view on base Table using age column
+ ------------------------------------------------
+ CREATE MATERIALIZED VIEW cyclist_by_age
+ AS SELECT age, birthday, name, country
+ FROM cyclist_mv
+ WHERE age IS NOT NULL AND cid IS NOT NULL
+ PRIMARY KEY (age, cid);
+
+  age is the partition key and cid is the clustering column.
+
+# Reference:
+  - https://docs.datastax.com/en/cql-oss/3.3/cql/cql_using/useCreateMV.html

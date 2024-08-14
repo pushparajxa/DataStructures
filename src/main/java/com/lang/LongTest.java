@@ -9,5 +9,11 @@ public class LongTest {
     Long l3 = 256l;
     Long l4= 256l;
     System.out.println(l3==l4);
+    
+    Integer i1 = 10;
+    Integer i2 = 30;
+  
+    System.out.println(i1 > i2);
+    
   }
 }

@@ -65,7 +65,7 @@ While chossing between POST and PUT, think in terms of idempotency. PUT operatio
 idempotent.
 
 
-Updating a value RESTfully with Post
+Updating a value RESTfully with POST vs PUT
 ======================================
 
 Reference:
