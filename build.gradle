@@ -5,7 +5,7 @@ apply plugin: 'java'
 //apply plugin: 'scala'
 apply plugin: 'idea'
 
-sourceCompatibility = 1.11
+//sourceCompatibility = 1.16
 
 repositories {
     mavenCentral()
@@ -13,28 +13,28 @@ repositories {
 }
 
 dependencies {
-    compile 'org.scala-lang:scala-library:2.12.3', 'org.scalatest:scalatest_2.12:3.0.1',
+    implementation 'org.scala-lang:scala-library:2.12.3', 'org.scalatest:scalatest_2.12:3.0.1',
             'org.testng:testng:6.11','org.apache.hadoop:hadoop-common:2.7.3','joda-time:joda-time:2.9.9'
-    //compile ('org.redisson:redisson:3.7.6-SNAPSHOT')
-    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.2.0.RELEASE'
+    //implementation ('org.redisson:redisson:3.7.6-SNAPSHOT')
+    implementation group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.2.0.RELEASE'
     compileOnly 'org.projectlombok:lombok:1.18.12'
 
 
-    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.5.5', ext: 'pom'
-    compile 'org.apache.commons:commons-text:1.9'
-    compile 'org.apache.avro:avro:1.11.0'
+    implementation group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.5.5', ext: 'pom'
+    implementation 'org.apache.commons:commons-text:1.9'
+    implementation 'org.apache.avro:avro:1.11.0'
 
-    compile "com.fasterxml.jackson.core:jackson-databind:2.9.6"
-    compile "com.fasterxml.jackson.module:jackson-module-parameter-names:2.9.6"
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.9.6"
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.6"
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.9.6"
+    implementation "com.fasterxml.jackson.module:jackson-module-parameter-names:2.9.6"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.9.6"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.6"
 
     // , 'org.apache.commons:commons-lang3:3.7'
             // 'com.amazonaws:aws-java-sdk:1.7.4','org.apache.hadoop:hadoop-aws:2.7.3'
-    testCompile "org.scala-lang:scala-library:2.12.3",'org.testng:testng:6.11'
-    testCompile("org.junit.jupiter:junit-jupiter-engine:5.2.0")
+    testImplementation "org.scala-lang:scala-library:2.12.3",'org.testng:testng:6.11'
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.2.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.2.0")
-    testRuntime("org.junit.platform:junit-platform-console:1.2.0")
+    testRuntimeOnly("org.junit.platform:junit-platform-console:1.2.0")
   //  zinc 'com.typesafe.zinc:zinc:0.3.15'
 }
 
@@ -54,37 +54,12 @@ sourceSets {
     }
 }
 
-jar{
-   // sourceSets.getByName("main").getJava().srcDirs().name
-   // println "SourceSet output directories are "+ sourceSets.compile.output.dirs.toSet().toString()
-    archiveName = "aws.jar"
-    from{
-        configurations.compile.collect()
-    }
-    exclude '*scala*.jar'
-    manifest{
-        attributes("Main-Class":"Aws.class")
-    }
-    doLast{
-        println sourceSets.getByName("main").output.dirs
-    }
-}
 
 test {
     useJUnitPlatform()
 }
 
 
-task copyJarsToLib (type: Copy) {
-    def toDir = "build/libs/dependency-jars"
-
-    // create directories, if not already done:
-    file(toDir).mkdirs()
-
-    // copy jars to lib folder:
-    from configurations.compile
-    into toDir
-}
 
 tasks.withType(ScalaCompile) {
     enabled = false

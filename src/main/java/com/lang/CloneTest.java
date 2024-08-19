@@ -8,6 +8,13 @@ public class CloneTest implements Cloneable {
         CloneTest cloneTest = new CloneTest();
         System.out.println(cloneTest.x);
         System.out.println(cloneTest.clone().x);
+        
+        int [] arr = new int[] {1,2,};
+        int[] clone = arr.clone();
+    
+        String [] strings = new String[]{"hello", "world"};
+        String[] strings1 = strings.clone();
+    
     }
     
     

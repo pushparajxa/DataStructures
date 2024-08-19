@@ -55,3 +55,12 @@ Redis Cluster with hash slots
 
   # Reference:
     - https://redis.io/learn/operate/redis-at-scale/scalability/clustering-in-redis
+
+Hashtag example
+===============
+"user:{1001}:name" -> "Alice"
+
+    user:{1001}:name --> is the key. {1001} --> 1001 is the hashtag and based on this it will go to
+    corresponding node in the cluster.
+
+    "Alice" is the value.

@@ -1,0 +1,10 @@
+Redis
+  - Doesn't support transactions across cluster nodes
+  - It can execute multiple commands on a single node or if all the keys fall to this node in the
+  cluster.
+  - There is no rollback mechanism provided by it.
+  - With MULTI command, after EXEC is called, server will start executing other commands even if one
+   fails.
+
+# Reference:
+  - https://redis.io/docs/latest/develop/interact/transactions/

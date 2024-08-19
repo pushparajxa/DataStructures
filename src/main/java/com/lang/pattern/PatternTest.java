@@ -3,7 +3,6 @@ package com.lang.pattern;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.codec.language.bm.Rule.RPattern;
 
 public class PatternTest {
     
@@ -14,6 +13,9 @@ public class PatternTest {
        
        patternText = "<[^>]+>";
        textToMatch = "<b>bold text</b> and <i>italic text</i>";
+       
+       patternText = "[a-zA-Z0-9]+";
+       textToMatch = "dog cat cat dog";
        
        general(patternText, textToMatch);
     
@@ -26,7 +28,7 @@ public class PatternTest {
         {
             int startIndex = matcher.start();
             int endIndex = matcher.end();
-            System.out.println("start=" + startIndex +" and endIndex =" + endIndex);
+            //System.out.println("start=" + startIndex +" and endIndex =" + endIndex);
             System.out.println(matcher.group());
         
         }

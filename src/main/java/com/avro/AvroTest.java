@@ -8,7 +8,6 @@ import static com.avro.AvroTest.google_domain_status.OPENED;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import org.apache.avro.LogicalTypes;
@@ -25,6 +24,8 @@ import org.apache.avro.generic.GenericDatumWriter;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.DatumWriter;
+import org.joda.time.DateTimeZone;
+//import org.joda.time.LocalDate;
 
 public class AvroTest
 {

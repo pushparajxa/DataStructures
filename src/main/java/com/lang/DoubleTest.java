@@ -47,6 +47,13 @@ public class DoubleTest {
     System.out.println(d6.equals(d7));
     System.out.println(d6.equals(d8));
     System.out.println(Double.NaN);
+    System.out.println(23d);
+    double p = 23;
+    System.out.println(p);
+    double p2 = (double)34;
+    System.out.println(p2);
+    double p3 = 34d;
+    System.out.println(24/2d);
   //  System.out.println(Double.);
 
 /*

@@ -4,6 +4,7 @@ package com.lang.Date;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 
 import java.time.format.DateTimeFormatter;
@@ -12,7 +13,8 @@ public class Java8DateTimeTest {
 
   public static void main(String[] args) {
     //testDateTime();
-    testEpochAtDifferentTimeZones();
+   // testEpochAtDifferentTimeZones();
+    testDateTime();
     
 
   }
@@ -33,6 +35,14 @@ public class Java8DateTimeTest {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd kk:mm:ss");
     LocalDateTime parse = LocalDateTime.parse("2019-01-31 17:24:20",formatter);
     System.out.println(parse);
+  }
+  
+  
+  static void testDateTime2() {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("kk:mm:");
+    LocalDateTime parse = LocalDateTime.parse("17:24",formatter);
+    System.out.println(parse);
+    System.out.println();
   }
 
 }

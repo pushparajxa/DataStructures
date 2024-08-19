@@ -2,6 +2,7 @@
 package com.lang.streams;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class StreamsTest {
@@ -26,7 +27,15 @@ public class StreamsTest {
       e.printStackTrace();
     }
     System.out.println(res);
+    
+   int answer =  Arrays.stream(new int[]{2,3,4,5}).reduce(0, (x,y)-> x+y);
+    System.out.println(answer);
+      
+      System.out.println(Arrays.stream(new int[]{2,3,4,5}).max().getAsInt());
+      System.out.println(Arrays.stream(new int[]{2,3,4,5}).min().getAsInt());
+    
   }
+  
   
 /*  static int listSum(List<Integer> list) {
     

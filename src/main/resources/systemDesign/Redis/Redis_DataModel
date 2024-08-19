@@ -1,2 +1,23 @@
 - In Redis all keys are Strings.
   + They are binary safe meaning, you can use any binary sequence as a key, from a string like "foo" to the content of a JPEG file.
+
+- Values
+  - Strings
+  - HSET
+  - ZSET
+  - LIST
+  - GEOINDEX
+  - HYPERLOGLOGS
+
+
+- Max key size is 512 MB
+- Max value size is 512 MB
+
+
+- HyperLoglog
+  + Uses only 12KB of space for a set, even if that set contains upto 10^9 elements.
+  + It doesn't store all the elements.
+  + It gives you cardinality or unique number of elements in a set.
+  + You can merge two keys like
+     PFMERGE all_visitors visitors_day1 visitors_day2
+  + It gives result with standard error of 0.81% which is good enough in most estimations.

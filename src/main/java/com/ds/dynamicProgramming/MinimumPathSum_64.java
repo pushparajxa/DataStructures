@@ -36,6 +36,8 @@ public class MinimumPathSum_64 {
            /* System.out.println("Previous = " + Arrays.toString(prev));
             System.out.println("Current = " + Arrays.toString(cur)); */
         }
+        
         return cur[0];
     }
+    
 }

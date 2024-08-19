@@ -4,10 +4,17 @@ Transactions handled by a database  running on a datacenter node
     actions per second.
 
 
-In the API design, we take amount to be string because different systems have different
-serialization mechanisms.
+    Transactions on a database:
+      * Few thousands of transactions per second
+      * MySQl Server does 15,000 transaction per second,
+        + Configuration: 2 Processors, 128 cores, 256 Threads.
+      # Reference:
+        - https://www.tpc.org/tpce/results/tpce_perf_results5.asp?resulttype=all
 
-  - It is recommended ot keep numbers ni string format during transmission and storage. They are
+*IMPORTANT* In the API design, we take data type of amount transferred as string because different
+systems have different serialization mechanisms.
+
+  - It is recommended ot keep numbers in string format during transmission and storage. They are
   only parsed to numbers when used for display or calculation.
 
 

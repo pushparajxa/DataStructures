@@ -33,7 +33,7 @@ public class ReadFromFile {
         }
     }
 
-    static class ObjectReade{
+    static class ObjectReader{
         public static void main(String[] args) {
             try {
                 ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(new File("/tmp/in1")));
