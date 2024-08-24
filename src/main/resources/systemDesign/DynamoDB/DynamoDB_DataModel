@@ -52,4 +52,3 @@ DynamoDB uses a non-relational (NoSQL) data model that is significantly differen
           DynamoDB supports storing complex nested attributes using JSON-like documents.
 
 
-# Dynamo DB doesn't allow changing of schemas. Where as MongoDB and Cassandra allows.
