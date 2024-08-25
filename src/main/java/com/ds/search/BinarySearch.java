@@ -1,6 +1,7 @@
 
 package com.ds.search;
 
+import java.lang.Math;
 public class BinarySearch {
 
     //Assumption  : Array in sorted in ascending order
@@ -64,5 +65,7 @@ public class BinarySearch {
         if (!value)
             throw new RuntimeException("Error");
     }
+    
+    
 
 }

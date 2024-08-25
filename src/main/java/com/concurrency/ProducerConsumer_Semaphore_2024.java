@@ -26,6 +26,7 @@ public class ProducerConsumer_Semaphore_2024 {
                     done = true;
                 }
                 semaphore.release();
+                
             }
         }
         
