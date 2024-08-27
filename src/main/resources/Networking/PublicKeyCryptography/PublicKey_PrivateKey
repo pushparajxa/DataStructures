@@ -1,0 +1,6 @@
+-- Theoretically either of public key or private key can be used for encryption or decryption.
+
+- In general use case public key is used to encrypt data and private key to decrypt it.
+
+- In Digital Signatures and Certificates, private key is used to encrypt and public key is used to
+decrypt.

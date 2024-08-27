@@ -1,0 +1,79 @@
+When a client does https://www.google.com in the browser, browser will get the ip address A record
+through Domain Name Servers. Once it gets the ip address, it will initiate handshake with the server
+ on TCP 443 (HTTPS) port.
+    + Server will send the certificates of all the intermediate CA except root CA.
+    + Root CA certificate is pre-installed on any browser.
+    + If intermediate CA certificate is missing, an url to fetch it will be present in the digital
+      certificate(AIA field) (Authority Information Access)
+
+      - The AIA extension is supposed to point the client towards an endpoint from which the
+        signing certificate can be obtained even if the server does not provide the intermediate
+        certificates as part of the TLS handshake.
+      - Reference:
+          https://akamath32.medium.com/certificate-authority-information-access-aia-7bc56f7257fc
+
+
+Reference:
+    1. https://upload.wikimedia.org/wikipedia/commons/8/87/Chain_of_trust_v2.svg
+    2. https://security.stackexchange.com/questions/211749/where-do-tls-clients-fetch-intermediate-ca-certificates-from
+
+
+How Man in the middle attack can take place (MITM) in TLS
+==========================================================
+ During TLS handshake, a man in the middle can provide a fake public key of the server to the client
+ . He will decrypt all the information sent by client. He will read or alter them and forward to the
+  server using its actual public key. In this process neither client nor server will be aware that
+  someone is listening to their communication.
+
+  Reference:
+    1. https://eitca.org/cybersecurity/eitc-is-acc-advanced-classical-cryptography/man-in-the-middle-attack/man-in-the-middle-attack-certificates-and-pki/examination-review-man-in-the-middle-attack-certificates-and-pki/how-does-the-use-of-certificates-and-public-key-infrastructure-pki-prevent-man-in-the-middle-attacks-in-public-key-cryptography/
+    2. A MITM attack occurs when an attacker intercepts and possibly alters the communication between
+     two parties who believe they are directly communicating with each other. In public key cryptography,
+     this can happen if an attacker is able to intercept the public key exchange process, substituting their
+     own public key for the intended recipient’s key. Consequently, the attacker can decrypt the messages
+     intended for the recipient, read or alter them, and then re-encrypt them with the recipient’s actual
+     public key before forwarding them, all without either party being aware of the interception.
+
+ Man in the middle attack is solved by Digital Certificates.
+
+
+What does a Digital Certificate contain
+=======================================
+Subject Name
+Validity
+Subject Public Key
+Issuer(Intermediate CA) Name
+Issuer(Intermediate CA) Siganture (Made by the intermediate CA's private key).
+
+
+Certificate Pinning
+===================
+ Hash of the public key (in most cases) or Digital Certificate is hard coded into the applicaiotn
+ through configuration or source code. This way application can verify the public key to avoid man
+ in the middle attack when Digital certificate issuing authority is compromised. Attacker will issue
+  fake DigitalCertificates and pose as original server. In that situations hash of the pyblic key or
+   DigitalCertificate will not match if attacker produces a fake DigitalCertificate.
+
+
+ - Certificate pinning is not used due to its complexity in implementation. Certificate Transparency
+  is use instead.
+
+  ### Reference
+    1. https://www.perplexity.ai/search/could-you-give-examples-for-th-64gBvTzDQbuqgPD77aGJWA#12
+
+
+
+Certificate Transparency Logs
+=============================
+ It is an append only certificatelog which can be publicly verified. It contains all the
+ certificates that are issued by a CA. This prevents issues that arise when issuing CA system is
+ compromised and fake certificates were generated. By the time issuing CA notices this fake
+ certificates damage would have already done by client being cheated by fraud.
+
+  Reference:
+    1. https://en.wikipedia.org/wiki/Certificate_Transparency
+
+
+
+
+

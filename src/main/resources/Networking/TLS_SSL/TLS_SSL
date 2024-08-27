@@ -1,0 +1,41 @@
+Tl;DR:: TLS is faster and current standard. SSL is deprecated.
+
+Based on the search results, here are the key differences between TLS (Transport Layer Security) and SSL (Secure Sockets Layer):
+
+1. Version and Development:
+   - SSL is older, with versions 2.0 and 3.0 released in 1995 and 1996 respectively.
+   - TLS is the successor to SSL, with TLS 1.0 released in 1999 as an upgrade to SSL 3.0.
+   - All SSL versions are now deprecated due to security vulnerabilities.
+
+2. Security:
+   - TLS is more secure than SSL, as it was developed to address vulnerabilities found in SSL.
+   - TLS supports stronger encryption algorithms and has improved security measures.
+
+3. Protocol Details:
+   - Cipher Suites: SSL supports the Fortezza cipher suite, while TLS does not.
+   - Alert Messages: TLS replaced some SSL alert messages with new ones.
+   - Handshake Process: TLS calculates hashes over handshake messages differently than SSL.
+   - Message Authentication: TLS uses HMAC (Hash-based Message Authentication Code), while SSL uses MAC (Message Authentication Code).
+
+4. Performance:
+   - TLS is generally faster and more efficient than SSL.
+
+5. Current Usage:
+   - SSL is deprecated and no longer considered secure for use.
+   - TLS is the current standard, with TLS 1.2 and 1.3 being the most widely used versions.
+
+6. Terminology:
+   - Despite TLS being the current standard, the term "SSL" is still widely used in the industry, often referring to TLS.
+   - What are commonly called "SSL certificates" are actually certificates that can be used with both SSL and TLS protocols.
+
+In summary, while SSL and TLS serve the same purpose of securing data transfer over networks, TLS is the more modern, secure, and efficient protocol that has largely replaced SSL in current usage.
+
+Citations:
+[1] https://aws.amazon.com/compare/the-difference-between-ssl-and-tls/
+[2] https://www.cloudpanel.io/blog/ssl-vs-tls-certificates/
+[3] https://kinsta.com/knowledgebase/tls-vs-ssl/
+[4] https://www.ssl2buy.com/wiki/ssl-vs-tls
+[5] https://www.geeksforgeeks.org/difference-between-secure-socket-layer-ssl-and-transport-layer-security-tls/
+[6] https://www.keyfactor.com/blog/ssl-vs-tls-what-are-the-differences/
+[7] https://www.digicert.com/what-is-ssl-tls-and-https
+[8] https://www.indusface.com/learning/what-is-ssl-pinning-a-quick-walk-through/

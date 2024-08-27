@@ -5,6 +5,11 @@ package com.ds.recursion;
 
 public class QuadTree_427 {
 
+    /*
+        We can construct quad tree even if total number of elements in the grid or not as 4^h.
+        We can create ghost nodes and add them.
+     */
+    
 // Definition for a QuadTree node.
     static class Node {
         public boolean val;
