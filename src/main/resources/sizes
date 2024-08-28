@@ -1,0 +1,6 @@
+ # Linux Buffer Cache Page Size -- 4 KB, Matches the file system block size
+
+ # NVMe LBA, Logical Block Size -- 512 Bytes to 4KB.
+
+ # SSD Block size ranges from 4 KB to 8KB  and sometimes larger
+

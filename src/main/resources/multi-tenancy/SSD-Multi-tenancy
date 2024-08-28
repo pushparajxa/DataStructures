@@ -2,13 +2,56 @@ What is a Namespace?
 ======================
 
 
-In NVMe® technology, a namespace is a collection of logical block addresses (LBA) accessible to host software. A namespace ID (NSID) is an identifier used by a controller to provide access to a namespace. A namespace is not the physical isolation of blocks, rather the isolation of logical blocks addressable by the host software.
+In NVMe® technology, a namespace is a collection of logical block addresses (LBA) accessible to host software.
+ A namespace ID (NSID) is an identifier used by a controller to provide access to a namespace. A namespace is not
+ the physical isolation of blocks, rather the isolation of logical blocks addressable by the host software.
 
 In Linux, namespaces appear each with a unique identifier in devices; /dev/nvme0n1 is looking at controller 0 and namespace 1).
 
-There are many reasons why host software would want to break up an NVMe SSD into multiple namespaces: for logical isolation, multi-tenancy, security isolation (encryption per namespace), write protecting a namespace for recovery purposes, overprovisioning to improve write performance and endurance and so on.
+There are many reasons why host software would want to break up an NVMe SSD into multiple namespaces: for
+logical isolation, multi-tenancy, security isolation (encryption per namespace), write protecting a
+namespace for recovery purposes, over provisioning to improve write performance and endurance and so
+ on.
 
-On an NVMe SSD by default, the size of the namespace is equal to the size of LBA’s determined by the manufacturer. Each namespace is presented as a separate target device in the host software.
+On an NVMe SSD by default, the size of the namespace is equal to the size of LBA’s determined
+by the manufacturer. Each namespace is presented as a separate target device in the host software.
+
+
+    Definition of a logical block address (LBA):
+    ------------------------------------------
+        An LBA is a unique identifier for a specific block of data storage on an NVMe device.
+        It represents the smallest addressable unit of storage that can be read from or written to on the device.
+
+
+
+    Relationship between NVMe and SSD:
+    ----------------------------------
+        NVMe is a protocol specifically designed to take advantage of the speed and parallelism capabilities of SSDs.
+        Not all SSDs use NVMe; some still use older interfaces like SATA or SAS.
+        NVMe SSDs generally offer the highest performance among solid-state storage options.
+
+
+    Physical storage representation:
+    --------------------------------
+        Each LBA typically corresponds to a fixed-size chunk of physical storage on the SSD.
+        The actual mapping of LBAs to physical storage locations is managed by the NVMe controller and is
+         transparent to the hos
+
+
+    Formatting and block size:
+    --------------------------
+        The size of each logical block is determined when the namespace is formatted.
+        Common block sizes include 512 bytes and 4096 bytes, but other sizes are possible depending on th
+        e device and configuration.
+
+    Physical block size:
+    ---------------------
+        The actual physical block size of SSDs is typically larger than the reported logical block size.
+        Common physical block sizes for SSDs include:
+            4 KB (4096 bytes)
+            8 KB (8192 bytes)
+            Sometimes larger sizes
+
 
 
 
@@ -16,6 +59,11 @@ Multiple Namespaces
 =====================
 Multi-Tenancy:
 --------------
-A use case may involve having two or more customers using one NVMe SSD. Having more than one customer using one SSD raises concerns of consistency of service, dedicated performance and lowering the cost of having to purchase multiple SSDs. The logical separation between each tenant allows the owner to cater each namespace to the tenant’s workload habits. The SSD can still wear level and share spare areas for garbage collection between namespaces. This is different from NVM Sets where the expectation is physical isolation rather than namespaces, which is logical isolation.
+A use case may involve having two or more customers using one NVMe SSD. Having more than one customer
+using one SSD raises concerns of consistency of service, dedicated performance and lowering the cost of
+having to purchase multiple SSDs. The logical separation between each tenant allows the owner to cater
+each namespace to the tenant’s workload habits. The SSD can still wear level and share spare areas for
+garbage collection between namespaces. This is different from NVM Sets where the expectation is physical
+isolation rather than namespaces, which is logical isolation.
 
 Refer: https://nvmexpress.org/resource/nvme-namespaces/

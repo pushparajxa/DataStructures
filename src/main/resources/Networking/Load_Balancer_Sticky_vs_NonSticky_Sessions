@@ -56,7 +56,8 @@ Sticky Session vs Session Replication
 -------------------------------------
 * In Session replication, user session is replicated across all the tomcat instances running behind
 load balancer.
-* In Sticky session load balacner will always direct requests from user to single physical app  server.
+* In Sticky session load balancer will always direct requests from user to single physical app
+server.
 * In Tomcat Session replication is used with Sticky session.
 
 * Reference
