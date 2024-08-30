@@ -13,11 +13,14 @@ closed after server sends the response. Persistence connection enables pipelinin
 
 HTTP 1.0
 ---------
+* In HTTP/1.x versions, request and responses are sent in plain text. Images are sent converted to
+  binary representation and sent as 0s and 1s
+
 * Connections are not persistent. However un-officially it is supported by the used of header
 
   Connection: keep-alive
 
-Client should send request with ahove header and if sever supports it then it will send response
+Client should send request with above header and if sever supports it then it will send response
 with the same header. After this, connection is not dropped until client sends a request with the
 header
 
@@ -29,67 +32,196 @@ header
 
 HTTP 1.1
 --------
-* All connections are persistent by-default (with timeout).
+  * All connections are persistent by-default (with timeout).
 
-* HTTP/1.1 Spec limit number of keep-alive connections to only 2 per server by the client.
+  * HTTP/1.1 Spec limit number of keep-alive connections to only 2 per server by the client.
 
-* Timeout: connection timeout of Apache httpd 1.3 and 2.0 is as little as 15 seconds and just 5
-  seconds for Apache httpd 2.2 and above.
-     * Refer: https://en.wikipedia.org/wiki/HTTP_persistent_connection
-
-HTTP Pipelining
----------------
-* It is available with HTTP-1.1
-
-* It allows more than one requests to be sent over single TCP connection without waiting for their
-responses. Server should send responses non-pipelined, i.e., serially in the order it has received
-the requests. This may result in HOL (head of line blocking) as the initial request received by the
-server may be take lot of time than others. For example, if the data is present in the server
-cache then it can send immediately, otherwise, it has to query database and send the result while
-other requests's data is available in the cache and can be sent quickly.
+  * Timeout: connection timeout of Apache httpd 1.3 and 2.0 is as little as 15 seconds and just 5
+    seconds for Apache httpd 2.2 and above.
+       * Refer: https://en.wikipedia.org/wiki/HTTP_persistent_connection
 
 
-* Client sends multiple requests over the persistent connection and the server should return the
-responses in the correct order the requests are received. Server need not to handle requests
-concurrently.
+  Chunked transfer encoding
+  -------------------------
+  Server can send response in chunks and similarly client can upload a big file in chunks.
+  This helps in faster loading of webpages at client side.
 
-* Idempotent requests shall only be pipelined.
+  Ref:
+     1. https://gist.github.com/CMCDragonkai/6bfade6431e9ffb7fe88
+     2. https://youtu.be/UMwQjFzTQXw?si=cEXYfAWd2mAvmIou&t=141
 
-* Non-Idempotent requests like POST shall not be pipelined. As per standards specification.
-  - Section 8.1.1.2 Pipelining
-    # https://www.w3.org/Protocols/rfc2616/rfc2616-sec8.html
+  HTTP Pipelining
+  ---------------
+  * It is available with HTTP-1.1
 
-* Head of line blocking (HOL)
-
-  - One form of HOL blocking in HTTP/1.1 is when the number of allowed parallel requests in the browser is used up,
-    and subsequent requests need to wait for the former ones to complete. HTTP/2 addresses this issue through request multiplexing,
-    which eliminates HOL blocking at the application layer, but HOL still exists at the transport (TCP) layer.
-    HTTP/3 uses QUIC instead of TCP which removes HOL blocking in the transport layer.
-
-   - Reference:
-    # https://en.wikipedia.org/wiki/Head-of-line_blocking
-
-
-* Reference
-  - https://en.wikipedia.org/wiki/HTTP_pipelining
+  * It allows more than one requests to be sent over single TCP connection without waiting for their
+  responses. Server should send responses non-pipelined, i.e., serially in the order it has received
+  the requests. This may result in HOL (head of line blocking) as the initial request received by the
+  server may be take lot of time than others. For example, if the data is present in the server
+  cache then it can send immediately, otherwise, it has to query database and send the result while
+  other requests's data is available in the cache and can be sent quickly.
 
 
+  * Client sends multiple requests over the persistent connection and the server should return the
+  responses in the correct order the requests are received. Server need not to handle requests
+  concurrently.
 
-HTTP/2 Streams
--------------------
-The HTTP/2 specification defines a stream as “an independent, bidirectional sequence of frames exchanged between the client and server within an HTTP/2 connection.”
-You can think of a stream as a series of frames making up an individual HTTP request/response pair on a connection.
-When a client wants to make a request it initiates a new stream. The server will then reply on that same stream.
-This is simi‐ lar to the request/response flow of h1 with the important difference that because of
-the framing, multiple requests and responses can interleave together without one blocking another.
-The Stream Identifier (bytes 6–9 of the frame header) is what indi‐ cates which stream a frame belongs to.
+  * Idempotent requests shall only be pipelined.
+
+  * Non-Idempotent requests like POST shall not be pipelined. As per standards specification.
+    - Section 8.1.1.2 Pipelining
+      # https://www.w3.org/Protocols/rfc2616/rfc2616-sec8.html
+
+  * Head of line blocking (HOL)
+
+    - One form of HOL blocking in HTTP/1.1 is when the number of allowed parallel requests in the browser is used up,
+      and subsequent requests need to wait for the former ones to complete. HTTP/2 addresses this issue through request multiplexing,
+      which eliminates HOL blocking at the application layer, but HOL still exists at the transport (TCP) layer.
+      HTTP/3 uses QUIC instead of TCP which removes HOL blocking in the transport layer.
+
+     - Reference:
+      # https://en.wikipedia.org/wiki/Head-of-line_blocking
+
+  * HTTP/1.1 pipelining does not require any special headers or parameters to be set in the request.
+    But client and server should support it.
+
+  * Reference
+    - https://en.wikipedia.org/wiki/HTTP_pipelining
+    - https://www.youtube.com/watch?v=UMwQjFzTQXw  (Alex Wu on HTTP 1.x| HTTP 2| HTTp 3)
 
 
-Ref: Page 47, Book: Learning HTTP/2, A Practical guide for begineers. Tech/Networking folder.
+
+    Cache-Control Header
+    ====================
+
+      The Cache-Control header is used to specify directives for caching mechanisms in both requests
+      and responses. It controls how, and for how long, a resource can be cached by browsers and
+      intermediate caches.
+
+        Usage in Responses
+
+       In response headers, the Cache-Control header can include various directives:
+
+          public: Indicates that the response can be cached by any cache.
+          private: Indicates that the response is intended for a single user and should not be stored by shared caches (e.g., proxies).
+          no-cache: Forces caches to submit the request to the origin server for validation before releasing a cached copy.
+          no-store: Instructs caches not to store any part of the request or response.
+          max-age=<seconds>: Specifies the maximum amount of time a resource is considered fresh. After this time, the resource is stale.
+          must-revalidate: Indicates that once the resource becomes stale, caches must not use the stale copy without first revalidating it with the origin server.
+
+      Example of Cache-Control in Response:
+      ----------------------------------
+        HTTP/1.1 200 OK
+        Cache-Control: max-age=3600, public
+        Content-Type: text/html
+
+        <html>
+        <body><h1>Hello, World!</h1></body>
+        </html>
+
+
+      Usage in Requests
+      -----------------
+      In request headers, Cache-Control can be used to influence the behavior of caches when the client requests resources:
+
+          no-cache: The client is requesting a fresh copy of the resource from the server, even if the cache has a valid copy.
+          max-age=<seconds>: Similar to the response, this directive can specify how long the client is willing to accept a cached response.
+
+      Example of Cache-Control in Request:
+         GET /example HTTP/1.1
+         Host: www.example.com
+         Cache-Control: no-cache
+
+    Tag Header
+    ====================
+
+       The ETag (Entity Tag) header is used for web cache validation and to help manage caching behavior.
+       It is a unique identifier assigned by the server to a specific version of a resource.
+       When a resource changes, its ETag value changes.
+
+        Usage
+
+          Response ETag: The server generates an ETag when sending a response. This tag reflects the current version of the resource.
+          Request ETag: The client can include the If-None-Match header in subsequent requests to check if the resource has changed.
+
+      Example of ETag in Request:
+      -----------------
+        HTTP/1.1 200 OK
+        ETag: "abc123"
+        Content-Type: text/html
+
+        <html>
+        <body><h1>Hello, World!</h1></body>
+        </html>
+
+      Example of ETag in Request:
+      -----------------
+        GET /example HTTP/1.1
+        Host: www.example.com
+        If-None-Match: "abc123"
+
+
+
+HTTP/2
+------
+  * In HTTP/2, request and response are sent in binary format
+
+
+    Key Differences in HTTP/2
+
+        Binary Format:
+            Framing Layer: HTTP/2 introduces a binary framing layer, which encapsulates all HTTP messages
+            in a series of frames. These frames can be of different types (e.g., headers, data, priority)
+             and are encoded in a binary format. This allows for more efficient parsing and processing by both clients and servers.
+            Efficiency: The binary format reduces the overhead associated with parsing plain text,
+            leading to improved performance, especially for high-latency connections.
+
+        Header Compression:
+            HTTP/2 employs HPACK, a header compression format that reduces the size of header fields.
+             This is particularly beneficial for reducing the amount of data sent for requests and responses,
+             as headers can often be large and repetitive.
+
+        Multiplexing:
+            With the binary framing layer, HTTP/2 allows multiple streams (requests/responses)
+            to be sent simultaneously over a single connection without blocking. This is a significant
+            improvement over HTTP/1.x, where requests are often processed sequentially.
+
+        Control Frames:
+            In addition to data frames that carry the payload of requests and responses,
+            HTTP/2 also defines control frames for managing streams, flow control, and other connection-related activities.
+
+    Example of HTTP/2 Request and Response
+
+        While you cannot view HTTP/2 requests and responses directly as plain text,
+          here's a simplified representation of what happens under the hood:
+
+        HTTP/2 Request: The client sends a request in a series of binary frames, which might include:
+            A frame for the headers (e.g., method, URL, headers).
+            A data frame (if there is a body).
+
+        HTTP/2 Response: The server responds with its own set of binary frames, which may include:
+            A frame for the response headers (e.g., status code, headers).
+            A data frame containing the response body.
+
+    HTTP/2 Streams
+    -------------------
+    The HTTP/2 specification defines a stream as “an independent, bidirectional sequence of frames exchanged between
+    the client and server within an HTTP/2 connection.”
+    You can think of a stream as a series of frames making up an individual HTTP request/response pair on a connection.
+    When a client wants to make a request it initiates a new stream. The server will then reply on that same stream.
+    This is similar to the request/response flow of h1 with the important difference that because of
+    the framing, multiple requests and responses can interleave together without one blocking another.
+    The Stream Identifier (bytes 6–9 of the frame header) is what indicates which stream a frame belongs to.
+
+
+    Ref: Page 47, Book: Learning HTTP/2, A Practical guide for beginners. Tech/Networking folder.
 
 
 HTTP Long Polling:
 -------------------
+
+* Long polling can be implemented in any version of HTTP.
+
 Client makes a request. After server sends a response the transaction is complete but the
 underlying (TCP) (will stay unless closed by server or client) will stay open. Then client can make
 another request. Server can take any amount of time (less than or equal to timeout) to send a
@@ -138,7 +270,7 @@ message is identified with an identifier.
       Difference between HTTP Streaming and COMET
       -------------------------------------------
       * If you don't know the amount of data that you are going to send, i.e., live stream of a
-        match, you send the data in packets/chunks, which what HTTP Streamig about. In COMET you are
+        match, you send the data in packets/chunks, which what HTTP Streaming about. In COMET you are
         sending updates to the client from the server through single open connection.
 
 
@@ -175,6 +307,9 @@ https://www.youtube.com/watch?v=a-sBfyiXysI
   * QUIC is based on UDP.
   * Each stream is independent of other streams.
   * It is used by 25% of websites.
+* HTTP/2 is used around 60% of web.
+* HTTP/1 is used around 25% of web.
+* Google and Cloudfare have already adopted to HTTP/3 and many are in the process of adoption.
 
 Difference between Long-Polling, Websockets, Server-Sent Events (SSE) and Comet
 -------------------------------------------------------------------------------

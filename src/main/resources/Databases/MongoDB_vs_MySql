@@ -1,0 +1,24 @@
+A key benefit of the MongoDB design is that the database is extremely easy to scale.
+ Configuring a sharded cluster allows a portion of the database, called a shard,
+ to also be configured as a replica set. In a sharded cluster, data is distributed
+ across many servers. This highly flexible approach allows MongoDB to horizontally
+ scale both read and write performance to cater to applications of any scale.
+
+A replica set is the replication of a group of MongoDB servers that hold the same data,
+ensuring high availability and disaster recovery.
+
+With a MySQL database system, options for scalability are much more limited.
+ Typically, you have two choices: vertical scalability, or adding read replicas.
+ Scaling vertically involves adding more resources to the existing database server, but this has an inherent upper limit.
+
+Read replication involves adding read-only copies of the database to other servers.
+ However, this is typically limited to five replicas in total, which can only be used for read operations.
+ This can cause issues with applications that are either write-heavy, or write and read regularly for the database,
+since it’s common for replicas to lag behind the write master.
+Multi-master replication support has been added to MySQL, but its implementation is more
+limited than the functionality available in MongoDB.
+
+
+
+## Reference:
+  https://www.mongodb.com/resources/compare/mongodb-mysql

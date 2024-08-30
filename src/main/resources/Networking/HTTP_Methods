@@ -36,16 +36,51 @@ is intended and the server MUST NOT attempt to apply the request to some other r
 server desires that the request be applied to a different URI,
 
 
-HEAD
+HEAD    :: GET without message body. Headers in response should be same as that of GET.
 =======
 The HEAD method is used to ask only for information about a document, not for the document itself.
 HEAD is much faster than GET, as a much smaller amount of data is transferred.
 It's often used by clients who use caching, to see if the document has changed since it was last accessed.
 If it was not, then the local copy can be reused, otherwise the updated version must be retrieved with a GET.
-The metainformation contained in the HTTP headers in response to a HEAD request should be identical to the information sent in response to a GET request.
-This method can be used for obtaining metainformation about the resource identified by the request URI without transferring the data itself.
+The meta information contained in the HTTP headers in response to a HEAD request should be identical
+ to the information sent in response to a GET request.
+This method can be used for obtaining meta information about the resource identified by the request
+URI without transferring the data itself.
 This method is often used for testing hypertext links for validity, accessibility, and recent modification.
 
 Refer:
   - https://condor.depaul.edu/dmumaugh/readings/handouts/SE435/HTTP/node14.html
   - More about REST methods in Networking/REST/REST_Methods file
+
+
+OPTIONS
+========
+
+  It is generally used in CORS
+
+Sample request
+--------------
+
+  OPTIONS /api/resource HTTP/1.1
+  Host: example.com
+
+Response will be like below
+---------------------------
+
+  HTTP/1.1 204 No Content
+  Date: Wed, 28 Aug 2024 12:34:56 GMT
+  Server: Apache/2.4.41 (Ubuntu)
+  Allow: OPTIONS, GET, POST, PUT, DELETE
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+  Access-Control-Allow-Headers: Content-Type, Authorization
+  Access-Control-Max-Age: 86400
+  Content-Length: 0
+
+  Use Cases:
+  ---------
+
+      CORS (Cross-Origin Resource Sharing): The OPTIONS method is often used in CORS preflight requests to
+      determine if the server will allow a cross-origin request.
+
+      Discovery: Clients can use the OPTIONS request to discover what actions are allowed on a particular resource.

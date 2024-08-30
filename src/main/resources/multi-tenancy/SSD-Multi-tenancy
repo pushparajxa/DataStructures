@@ -53,6 +53,14 @@ by the manufacturer. Each namespace is presented as a separate target device in 
             Sometimes larger sizes
 
 
+  Write Amplification problem for SSDs
+  ------------------------------------
+  - SSDs operate on different granularity while handling write and erasure.
+  - If we need to write data to an existing location(override), that area has to be first cleaned.
+     SSD does this in higher sizes i.e. 256 KB blocks.
+ -  Where as writes can be done at 4 KB page size.
+ - Because of above problem, physical storage would be higher than the logical storage.
+ - More details at: https://en.wikipedia.org/wiki/Write_amplification
 
 
 Multiple Namespaces
