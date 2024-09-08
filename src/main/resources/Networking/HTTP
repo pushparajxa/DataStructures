@@ -41,8 +41,8 @@ HTTP 1.1
        * Refer: https://en.wikipedia.org/wiki/HTTP_persistent_connection
 
 
-  Chunked transfer encoding
-  -------------------------
+  Chunked transfer encoding/ HTTP Streaming
+  -----------------------------------------
   Server can send response in chunks and similarly client can upload a big file in chunks.
   This helps in faster loading of webpages at client side.
 
@@ -132,7 +132,7 @@ HTTP 1.1
          Host: www.example.com
          Cache-Control: no-cache
 
-    Tag Header
+    ETag Header
     ====================
 
        The ETag (Entity Tag) header is used for web cache validation and to help manage caching behavior.

@@ -1,0 +1,65 @@
+Data from Sql Server put into Kafka using CDC (Debezium Connector). The data needs to be encrypted.
+The encryption key need to be rotated to prevent any act of compromise. If we rotate every month,
+some consumers may want data written with previous keys.
+  In order to solve this we need to store key_id along with decrypted text in the Kafka. But this
+  can lead to salamander attack below.
+
+  ## Example (Reference: https://www.perplexity.ai/search/what-is-ecb-mode-in-aes-and-wh-VkGxpNVkR6OXmWNZQeffzA#9
+                         https://ryansquared.pub/posts/the-key-to-commitment)
+
+  Certainly. Here's an example scenario that illustrates how the lack of key commitment in an
+   authenticated encryption scheme could allow an attacker to break message integrity and authenticity
+   without compromising confidentiality:
+
+  Scenario:
+
+  1. Alice wants to send a message M to Bob using an AEAD scheme without key commitment (like AES-GCM).
+
+  2. Alice and Bob share a secret key K1.
+
+  3. An attacker, Mallory, knows another key K2 (different from K1).
+
+  Attack:
+
+  1. Alice encrypts her message M using K1:
+     (C, T) = Encrypt(K1, N, A, M)
+     Where C is the ciphertext, T is the authentication tag, N is the nonce, and A is associated data.
+
+  2. Mallory intercepts (C, T).
+
+  3. Mallory finds a message M' and associated data A' such that:
+     Encrypt(K2, N, A', M') = (C, T)
+
+  4. Mallory sends (C, T) to Bob along with A'.
+
+  Result:
+
+  1. When Bob receives (C, T) and A', he successfully decrypts and authenticates the message using K1.
+
+  2. Bob believes he has received a valid, authentic message from Alice.
+
+  3. However, the message Bob decrypts is M, not M', which Mallory crafted.
+
+  4. The confidentiality of M is maintained (Mallory doesn't know its contents).
+
+  Key points:
+
+  1. Message integrity is broken: The message Bob receives (M) is not the one Mallory crafted (M').
+
+  2. Authenticity is compromised: Bob believes the message is from Alice, but it's actually associated with Mallory's key K2.
+
+  3. Confidentiality is preserved: Mallory doesn't learn the contents of Alice's original message M.
+
+  This attack, known as the "Invisible Salamander" attack, exploits the lack of key commitment in the AEAD scheme. It allows an attacker to find collisions where different keys and messages produce the same ciphertext and tag, potentially leading to confusion about the message's origin and integrity.
+
+  To prevent such attacks, key-committing AEAD schemes ensure that a given (C, T) pair can only be valid under a single key, thus maintaining the binding between the key and the encrypted message.
+
+  Citations:
+  [1] https://ryansquared.pub/posts/the-key-to-commitment
+  [2] https://www.massagestudybuddy.com/4-keys-to-successful-commitment
+  [3] https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/migrate-commitment-policy.html
+  [4] https://eprint.iacr.org/2020/1153.pdf
+  [5] https://en.wikipedia.org/wiki/Authenticated_encryption
+  [6] https://www.effectory.com/knowledge/3-key-types-of-organisational-committment/
+  [7] https://aws.amazon.com/blogs/security/improved-client-side-encryption-explicit-keyids-and-key-commitment/
+  [8] https://nvlpubs.nist.gov/nistpubs/legacy/sp/nistspecialpublication800-38d.pdf

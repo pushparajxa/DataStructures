@@ -1,0 +1,8 @@
+
+
+
+Reference:
+  1. https://cloud.google.com/blog/products/databases/using-haproxy-to-scale-read-only-workloads-on-cloud-sql-for-postgresql/
+  2. https://blog.cloudflare.com/open-sourcing-our-fork-of-pgbouncer/
+  3. https://blog.cloudflare.com/performance-isolation-in-a-multi-tenant-database-environment/
+  4. https://newsletter.systemdesign.one/p/postgresql-scalability

@@ -1,0 +1,21 @@
+NP:: a decision problem, if a solution to this problem gives answer YES, then it can be verifiable
+in polynomial time.
+
+P:: A problem which can be solvable and verifiable in polynomial time.
+    If I have a solution in polynomial time, then I can use to verify an answer to that problem in
+    polynomial time. I give the same input to my solution, get its result then compare the answer
+    provided to check if they match.
+
+NP-Complete:: All problem in NP should be convertible in polynomial time to an NP-Complete problem.
+              An answer "yes" to this problem can be verified in polynomial time.
+
+
+NP-Hard:
+    - Some there problems may not be in NP. That is, an "yes" to the problem is not verifiable in
+      polynomial time.
+    - All NP-Complete problems are in NP-Hard.
+    - All NP problems can be convertible in polynomial to every NP-Hard problem.
+      That is to say that a problem can be in NP-Hard only if all NP problems can be reduced in
+      polynomial time to that problem.
+    - An NP-Hard problem may not need to be in NP. That is, its solution "yes" to a problem may not
+      be verifiable in polynomial time.

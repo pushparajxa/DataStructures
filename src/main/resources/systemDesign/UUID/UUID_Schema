@@ -1,0 +1,8 @@
+UUID is in total 128 bit long , i.e., 16 byte long
+    - 60 bits for timestamp, 100 nanosecond intervals of 128 bit UTC timestamp. Least Significant
+      bytes are taken.
+    - Clock Sequence, a randomly initialized number upon node/machine restart.
+      + If timestamps are generated with in the 100 nano second interval, this is incremented.
+      + If system clock has been set backwards or if the node was down, upon restart
+        if the previous value is known, we can just increment it otherwise we can set it to random
+        value.

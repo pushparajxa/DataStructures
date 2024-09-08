@@ -36,5 +36,30 @@ public class ForTest {
                 System.out.println(l);
             }
         }
+        
+        for(int l=0; l< arr.length; l++) {
+            if(l%2==0){
+                continue;
+            }
+            else {
+                System.out.println(l);
+            }
+        }
+        
+        
+        for (int k = 0; k < 5; k++) {
+            if (k < 3) {
+                System.out.println("K is less than 3 and k=" + k);
+            }
+        }
+        
+/*        for (int k = 0; k < 5; k++) {
+            if (k < 3) {
+                System.out.println("K is less than 3 and k=" + k);
+            }
+            else{
+                k =0;
+            }
+        }*/
     }
 }

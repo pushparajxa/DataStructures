@@ -1,9 +1,0 @@
-Redis:  30,000 updates per second
-      1. https://systoilet.wordpress.com/2010/08/09/redis-vs-memcached/
-
-Transactions on a database:
-  * Few thousands of transactions per second
-  * MySQl Server does 15,000 transaction per second,
-    + Configuration: 2 Processors, 128 cores, 256 Threads.
-  # Reference:
-    - https://www.tpc.org/tpce/results/tpce_perf_results5.asp?resulttype=all

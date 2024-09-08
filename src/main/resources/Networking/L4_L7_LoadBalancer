@@ -1,0 +1,39 @@
+L4 Load Balancer (https://www.perplexity.ai/search/in-this-webpage-https-blog-clo-_MlMy77hQxiO_MX_Bu4.4w#4)
+----------------
+ - It doesn't make new connection to the back end server
+ - It routes the connection to the server by changing the source ip to its address.
+ - It works as NAT
+ - All the requests in the session(until connection is closed) to the same backend server.
+ - No SSL termination as well.
+
+
+L7 Load balancer (https://www.perplexity.ai/search/in-this-webpage-https-blog-clo-_MlMy77hQxiO_MX_Bu4.4w#5)
+----------------
+   - Individual requests can be routed to different servers.
+   - SSL Termination and decryption would happen.
+
+   Application-aware:             L7 load balancers can inspect and understand application-layer protocols like HTTP, HTTPS, and WebSocket.
+
+   Content-based routing:         They can make routing decisions based on the content of requests, such as URLs,
+                                  HTTP headers, cookies, or specific data within the request.
+
+   Advanced traffic distribution: L7 load balancers can route requests to different server pools based on the type of
+                                  content requested (e.g., static vs. dynamic content).
+
+   SSL termination:               They can handle SSL/TLS encryption and decryption, offloading this processing from backend servers.
+
+
+   Session persistence:           L7 load balancers can maintain session stickiness based on application-layer information like cookies.
+
+   Application security:          Some L7 load balancers can function as web application firewalls
+                                   (WAFs), protecting against common web attacks.
+
+   Content manipulation:          They can modify request and response headers, rewrite URLs, or
+                                    inject HTTP headers.
+
+   Microservices support:         L7 load balancers are well-suited for routing traffic in complex microservices architectures.
+
+   Higher latency:                Due to the deeper packet inspection, L7 load balancers may introduce slightly more latency
+                                   compared to L4 load balancers.
+
+   More resource-intensive:       The advanced features of L7 load balancers require more computational resources.
