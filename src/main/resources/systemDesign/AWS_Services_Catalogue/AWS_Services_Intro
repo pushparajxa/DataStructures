@@ -1,0 +1,6 @@
+Athena --> Hive
+Kinesis --> Flink
+Aurora --> Serverless and scalbel MySQl and Postgres only
+RDS ---> General purpose DB with small and medium requirements, supporting wide variety of engines
+         such as MySQL, PostgreSQL, MariaDB, Oracle, SQL Server, Aurora.
+RedShift ---> Warehouse/DataLake

@@ -1,0 +1,193 @@
+* Number of TCP/UDP connections per src_ip, dst_ip, dst_port are 2^16 i.e. 65536
+  - A server with a given ip and port can theoretically support 2^32 * 2^16 connections
+   ~ 1000 Trillion ~ 1 Quadrillion.
+
+  - A connection (TCP, UDP) is identified by (src_ip, src_port, dst_ip, dst_port)
+
+  - For each connection there will be two buffers at client and server
+    - 1 Read Buffer
+    - 1 Writ buffer
+    - So for n connections we need 2*n file descriptors at client side and
+      2*n file descriptors at server.
+
+  # Reference:
+    1. https://josephmate.github.io/2022-04-14-max-connections/
+    2. https://stackoverflow.com/questions/2332741/what-is-the-theoretical-maximum-number-of-open-tcp-connections-that-a-modern-lin
+
+
+* Port types
+  Originally, ports were divided into three ranges:
+
+      Well-known ports: 0-1023
+      Registered ports: 1024-49151
+      Dynamic/Private ports: 49152-65535 --> These are also called as ephemeral ports. (Dynamically
+      allocated by the OS when requested by the processes).
+
+Libraries
+---------
+ * Socket.io provides code for handling reconnection and any other connection management related
+    facilities for maintaining websockets.
+
+
+Configuring web-sockets
+=======================
+• Heartbeat
+
+• Buffer undelivered messages
+
+• Message routing
+
+• Broadcast
+
+• Handling backpressure
+
+• Automatic reconnection
+
+• Message acknowledgements
+
+• Encryption
+
+• Multiplexing
+
+• Fallback (HTTP long polling)
+  Client unable to make websocket connection due to firewall
+  or  proxy error.
+
+  # Reference: https://youtu.be/vXJsJ52vwAA?si=WzjzsDUBv4M6dpiq&t=145
+
+
+Scaling Challenges (Horizontal)
+================================
+
+      Data synchronization:
+      --------------------
+        Different clients connect to different servers. Message from a client connected to one server
+        should be sent client connected to other server(Websocket servers are sitting behind load
+        balancer/reverse proxy)
+
+      Connection state synchronization:
+      --------------------------------
+        If a user goes offline, notification about it should be sent all the users in the channel who
+        maybe connected to different servers.
+
+      Making Redis redundant:
+      ----------------------
+         Some solutions can use Redis for pub-sub storing information of channel and users in it. We
+          need to makes sure that Redis doesn't go down.
+
+      Load shedding:
+      -------------
+        If it happens that we need to bring a node down or it got some issue in hardware need to
+        shed some connections, we need to handle that case as well.
+
+      Restoring connections:
+      ---------------------
+        When a node goes down, we need to make all the reconnection from clients to different
+        servers. But all the clients at the same time might be attempting to connect, which could
+        lead to lot of error while connecting messages and higher latencies as servers would be busy
+        in handling this influx of connection requests.
+          sol: exponential back-off.
+
+
+
+# Reference:
+   1. https://www.youtube.com/watch?v=vXJsJ52vwAA&t=3s
+   2. https://dyte.io/blog/scaling-websockets-to-millions/
+
+Scaling -Solutions (Horizontal)
+-------------------------------
+We create many web socket servers and clients connections are routed/made to them via a reverse
+proxy(L4) such as HAProxy. This proxy will just route messages to the websocket servers. (Unlike L7
+proxy it will not maintain two connections, one between client and reverse proxy and another from
+reverse proxy to backend web socket server.
+ Websocket connections are stateful connection. What includes in the state is
+mentioned below. It include session keys, authentication, number of message sent/in-progress or any
+connection management related.
+
+ #References:
+  1. https://www.youtube.com/watch?v=gzIcGhJC8hA (Hussein Naseer)
+
+
+Limitations of WebSockets
+--------------------------
+Lack of Built-in Load Balancing:
+
+    WebSocket connections are stateful and long-lived, which can make load balancing challenging.
+    The protocol doesn't provide built-in features for distributing connections across multiple servers.
+    Implementing load balancing for WebSocket connections often requires additional infrastructure and custom logic.
+
+Manual Implementation Required:
+
+    To handle reconnections, developers typically need to:
+        Detect disconnections (often using timeouts or ping/pong mechanisms)
+        Implement retry logic with exponential backoff
+        Handle state management during reconnection attempts
+    For load balancing, additional server-side infrastructure is usually needed.
+
+Comparison to Other Protocols:
+
+    Some other protocols or services (like MQTT brokers or specialized WebSocket services)
+    may offer built-in reconnection and load balancing features.
+    These features often need to be implemented at the application layer when using raw WebSockets.
+
+
+  The "state" in WebSocket connections refers to:
+
+      Connection status: The connection remains open and active,
+      maintaining its state (CONNECTING, OPEN, CLOSING, or CLOSED).
+      Session information: Can include authentication tokens,
+      user identifiers, or any custom session data.
+      Message sequencing: The ability to maintain order of messages sent and received.
+
+      Long-lived:
+
+  "Long-lived" means the connection persists over an extended period, unlike traditional
+   HTTP requests which are short-lived. A WebSocket connection:
+
+      Remains open after the initial handshake until explicitly closed by either party or due to network issues.
+      Can last for minutes, hours, or even days, depending on the application needs and network conditions.
+
+      State storage:
+
+  The state information is stored on both client and server sides:
+    Client-side:
+
+        The WebSocket object maintains the connection state.
+        Browsers handle the low-level details of keeping the connection alive.
+        Client applications can store session-specific data related to the WebSocket connection.
+
+    Server-side:
+
+        The server maintains a list of active connections and their associated metadata.
+        Session information, authentication status, and any application-specific state are
+        typically stored server-side.
+        Servers often use in-memory data structures or databases to manage connection states.
+
+
+Can multiple tabs/windows share same websocket connection to the server?
+========================================================================
+  * Yes, it is possible to do that but it comes with challenges.
+  * By default, browser creates a websocket connection for each tab/window.
+  * socket.io library provides this functionality.
+
+  * Shared workers can also be used
+
+     - In order to achieve WebSocket connection sharing between browser tabs and windows,
+        we can leverage the power of web workers.
+     - Web workers are essentially separate threads, totally independent of
+        other scripts with no access to the DOM.
+     - They can execute tasks in the background, what makes them particularly useful
+        for performing complex computations and preventing the web page from freezing or
+        becoming unresponsive.
+     - A shared worker is a special type of web worker that can be shared between
+        multiple browser tabs or windows.
+
+     - https://brightinventions.pl/blog/sharing-websocket-connections-between-browser-tabs-and
+     -windows/
+
+     - https://www.perplexity.ai/search/1-real-time-chat-we-are-buildi-4KM_kq5iRnK3UCliYT.pmg#37
+
+
+# References:
+  1. https://stackoverflow.com/questions/47268038/websockets-and-scalability
+  2. https://www.youtube.com/watch?v=4Uwq0xB30JE (How to use WebSockets with React and Node)

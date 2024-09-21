@@ -1,0 +1,13 @@
+T1   read(A)           Incr(A)          commit
+
+T2           read(A)                Incr(A)  commit;
+
+
+T2 didn't have the update that T1 has committed to A.
+
+
+ - This can occure in Read uncommitted and Read committed levels.
+ - It won't occur at snapshot isolation/repeatable reads level.
+
+
+Page n: 226, DDIA, Figure 7-1

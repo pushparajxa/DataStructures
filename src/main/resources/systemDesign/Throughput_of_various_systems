@@ -27,7 +27,7 @@ Transactions on a database:
 
 Indexing latency
 ================
- * Twitter systems can index search/docucments for searching through key terms in one second.
+ * Twitter systems can index search/documents for searching through key terms in one second.
       + That is their system takes at most 1 second for a tweet to appear in search after it was
       created/published.
 

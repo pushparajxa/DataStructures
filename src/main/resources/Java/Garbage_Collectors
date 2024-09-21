@@ -1,0 +1,147 @@
+Heap Layout
+===========
+
+   Eden|S0|S1|Tenured|Permanent
+
+    Young Generation: Eden + Survivor Space (S0 + S1)
+    Old Generation:   Tenured
+    Permanent Generation: Permanent (Classes and methods)
+
+
+Young Generation
+================
+ - Eden
+     S0 and S1.
+    Once Eden is full, collector will collect dead objects and copy alive objects to
+    P1 as well as those that are alive in S0.
+    In the next cycle, the same happens to S1 and alive objects in Eden and S1 are moved to S0.
+    If an object survives n cycles then it is promoted to tenure generation.
+   - This is called Copy Collector.
+
+ - Garbage collection in Younger generation is called minor garbage collection.
+ - Minor GC is STW (Stop the word event)
+
+
+
+
+Old Generation
+================
+   - Garbage collection in this generation is called major generation.
+   - This is also STW event. (Stop the world event).
+
+
+-XX:+UseParallelGC
+================
+ Minor GC:: Parallel & STW
+ Major GC:: Single thread
+
+
+    Maximum garbage collection pause time:
+    -------------------------------------
+     The maximum pause time goal is specified with the command-line option -XX:MaxGCPauseMillis=<N>.
+     This is interpreted as a hint that pause times of <N> milliseconds or less are desired; by default,
+     no maximum pause- time goal. If a pause-time goal is specified, the heap size and other parameters
+     related to garbage collection are adjusted in an attempt to keep garbage collection pauses shorter
+     than the specified value; however, the desired pause-time goal may not always be met.
+     These adjustments may cause the garbage collector to reduce the overall throughput of the application.
+
+    Throughput:
+    ----------
+      The throughput goal is measured in terms of the time spent doing garbage collection versus
+      the time spent outside of garbage collection, referred to as application time. The goal
+      is specified by the command-line option -XX:GCTimeRatio=<N>, which sets the ratio of
+      garbage collection time to application time to 1 / (1 + <N>).
+
+      For example, -XX:GCTimeRatio=19 sets a goal of 1/20 or 5% of the total time in garbage collection.
+      The default value is 99, resulting in a goal of 1% of the time in garbage collection.
+
+    Footprint:
+    ---------
+      The maximum heap footprint is specified using the option -Xmx<N>. In addition, the collector has
+      an implicit goal of minimizing the size of the heap as long as the other goals are being met.
+
+
+   Priority of Parallel Collector Goals
+   ------------------------------------
+      The goals are maximum pause-time goal, throughput goal, and minimum footprint goal,
+        and goals are addressed in that order:
+
+          The maximum pause-time goal is met first. Only after it's met is the throughput goal addressed.
+          Similarly, only after the first two goals have been met is the footprint goal considered.
+
+
+
+
+
+-XX:+UseParallelOldGC
+=====================
+Minor GC:: Parallel & STW
+Major GC:: Parallel Compacting collector
+  - STW for Major GC when there is no space for allocating a size.
+
+- These are(parallel collectors) labelled as throughput collectors as they do not take any/less CPU
+  cycles while application running ensuring high throughput for the application.
+
+
+CMS (Concurrent Mark and Sweep)
+================================
+ - It uses concurrent and parallel collector for old generation.
+ - It doesn't compact the space. There would be holes in the heap.
+ - It doesn't move live objects.
+ - It uses parallel collector (copy collector) for Younger generation
+ - It takes minor STW pauses
+
+ - Major GC:: It is a not a compacting collector.
+
+
+  CMS Collection Phases
+  ---------------------
+  The CMS collection cycle includes both concurrent and stop-the-world phases:
+
+     Initial Mark (STW): A brief stop-the-world phase to identify objects
+                           directly reachable from roots
+
+     Concurrent Mark: Traces the object graph concurrently with application threads
+
+     Concurrent Pre-clean: Retraces modified sections of the object graph concurrently
+
+     Remark (STW): A stop-the-world phase to finalize marking, typically
+                      longer than the initial mark
+
+     Concurrent Sweep: Reclaims unreachable objects concurrently
+
+     Concurrent Reset: Prepares for the next GC cycle concurrently
+
+  STW event when unable to allocate a given request
+
+
+    Concurrent Mode Failure
+    -----------------------
+      The CMS collector uses one or more garbage collector threads that run simultaneously with
+      the application threads with the goal of completing the collection of the tenured generation
+      before it becomes full. As described previously, in normal operation, the CMS collector
+       does most of its tracing and sweeping work with the application threads still running,
+       so only brief pauses are seen by the application threads. However, if the CMS collector
+       is unable to finish reclaiming the unreachable objects before the tenured generation
+       fills up, or if an allocation cannot be satisfied with the available
+        free space blocks in the tenured generation, then the application is
+        paused and the collection is completed with all the application threads stopped.
+        The inability to complete a collection concurrently is referred to as concurrent mode
+        failure and indicates the need to adjust the CMS collector parameters. If a concurrent
+         collection is interrupted by an explicit garbage collection (System.gc()) or for a garbage
+         collection needed to provide information for diagnostic tools, then a concurrent
+          mode interruption is reported.
+
+    # Reference:
+      1. https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/cms.html
+
+
+
+
+G1
+==
+  - Parallel, concurrent and incrementally compacting low-pause garbage collector.
+
+
+
+

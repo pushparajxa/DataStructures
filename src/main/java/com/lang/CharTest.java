@@ -23,7 +23,9 @@ public class CharTest {
 
   public static void main(String[] args) throws UnsupportedEncodingException
   {
-
+    boolean r[]= new boolean[3];
+    System.out.println(Arrays.toString(r));
+    System.out.println((int)'5' + "" + (int)'0');
     System.out.println(isLatin1(null));
     System.out.println(isLatin1(""));
     System.out.println(isLatin1("\u20AC"));

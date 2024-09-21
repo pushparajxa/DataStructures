@@ -1,0 +1,32 @@
+Read UnCommitted
+================
+   + It prevents dirty writes, i.e, a transaction can't write to an uncommitted write. (Writing to a
+    row which has already being written by another transaction)
+
+   - It allows dirty reads.
+
+   # Refer: DDIA, Page 234, at the bottom of the page.
+
+
+Read Committed
+================
+  + No dirty reads. Transaction can read uncommitted data of another transaction.
+  + No dirty writes.
+
+  - Lost update's can occur
+
+  - Non repeatable reads can occur.
+    * Client have to refresh the page to get latest data.
+
+
+Snapshot Isolation
+==================
+ * A transaction sees data past the time it started only.
+ * At the end of transaction if this one writes to a row that is being written to by other
+  transaction then it is rolled back.
+ * When you write to a row, you mark it as deleted and create a new one with this transaction
+  timestamp.
+ * Transactions is aborted only of there is a write-write conflict with other transactions.(on same
+  row(s))
+
+

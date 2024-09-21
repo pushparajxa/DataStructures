@@ -157,4 +157,11 @@ public class ShortestSubArrayWithSumAtLeastK {
         
         return minC == Integer.MAX_VALUE ? -1:minC;
     }
+    
+    public static void main(String[] args) {
+        ShortestSubArrayWithSumAtLeastK shortestSubArrayWithSumAtLeastK =
+            new ShortestSubArrayWithSumAtLeastK();
+        int res = shortestSubArrayWithSumAtLeastK.shortestSubarray(new int[]{-3, 7}, 8);
+        System.out.println(res);
+    }
 }

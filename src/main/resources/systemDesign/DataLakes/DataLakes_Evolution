@@ -1,0 +1,112 @@
+Data lakes have evolved from
+
+  1. Hadoop
+  2. Hive ---> Sql support on data stored in HDFS
+  3. Paruqet columnar file format
+  4. Table formay by Iceberg developed by Netflix.
+      Delta Lake and Hudi provide similar Table Formats.
+
+
+  # Reference:
+    1. https://alekseiondata.substack.com/p/from-hadoop-to-iceberg-an-evolution
+
+
+
+  Table Format
+  ------------
+  In the context of modern data lakes and distributed data systems, a Table Format refers to
+  the structure and organization of data in large-scale storage systems (like Hadoop Distributed
+  File System, S3, etc.). It defines how data files (e.g., Parquet, ORC) are organized into tables,
+   how they are read and written, and how metadata about the table is stored and managed.
+   Table formats are essential for handling large datasets efficiently and
+  enabling features like schema evolution, time travel, and ACID transactions in data lakes.
+
+  Key Concepts of Table Formats:
+
+      File Formats:
+          Table formats work with file formats (like Parquet, ORC, or Avro) that describe how individual
+          data files are structured. These file formats are optimized for analytical queries, allowing
+          data to be read in a columnar format.
+
+      Example of File Formats:
+          Parquet: A columnar storage format optimized for read-heavy workloads.
+          ORC: Similar to Parquet, but with more compression and indexing features.
+
+      Table Layout:
+          Table formats provide an abstraction layer that organizes files into tables with defined schemas,
+           partitions, and columns. The format manages where and how the files are laid out in storage.
+          Tables are typically divided into partitions (e.g., by date, region) for faster access, and this
+          partitioning information is handled by the table format.
+
+      Metadata Management:
+          Table formats maintain metadata about the table’s structure, schema, partitions, file locations,
+          and statistics. This metadata is essential for efficiently querying the table, as it helps the
+          query engine quickly locate and read only the relevant data.
+
+      Example of Metadata Stored:
+          Schema information (columns, data types).
+          Partition details.
+          File locations and sizes.
+          Snapshots or versions of the table.
+
+      ACID Transactions:
+          Some table formats (like Delta Lake and Apache Iceberg) support
+          ACID (Atomicity, Consistency, Isolation, Durability) transactions, enabling
+           reliable handling of concurrent writes and
+          ensuring that queries see consistent data even when updates or deletes are occurring.
+
+      Schema Evolution:
+          Table formats allow schema changes over time (like adding or removing columns) without breaking
+          existing queries or historical data. This feature is crucial for managing datasets in
+          evolving systems where data models can change.
+
+      Time Travel and Snapshots:
+          Some table formats support time travel, meaning they keep track of historical
+          versions of the data. This enables users to query past states of the table, which is
+          useful for auditing, debugging, and reproducing previous results.
+
+      Example: You can query what the data looked like at a particular point in time or revert the table to an earlier state.
+
+  Popular Table Formats:
+
+      Apache Hive (Classic Table Format):
+
+          In traditional Hive, tables are typically stored as directories of files (e.g., Parquet or ORC files) in
+          HDFS or cloud storage, with metadata managed by the Hive Metastore. However, this classic
+          format doesn’t support advanced features like time travel or ACID transactions.
+
+          Drawback: Lacks transactional consistency (especially in multi-writer scenarios) and can be
+          inefficient when it comes to small incremental updates or deletes.
+
+      Apache Iceberg:
+          Iceberg is an open table format designed for large-scale data lakes. It supports features like ACID
+           transactions, schema evolution, partition evolution, and time travel.
+
+          Key Features:
+              Tracks data files through snapshots.
+              Handles large datasets efficiently, with partitioning and metadata.
+              Supports queries across different compute engines (like Spark, Presto, Trino, etc.).
+
+      Delta Lake:
+          Delta Lake is an open-source storage layer that adds ACID transactions to data lakes.
+          It supports time travel, schema enforcement, and batch/streaming data unification.
+
+          Key Features:
+              Transactional consistency on top of Parquet files.
+              Time travel for querying historical data versions.
+              Unified batch and streaming processing (used in tools like Apache Spark).
+
+      Apache Hudi:
+          Apache Hudi (Hadoop Upserts Deletes and Incrementals) is another open-source table
+           format that brings ACID transactions, incremental processing, and indexing to data lakes.
+           It’s optimized for handling upserts and deletes.
+
+            Key Features:
+                Efficient incremental updates and deletes.
+                Supports two storage modes: Copy-on-Write (COW) and Merge-on-Read (MOR).
+                Optimized for streaming and real-time data pipelines.
+
+      AWS Glue Tables:
+          AWS Glue Data Catalog uses a table format concept to help organize and query data
+          stored in S3 using tools like Amazon Athena. It is more of a catalog service, but tables
+          in Glue often follow similar principles to the table formats mentioned above.

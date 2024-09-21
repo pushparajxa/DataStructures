@@ -1,5 +1,12 @@
-Client makes a upgrade(to websockets) request(HTTP) to server. If server supports websockets then it
- responds yes and on that tcp connection they can use webcokets.
+
+- Client makes a request(HTTP)  to server with "upgrade" header in it to indicate client intereset
+  to upgrade the connection to websockets.
+- If server supports websockets then it responds yes and on that tcp connection they can use
+websockets.
+
+-  HTTP request with following headers
+    Connection: Upgrade
+    Upgrade: websocket
 
 
 If Client connects to reverse proxy or load balancer, there will two connections, one from client to
@@ -16,3 +23,4 @@ If Client connects to reverse proxy or load balancer, there will two connections
 
 
 Reference: https://www.youtube.com/watch?v=gzIcGhJC8hA
+

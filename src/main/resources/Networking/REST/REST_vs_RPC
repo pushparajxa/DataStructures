@@ -6,10 +6,13 @@
   - gRPC is an implementation of RPC and is used for streaming. It performs better for some
   use cases than REST.
 
-  gRPC (gRPC Remote Procedure Call) offers several advantages over traditional RPC (Remote Procedure Call) and REST (Representational State Transfer) for specific use cases, primarily due to its use of HTTP/2, protocol buffers, and bi-directional streaming. Here are some scenarios where gRPC performs better:
+  gRPC (gRPC Remote Procedure Call) offers several advantages over traditional RPC (Remote Procedure Call) and REST (Representational State Transfer)
+   for specific use cases, primarily due to its use of HTTP/2, protocol buffers, and bi-directional streaming.
+    Here are some scenarios where gRPC performs better:
 
   1. **Low Latency and High Throughput Applications**:
-     - gRPC is optimized for low latency and high throughput communication. Its use of HTTP/2 allows for multiplexing multiple requests over a single connection,
+     - gRPC is optimized for low latency and high throughput communication. Its use of HTTP/2 allows for multiplexing multiple
+      requests over a single connection,
      reducing latency and increasing throughput compared to traditional HTTP/1.1 used by REST.
 
   2. **Real-Time Communication**:
@@ -18,7 +21,8 @@
 
   3. **Microservices Architecture**:
      - In a microservices architecture, services often need to communicate with each other frequently.
-        gRPC’s efficient binary serialization (protocol buffers) and performance optimizations make it well-suited for inter-service communication, reducing overhead and improving response times.
+        gRPC’s efficient binary serialization (protocol buffers) and performance optimizations
+         make it well-suited for inter-service communication, reducing overhead and improving response times.
 
   4. **Mobile and IoT Applications**:
      - For mobile and IoT devices with limited bandwidth and processing power, gRPC’s compact binary format reduces the payload size,

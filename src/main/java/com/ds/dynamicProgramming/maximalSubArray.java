@@ -1,12 +1,14 @@
 package com.ds.dynamicProgramming;
 
 import java.util.Arrays;
+// Kadane's Algorithm
 
 public class maximalSubArray {
 
     //  https://en.wikipedia.org/wiki/Maximum_subarray_problem
     // https://www.geeksforgeeks.org/largest-sum-contiguous-subarray/
 
+    // This handles the case where all the elements are negative as well.
     static int printMaximumSum(int arr[]){
       if(arr.length==1){
         return arr[0];
@@ -49,27 +51,7 @@ public class maximalSubArray {
         return subArray;
 
     }
-
-    //Handle the case where all of the array elements are negative numbers
-
-    //TODO : Fix This. Not working correctly
-     static int printMaximumSum2(int arr[]){
-        
-        if(arr.length == 0){
-            return arr[0];
-        }
-
-        int max_sum_so_far=Integer.MIN_VALUE;
-        int max_up_to_here=0;
-        
-        for(int i = 0;i<arr.length;i++) {
-            max_up_to_here = Math.max(arr[i],max_up_to_here+arr[i]);
-            max_sum_so_far = Math.max(max_up_to_here,max_sum_so_far);
-        }
-
-        return max_sum_so_far;
-
-    }
+    
 
     public static void main(String[] args) {
 
@@ -78,7 +60,7 @@ public class maximalSubArray {
     
         arr = new int[]{-22, -35, -4};
         
-        System.out.println(printMaximumSum2(arr));
+        System.out.println(printMaximumSum(arr));
       //  int[] subArrayWithMaxSum = subArrayWithMaxSum(arr);
         //System.out.println(Arrays.toString(subArrayWithMaxSum));
         // System.out.println(subArrayWithMaxSum(arr));

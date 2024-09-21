@@ -1,0 +1,121 @@
+Two Phase Commit
+----------------
+
+  Phase-1
+  --------
+   - Once TC knows that actions at different nodes have been completed, it tries to commit/abort the
+    transaction.
+   - TC: Transaction coordinator splits the task into multiple sub-transactions that are to be
+   executed at different nodes.
+
+   - TC will send PREPARE message to each node.
+
+   - PT/TM: Participant/Local Transaction Manager, if it thinks that it can commit changes, then it
+   will persist READY to log and sends it to TC.
+
+   - If TM wants to abort its transaction(local) then it writes ABORT to log and sends it to TC.
+
+
+   Phase-2
+   --------
+   - TC will collect messages from all the TMs and if any one says ABORT then it will send ABORT to
+   all the TMs.
+
+   - If anyone doesn't reply in a timeout window then it will send ABORT to all. (Writes ABORT to
+      its logs)
+
+   - If all TMs says READY then it will send COMMIT to all the TMs
+
+   - TC will write COMMIT/ABORT to its log before sending it out to all the TMs.
+
+   - TMs will write COMMIT/ABORT into its log and then proceeds with committing the transaction.
+
+
+   Failure scenarios
+   =================
+    TMs
+    ---
+    1. Fails before PREPARE message
+
+    2. Fails after receiving PREPARE message but before sending READY/ABORT to TC
+
+    3. Fails after sending READY/ABORT to TC
+
+    4. Fails after receiving COMMIT & processing it, from TC.
+
+
+    Case 1 & 2, --> During recovery it can contact peers or TC to get latest state.
+
+    Case 3 --> Same as gets latest state from TC (even if it wrote ABORT to its log and crashed)
+
+    Case 4 --> During recovery it should re-execute the transaction/commit it locally.
+
+
+    TC
+    --
+    1. Crashes after sending PREPARE message
+
+    2. Crash after receiving READY/ABORT messages from TMs.
+
+    3. Crash after sending COMMIT/ABORT to the TMs or crashes after sending to only few of them.
+
+    4. TC sends COMMIT/ABORT to nodes but only few receive them due to network partition.
+
+    Case 1 & 2 --> Refers to a situation where a decision has not been made by the TC or decision
+                    has been made(also persisted to disk) by it but crashed before sending it to TMs
+
+    Case  3& 4  ---> Refers to a situation where TC has made a decision but didn't reach every one.
+
+    Case 1 & 2  --> TMs would be in would have sent READY or ABORT after receiving the PREPARE
+                     message. If they have sent READY then they will block until to hear from TC (to
+                      COMMIT or ABORT)
+
+    Case 3 ---> TMs have to co-ordinate among themselves.  And those who do not receive  the
+    COMMIT/ABORT will block.
+
+    Case 4---> Those didn't receive will check with others. If there is a network partition then
+    some may block as they might not if anyone has received COMMIT/ABORT message.
+
+
+ # Reference:
+  1. https://www.alibabacloud.com/blog/tech-insights---two-phase-commit-protocol-for-distributed-transactions_597326
+  2. https://github.com/Akshat-Jain/database-internals-notes/blob/main/Part%202%3A%20Distributed%20Systems/Chapter%2013%20-%20Distributed%20Transactions.md
+
+
+  When TMs are in Ready state and waiting for TC to send COMMIT/ABORT then if TC crashes, TMs would
+  be waiting by holding the locks on the resources.
+
+
+  3 PC
+  ----
+
+  1. PreCommit from TC to TMs
+      canCommit from TMs to TC
+
+  2. PreCommit/Abort from TC to TMs
+     Commit/Abort from TMs to TC
+
+ 3. Commit from TC to TMs.
+      If Commit haven't received from TC yet, then a TM can commit because it has received PreCommit
+       .. which means that from step1 all TMs have voted for commit.
+
+
+ * In Step-1 resources/locks are not held by the process.
+
+
+ Inconsistency issue:
+ --------------------
+   During step-3, say TCs has crashed before sending Abort to TMs, some TMs will commit after
+   timeout because they haven't heard from TC within timeout period. But those who has sent Abort on
+    Step-2 will do Abort at the same time. This leads to some TMs committing and some Aborting.
+
+
+  # Reference:
+   1. https://www.alibabacloud.com/blog/tech-insights---two-phase-commit-protocol-for-distributed-transactions_597326
+   2. https://github.com/Akshat-Jain/database-internals-notes/blob/main/Part%202%3A%20Distributed%20Systems/Chapter%2013%20-%20Distributed%20Transactions.md
+
+
+
+
+
+

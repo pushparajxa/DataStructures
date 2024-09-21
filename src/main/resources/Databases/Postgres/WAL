@@ -1,0 +1,31 @@
+*Commit Delays & Commit Sibilings
+=================================
+
+In a high-volume environment, every time a user commits a transaction, PostgreSQL writes the changes to
+ the Write-Ahead Log (WAL) and flushes them to disk. The more transactions you have, the more frequently
+ this process occurs, and soon enough, your system may be spending a significant
+ amount of time handling disk I/O operations.
+
+This is especially problematic when you have multiple concurrent transactions — each one triggering
+its own separate disk write, which can lead to poor performance under heavy load.
+
+This is where batching commits helps! It not only helps in scaling, but also reducing the IoPS costs.
+By grouping multiple transactions together before writing them to disk, you can significantly reduce
+the number of disk operations, improving the overall throughput of your database.
+
+
+Two important PostgreSQL settings, commit_delay and commit_siblings, make this possible
+ by enabling commit batching in high-volume environments.
+
+{1}\ `commit_delay` introduces a small delay before a transaction is written to disk.
+ During this delay, PostgreSQL can gather multiple transactions and commit them together,
+  reducing the total number of writes.
+
+{2}\ But to make this delay useful only when necessary, `commit_siblings` comes into play.
+This setting defines the minimum number of open transactions required for the `commit_delay` to be applied.
+ If the number of open transactions is below the value of `commit_siblings`, no delay is added.
+
+
+-- Reference:
+    https://www.linkedin.com/posts/yugandhar-nanda-5a680999_in-a-high-volume-environment-every-time-activity-7239213483177734144-AJNo
+

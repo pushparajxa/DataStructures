@@ -1,0 +1,9 @@
+* Write lock is an exclusive lock
+* Read lock is a shared lock.
+* If you have a shared lock on a row, you can't get an exclusive lock on it. Similarly when you hold
+ exclusive lock you can't get a shared lock.
+  + But you can get a shared lock if the object has already a shared lock on it.
+
+* Reference:
+  - https://stackoverflow.com/questions/11837428/whats-the-difference-between-an-exclusive-lock-and-a-shared-lock
+  - http://dev.cs.ovgu.de/db/sybase9/help/dbugen9/00000154.htm

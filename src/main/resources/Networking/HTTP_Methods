@@ -52,6 +52,28 @@ Refer:
   - https://condor.depaul.edu/dmumaugh/readings/handouts/SE435/HTTP/node14.html
   - More about REST methods in Networking/REST/REST_Methods file
 
+POST
+    The POST method requests that the target resource process the representation enclosed in the request according
+     to the semantics of the target resource. For example, it is used for posting a message to an Internet forum,
+     subscribing to a mailing list, or completing an online shopping transaction.[55]
+
+PUT
+    The PUT method requests that the target resource create or update its state with the state defined by the
+     representation enclosed in the request. A distinction from POST is that the client specifies the target
+     location on the server.[56]
+
+CONNECT
+    The CONNECT method requests that the intermediary establish a TCP/IP tunnel to the origin server
+     identified by the request target. It is often used to secure connections through one or more
+     HTTP proxies with TLS.[57][58] See HTTP CONNECT method.
+
+OPTIONS
+    The OPTIONS method requests that the target resource transfer the HTTP methods that it supports.
+     This can be used to check the functionality of a web server by requesting '*' instead of a specific resource.
+
+TRACE
+    The TRACE method requests that the target resource transfer the received request in the response body.
+     That way a client can see what (if any) changes or additions have been made by intermediaries.
 
 OPTIONS
 ========
