@@ -170,7 +170,17 @@ public class DirectedGraphProblems {
                     DirectedEdge.markEdge(edge,TREE_EDGE);
                 }
             }
-
+            /*
+            
+                Directed BFS has
+                    1. Tree Edge
+                    2. Back Edge
+                    3. Cross Edge.
+                    
+                    Refer: Page 320, Algorithm Design, Goodrich
+            
+            
+             */
         }
     }
 

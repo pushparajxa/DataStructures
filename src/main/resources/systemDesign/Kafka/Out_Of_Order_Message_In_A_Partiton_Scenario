@@ -1,0 +1,15 @@
+Could you explain a scenario where out of order messages with in a partition
+would occur?
+
+   If you set retries>0 and
+              max.in.flight.requests.per.connection > 1  and
+              enable.idempotence to false
+
+
+It may happen that you send a two batches, one after another, first one fails,
+but second one succeeds. first one will be tried again now it succeeds.
+This will lead to out of order delivery situation with in a Kafka partition.
+
+
+# Reference:
+  1. https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#retries

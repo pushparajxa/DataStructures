@@ -1,6 +1,6 @@
 Transactions handled by a database  running on a datacenter node
 -----------------------------------------------------------------
-    A realtional database running on a typical data center node can support a few thousand trans-
+    A relational database running on a typical data center node can support a few thousand trans-
     actions per second.
 
 
@@ -43,3 +43,9 @@ Does Redis support distributed transactions?
       •	Log: Record the prepared state for recovery.
       •	Lock: Secure necessary resources to ensure commitment.
       •	Respond: Inform the coordinator of readiness with a "yes" or "no" vote.
+
+
+
+Event Sourcing
+---------------
+https://www.axoniq.io/blog/dispelling-the-eventual-consistency-fud-when-using-event-sourcing

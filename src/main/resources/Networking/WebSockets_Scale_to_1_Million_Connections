@@ -1,0 +1,23 @@
+
+
+Optimizations to be done
+------------------------
+Premature optimization is the root of all evil, but if we must:
+• Ulimit: Increase the cap of NOFILE resource (file descriptors, which are allocated per socket,
+          buffers)
+• Epoll (Async I/0): Reduce the high load of goroutines
+• Gobwas - More performant ws library to reduce buffer allocations
+• Conntrack table - Increase the cap of total concurrent connections in the OS
+
+
+
+
+ # Reference
+  1. https://www.youtube.com/watch?v=YiCCD5DPry8
+  2. https://www.youtube.com/watch?v=LI1YTFMi8W4
+  3. Code examples: https://github.com/eranyanay/1m-go-websockets  (TwistLock company)
+
+
+Profiling Websocket heap, memory and CPU usage
+-------------------------
+ - Use PProf library.

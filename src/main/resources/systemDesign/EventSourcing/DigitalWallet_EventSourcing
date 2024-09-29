@@ -1,0 +1,15 @@
+Issues with architecture mentioned in Alex Wu book on digital wallet
+--------------------------------------------------------------------
+
+In System design interview, an insiders guide volume-2 book, by Alex Wu, in the chapter 12,  Digital Wallet,
+he describes a solution based on event sourcing. For every transaction/command it reads the
+state of accounts and generates events. However, there would be lag in updating these events.
+In the meantime if we receive more commands then there would be inconsistency.  For example.
+A has balance 5$. First command is A->C(1$). We generate two events A(-1$), C1(1$),
+then another command A->D(5$) comes in,
+by the time event A(-1$) has been processed, the account would still show A(5$).
+So it will generate two events A(-5$) and D(5$) which is incorrect.
+
+
+ # Reference
+  https://www.axoniq.io/blog/dispelling-the-eventual-consistency-fud-when-using-event-sourcing

@@ -3,9 +3,36 @@
   - props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
   - By enabling idempotence, the producer automatically sets acks to all
     and guarantees message delivery for the lifetime of the Producer instance.
+  - Idempotence is not only acks=all, but also retries=Integer.MAX_VALUE
 
   - Refer:
     + https://stackoverflow.com/a/60289031/1171533
+    + https://kafka.apache.org/11/javadoc/org/apache/kafka/clients/producer/KafkaProducer.html
+
+
+# Transactional producer
+
+  - We put transactional.id in the producer properties to make it transactional.
+      props.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, "transactional-producer-1");
+
+  - By enabling transactions, the producer automatically enables
+    idempotence (and acks=all). Transactions allow to group produce
+    requests and offset commits and ensure all or nothing gets committed to Kafka.
+
+  - When using transactions, you can configure if consumers should only see records
+    from committed transactions by setting isolation.level to read_committed, otherwise by default
+    they see all records including from discarded transactions.
+
+  - In particular, the replication.factor should be at least 3, and
+    the min.insync.replicas for these topics should be set to 2.
+
+  - Finally, in order for transactional guarantees to be realized from end-to-end,
+    the consumers must be configured to read only committed messages as well.
+
+  - Refer
+    + https://stackoverflow.com/a/60289031/1171533
+    + https://kafka.apache.org/11/javadoc/org/apache/kafka/clients/producer/KafkaProducer.html
+      --> For transactional and idempotent producer.
 
 
 # Why idempotent producer is not enough? Why we need a transactional producer?
@@ -22,12 +49,12 @@
     the consumer becomes an atomic action.
 
 
-  - In scenarios where in your application thread you read and then process and then procuce.
+  - In scenarios where in your application thread you read and then process and then produce.
   - Relevant to workflows in which you are consuming and then producing messages based on what you
      consumed.
 
-  - public void sendOffsetsToTransaction​(Map<TopicPartition,​OffsetAndMetadata> offsets,
-    ConsumerGroupMetadata groupMetadata)
+  - public void sendOffsetsToTransaction(Map<TopicPartition,OffsetAndMetadata> offsets,
+                                         ConsumerGroupMetadata groupMetadata)
                                   throws ProducerFencedException
 
     Sends a list of specified offsets to the consumer group coordinator, and also marks those offsets
@@ -97,15 +124,6 @@
   + https://stackoverflow.com/a/71130037/1171533
   + https://kafka.apache.org/30/javadoc/org/apache/kafka/clients/producer/KafkaProducer.html#sendOffsetsToTransaction(java.util.Map,org.apache.kafka.clients.consumer.ConsumerGroupMetadata)
 
-# Transactional producer
-
-  - By enabling transactions, the producer automatically enables
-    idempotence (and acks=all). Transactions allow to group produce
-    requests and offset commits and ensure all or nothing gets committed to Kafka.
-
-
-  - Refer
-    + https://stackoverflow.com/a/60289031/1171533
 
 
 
