@@ -1,0 +1,79 @@
+Terminology
+-----------
+  + Aspect: module of code for a cross-cutting concern (logging, security, ...)
+  + Advice: What action is taken and when it should be applied
+  + Join Point: When to apply code during program execution
+  + Pointcut: A predicate expression for where advice should be applied
+
+
+
+Pointcut expressions
+--------------------
+ - execution(modifiers-pattern? return-type-pattern declaring-type-pattern? method-name-pattern(param-pattern) throws-pattern?)
+ - ? (before ? ) symbol are optional.
+
+
+  parameter-pattern
+  -----------------
+  For param-pattern
+  () - matches a method with no arguments
+  (*) - matches a method with one argument of any type
+  (..) - matches a method with 0 or more arguments of any type
+
+
+
+Sample Example
+--------------
+
+  @Aspect
+  @Component
+  public class MyDemoLoggingAspect {
+
+      @Pointcut("execution(* com.luv2code.aopdemo.dao.*.*(..))")
+       private void forDaoPackage() {}
+
+
+      @Before("forDaoPackage()")
+      public void beforeAddAccountAdvice() {
+      ... }
+
+
+      @Before("forDaoPackage()")
+      public void performApiAnalytics() {
+      ... }
+
+
+@AfterReturning
+---------------
+    @AfterReturning(
+       pointcut="execution(* com.luv2code.aopdemo.dao.AccountDAO.findAccounts(..))",
+       returning="result"
+    )
+    public void afterReturningFindAccountsAdvice( JoinPoint theJoinPoint, List<Account> result) {
+
+        // print out the results of the method call
+        System.out.println("\n=====>>> result is: " + result);
+    }
+
+
+@AfterThrowing
+--------------
+
+    @AfterThrowing(
+      pointcut="execution(* com.luv2code.aopdemo.dao.AccountDAO.findAccounts(..))",
+      throwing="theExc"
+      )
+    public void afterThrowingFindAccountsAdvice( JoinPoint theJoinPoint, Throwable theExc) {
+      // log the exception
+      System.out.println("\n=====>>> The exception is: " + theExc);
+    }
+
+
+    - If we need to stop the exception propagation then use the @Around advice
+
+
+@After Advice
+-------------
+    - @After will execute before @AfterThrowing
+
+    - It will not have access to the excpetion.

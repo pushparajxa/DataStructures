@@ -1,0 +1,28 @@
+AWS vs GCP
+----------
+
+  I'm moving some microservices from AWS (from within a Kubernetes cluster) to
+  GCP native workloads, and I have to say that AWS's IAM, even though it's
+  complex and verbose, is a nicer permission model than GCP's.
+
+  With GCP you can definitely tell they invented Kubernetes,
+  since their cloud platform seems to be built around the same
+  concepts as Kubernetes. And if you are familiar with K8s, you'll have an easier
+  time grasping the complexities of GCP.
+
+  I just find GCPs role attachment at the resource level a little bit harder \to manage than AWS's
+  centralized IAM policies.
+
+  And as a side note, it's definitely interesting to observe the two
+  distinct philosophies around how they designed their platform:
+
+  - AWS has a RPC inspired approach, where you have resources with
+  global identifiers (the ARNs) and actions that act on them.
+
+  - GCP has a more OOP inspired approach, where each thing is a resource,
+  and you build your whole infrastructure with manipulating resources and attaching sub-resources to them.
+
+  And all just to run some scripts reliably on their servers
+
+
+# Reference: https://www.linkedin.com/posts/vladcalinro_im-moving-some-microservices-from-aws-from-activity-7244759763660533760-IQfR

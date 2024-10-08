@@ -1,0 +1,38 @@
+@Autowire
+  --> Looks for spring bean with the variable name or matching type
+
+
+@Component
+    --> Is used on classes to declare it as a bean
+
+@Bean
+    --> Also used to create Beans but it is declared on methods in classes
+        annotated with @Configuration.
+
+
+ @EnbaleWebMvc --> WebMvcConfigurer for config declaration.
+      -- AbstractAnnotationConfigDispatcherServletInitializer
+
+ @EnableWebSecurity ---> WebSecurityConfigurer
+
+      -- AbstractSecurityWebApplicationInitializer
+        -- We do not generally add any code here. We create a class which extends this
+        -- We create all configuration in a class annotated with @Configuration, @EnableWebSecurity.
+            -- Check project "spring-security-demo-08-jdbc-plaintext"
+
+
+ @EnableTransactionManagement ---> TransactionManagementConfigurer
+
+    --> With this transaction
+
+
+AnnotationConfigApplicationContext annotationConfigApplicationContext  = new AnnotationConfigApplicationContext(DemoConfig.class, MyLoggerConfig.class);
+
+AccountDAO accountDAO = annotationConfigApplicationContext.getBean(AccountDAO.class);
+
+SpringBoot
+----------
+   * spring-boot-starter-aop
+
+# Reference
+  - ChatGPT Window --> https://chatgpt.com/c/66ea4e96-73d8-8013-9773-cb165e52d224

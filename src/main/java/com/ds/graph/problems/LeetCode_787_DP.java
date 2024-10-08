@@ -72,7 +72,7 @@ public class LeetCode_787_DP {
             return Integer.MAX_VALUE;
         }
         
-        if(!adjList.containsKey(src)) // Case where thre are no flights from this vertex.
+        if(!adjList.containsKey(src)) // Case where there are no flights from this vertex.
             return Integer.MAX_VALUE;
         
         

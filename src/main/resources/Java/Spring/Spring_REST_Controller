@@ -1,0 +1,107 @@
+Spring REST automatically converts POJO to JSON and vice versa.
+
++ With @RestController annotation, we need not to return @ResponseEntity from controller methods.
+Methods can directly return the values.
+
+  # Reference: https://chatgpt.com/c/66ea4e96-73d8-8013-9773-cb165e52d224
+
+  ### How `@RestController` Works:
+
+  - With `@RestController`, Spring assumes that the returned object should be serialized to the response body, and it automatically sets the appropriate HTTP status (`200 OK` by default).
+  - You can simply return the object itself, and Spring will handle converting it to the response format and setting the content type.
+
+  ### Example:
+
+  Here’s a simple example showing how you can directly return an object:
+
+  ```java
+  @RestController
+  @RequestMapping("/api/employees")
+  public class EmployeeController {
+
+      @GetMapping("/{id}")
+      public Employee getEmployee(@PathVariable Long id) {
+          // Fetch employee by id (mock example)
+          Employee employee = new Employee(id, "John Doe", "Software Engineer");
+          return employee;
+      }
+  }
+  ```
+
+  In this example:
+  - The `Employee` object is directly returned, and Spring will automatically serialize it into JSON and write it to the response body.
+  - The default HTTP status will be `200 OK`.
+
+  ### When to Use `ResponseEntity<>` with `@RestController`:
+
+  While returning an object directly works well, there are cases where using `ResponseEntity<>` can still be beneficial, even with `@RestController`:
+
+  1. **Custom HTTP Status Codes**:
+     - If you need to return a status code other than the default `200 OK`, you can use `ResponseEntity<>` to specify the status code explicitly.
+
+     ```java
+     @GetMapping("/{id}")
+     public ResponseEntity<Employee> getEmployee(@PathVariable Long id) {
+         Employee employee = findEmployeeById(id);
+         if (employee == null) {
+             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+         }
+         return ResponseEntity.ok(employee);
+     }
+     ```
+
+  2. **Setting Custom Headers**:
+     - If you need to include custom headers in the response, `ResponseEntity<>` provides a way to set those headers easily.
+
+     ```java
+     @PostMapping
+     public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
+         Employee savedEmployee = saveEmployee(employee);
+         URI location = URI.create("/api/employees/" + savedEmployee.getId());
+         return ResponseEntity.created(location).body(savedEmployee);
+     }
+     ```
+
+  3. **More Complex Response Handling**:
+     - For scenarios where you need to conditionally include or exclude response content, headers, or status codes, `ResponseEntity<>` provides fine-grained control over the entire HTTP response.
+
+  ### Summary
+  - You can directly return objects from methods when using `@RestController`, as it automatically handles response serialization and sets the response body.
+  - Use `ResponseEntity<>` if you need additional control over the HTTP status code, headers, or content type.
+
+
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>...</version>
+      </dependency>
+
+      <!-- Add Servlet support for
+                      Spring's AbstractAnnotationConfigDispatcherServletInitializer -->
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+        <version>...</version>
+      </dependency>
+
+
+
+Exception Handling. (Ref:https://www.baeldung.com/exception-handling-for-rest-with-spring)
+------------------
+
+  ResponseStatusException (Spring 5
+  - - - - - - - - -- - -- - - - - -
+
+    @GetMapping(value = "/{id}")
+    public Foo findById(@PathVariable("id") Long id, HttpServletResponse response) {
+        try {
+            Foo resourceById = RestPreconditions.checkFound(service.findOne(id));
+
+            eventPublisher.publishEvent(new SingleResourceRetrievedEvent(this, response));
+            return resourceById;
+         }
+        catch (MyResourceNotFoundException exc) {
+             throw new ResponseStatusException(
+               HttpStatus.NOT_FOUND, "Foo Not Found", exc);
+        }
+    }

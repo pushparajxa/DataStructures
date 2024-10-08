@@ -1,0 +1,5 @@
++ To identify main resource / entity, look for the most prominent "noun"
++ For our project, it is "customer"
++ Convention is to use plural form of resource / entity: customers
+
+    /api/customers

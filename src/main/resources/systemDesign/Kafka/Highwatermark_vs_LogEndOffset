@@ -5,6 +5,7 @@ Log End Offset: The offset where broker will persists next message received from
 LOE is generally greater than High watermark.
 
 # Reference:
+  - https://developer.confluent.io/courses/architecture/transactions/
   - https://stackoverflow.com/a/67806069/1171533
   - https://rongxinblog.wordpress.com/2016/07/29/kafka-high-watermark/
 
@@ -42,3 +43,4 @@ LOE is generally greater than High watermark.
 
   * Reference:
     - https://kafka.apache.org/31/javadoc/org/apache/kafka/clients/consumer/KafkaConsumer.html#seekToEnd(java.util.Collection)
+    - https://developer.confluent.io/courses/architecture/transactions/

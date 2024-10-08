@@ -31,6 +31,86 @@
 * Consumer Group Rebalance Listener
   - https://kafka.apache.org/25/javadoc/org/apache/kafka/clients/consumer/ConsumerRebalanceListener.html
   - https://www.perplexity.ai/search/in-this-documentation-of-consu-DCFKZ2VISxWczac6VzQy_Q
+  - https://www.confluent.io/blog/cooperative-rebalancing-in-kafka-streams-consumer-ksqldb/
+
+
+* Consumer groups are assigned to coordinators based on their group name
 
 * Reference
   - https://www.conduktor.io/blog/kafka-partition-assignment-strategy/
+
+
+* Consumer group leader
+  - To allow the client to dictate the protocol followed by a group of non-communicating consumers,
+  a single member is chosen to be the group leader for a rebalance, which then progresses in two phases.
+  During the first phase, the group coordinator waits for each member to join the group.
+  This entails sending an aptly named JoinGroup request, in which each member encodes a
+  subscription including any interested topics and client-defined user data.
+  The subscriptions are consolidated by the broker and sent in the JoinGroup response to the group leader.
+
+    The leader decodes the subscriptions, then computes and encodes the assignment
+    of partitions to each consumer. This is then sent to the group coordinator in
+    the leader’s SyncGroup request. This is the second phase of the rebalance: all
+    members must send a SyncGroup request to the broker, which then sends them their
+    partition assignment in the SyncGroup response. During the entire rebalance phase,
+    individual members never communicate with each other directly. They can only propagate
+    information to one another by talking to the broker-side group coordinator.
+
+ * Why Kafka nominates a consumer as leader during rebalancing? why not consumer group coordinator do that job?
+
+
+   - In Kafka, a consumer from the group is nominated as a leader during rebalancing to improve scalability and reduce
+      the load on the consumer group coordinator. Here's the rationale behind this design:
+
+     1. **Distributed Coordination**: Kafka assigns a consumer as the leader to distribute
+      the task of re-balancing across multiple consumers instead of overloading the single
+      consumer group coordinator. The leader consumer gathers metadata about partitions and the
+      topic from other consumers, ensuring that the assignment process is distributed.
+      This helps reduce bottlenecks and makes the system more scalable as the number of
+      partitions and consumers increases.
+
+     2. **Decentralization**: The consumer leader handles partition assignments locally
+     for the group, which reduces the need for all consumers to constantly communicate with
+     the central coordinator. This decentralized approach improves Kafka's resilience and
+     fault tolerance, especially in larger clusters, by avoiding dependency on a single node.
+
+     3. **Efficiency in Rebalancing**: When a consumer is designated as the leader, it
+     uses the data from the other consumers in the group to handle the partition assignment,
+     ensuring that the partitions are fairly distributed. Once the leader determines the
+     assignments, it communicates the results back to the coordinator, which ensures smooth coordination.
+
+     The consumer group coordinator focuses on managing metadata and high-level coordination,
+     while the consumer leader handles the heavy lifting of partition assignment.
+     This division of responsibility ensures both components remain efficient and scalable.
+
+     For more details, you can refer to Kafka's documentation on
+     [Consumer Group Coordination](https://kafka.apache.org/documentation/#design_consumer_group)
+     and Confluent’s discussion on re-balancing【57†source】.
+
+     * Reference
+       - https://www.confluent.io/blog/cooperative-rebalancing-in-kafka-streams-consumer-ksqldb/
+
+
+* Where does consumer group coordinator store the metadata about consumers and their assigned
+partitions? session.max.timeout etc..?
+
+   - Before KRaft & after KRaft
+    + in _consumer_offsets internal topic.
+
+  - The __consumer_offsets topic served several important purposes:
+
+        Failover support: If the GroupCoordinator broker failed, another broker
+        could take over as the new coordinator by reading the group metadata from this topic.
+
+        Consumer progress tracking: The topic stored the current offset position
+        for each consumer group, partition, and consumer.
+
+        Rebalancing information: It contained data necessary for the coordinator to
+        manage partition assignments when group membership changed.
+
+        Session management: The metadata included information needed to
+        apply timeouts like session.timeout and max.poll.timeout
+
+ + Reference:
+   - https://stackoverflow.com/questions/51996780/why-do-kafka-brokers-store-rebalance-metadata-for-consumer-groups-in-the-consu
+

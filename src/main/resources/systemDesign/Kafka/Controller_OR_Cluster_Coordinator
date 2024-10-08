@@ -1,0 +1,38 @@
+Historically, ZooKeeper played a crucial role in metadata management in Apache Kafka,
+but this responsibility has shifted as Kafka evolved. Let's clarify how metadata
+management works in both older versions (using ZooKeeper) and newer versions (Kafka without ZooKeeper).
+1. ZooKeeper (Older Kafka Versions):
+
+    Metadata Management: In older versions of Kafka (prior to version 2.8), ZooKeeper
+      was responsible for maintaining important metadata, such as:
+        Broker Registrations: Information on which brokers are part of the Kafka cluster.
+        Topic Metadata: Topic configurations, number of partitions, replication factors.
+        Leader Elections: ZooKeeper coordinated which broker would act as the leader for each partition.
+        In-Sync Replica (ISR) Sets: ZooKeeper maintained metadata on which replicas were considered "in-sync."
+    Kafka brokers would communicate with ZooKeeper to get this metadata and update
+    ZooKeeper when necessary, such as during broker failures, adding new topics, or electing new partition leaders.
+
+2. Kafka Without ZooKeeper (Newer Versions):
+
+    Starting with Kafka 2.8 and beyond, Kafka introduced KRaft (Kafka Raft) mode,
+    which removes the dependency on ZooKeeper and allows Kafka brokers to manage metadata internally. The KRaft mode brings:
+        Decentralized Metadata Management: Brokers now manage and store the
+        metadata directly in Kafka itself, using the Raft consensus algorithm to ensure consistency across brokers.
+        Improved Scalability: By removing ZooKeeper, Kafka eliminates the
+        need for a separate service and improves scalability for managing large clusters, as
+         metadata is now stored in a dedicated internal topic managed by the Kafka brokers themselves.
+
+Key Points:
+
+    Older Kafka Versions: Metadata was stored and managed in ZooKeeper, and
+    Kafka brokers interacted with ZooKeeper for metadata updates and leader election.
+    Newer Kafka Versions (with KRaft): Kafka brokers store and manage metadata
+    internally using a Raft-based consensus mechanism. ZooKeeper is no longer involved.
+
+This shift significantly improves Kafka's scalability and performance by eliminating
+the reliance on ZooKeeper, which was a bottleneck in large clusters.
+
+For more details, refer to Apache Kafka KRaft architecture or the Kafka 2.8 release notes
+
+# Reference
+ - https://chatgpt.com/c/66f24ae5-6878-8013-9edb-99f7a166c608

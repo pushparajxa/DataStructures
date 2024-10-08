@@ -1,0 +1,74 @@
+Spring-core and Spirng-security are different(built and developed differently may be by different
+orgs or people)
+  - We need to check version compatibility between them.
+  - spring-core involves Spring-MVC, aop etc..
+
+
+@RequestMapping
+  --> Denotes that this method accepts Request.GET, Request.POST etc.. all http methods.
+
+@GetMappping
+  --> Accepts only GET HTTP requests.
+
+Servlets
+--------
+  + Servlet container such as Tomcat creates only one instance of Servlet. That servlet will serve
+  any number of requests.
+
+  + Define servlets using this annotation
+    @WebServlet("/mappiing")
+
+    @WebServlet("/TestDbServlet")
+    public class TestDbServlet extends HttpServlet {
+    	private static final long serialVersionUID = 1L;
+
+    	/**
+    	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+    	 */
+    	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	}
+    	}
+
+Tomcat vs Apache
+----------------
+
+  Apache is HTTP server, which serves static content and can act as reverse proxy forwarding
+  requests to Tomcat server
+
+  Tomcat is the servlet container processing the requests through the servlets.
+
+
+ContextRoot/ ContextPath .. both are same
+------------------------------------------
+    <form:form action="${pageContext.request.contextPath}/authenticateTheUser"
+               method="POST">
+    </form:form>
+
+    + This can be changes in the project settings. (Web Project settings, Context Root)
+
+Logout process
+--------------
+
+  + When a logout is processed, by default Spring Security will ...
+  + Invalidate user’s HTTP session and remove session cookies, etc
+  + Send user back to your login page
+  + Append a logout parameter: ?logout
+
+
+Spring CSRF Protection (Spring Security- pdf no:12)
+----------------------
+ - CSRF examples
+
+ + You are logged into your banking app
+     tricked into sending money to another person
+ + You are logged into an e-commerce app
+     tricked into purchasing unwanted items
+
+
+ - Spring Security uses the Synchronizer Token Pattern
+ -  Each request includes a session cookie and randomly generated token
+ - Include this in the forms
+  						<input type="hidden"
+  							   name="${_csrf.parameterName}"
+  							   value="${_csrf.token}" />
+
