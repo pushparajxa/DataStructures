@@ -41,3 +41,21 @@ Phantom reads
       + Claiming a userid concurrently by two processes.
 
  # Ref: DDIA, Page 251
+
+
+ Strict Serializability
+ ======================
+  The serialization scheudle should match the real time order.
+    If T1 commits before T2. Then the serialization must reflect that.
+
+ External Consistency
+ ====================
+  Same as Strict serializability with application to geographically distributed database and
+  independent transactions.
+
+      If T1 commits at NYC and T2 commits after T1 at HongKong. The state after T2 completes
+      should reflect that T1 has been committed first and then T2.
+
+  #Refer:
+    https://cloud.google.com/blog/products/databases/strict-serializability-and-external-consistency-in-spanner?hl=en
+    https://timilearning.com/posts/mit-6.824/lecture-13-spanner/

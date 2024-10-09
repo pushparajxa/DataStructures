@@ -1,0 +1,17 @@
++ Needs 2f+1 nodes for f failures
++ It is not a byzantine guarantee consensus protocol
+
++ log replication pauses while leader election is happening.
+  - It means no transactions executed while leader election is happening.
+    - Write requests are blocked
+    - Strongly consitent reads will be blocked as they must go through the leader.
+      - Some Raft implementations allow reading from replicas with the risk of stale reads.
+
++ Every operation set/get is modelled as commands.
+
++ Leader marks a command as committed when it is replicated by quorum number of followers.
+
++ Followers apply committed command to their state machine.
+
+
+

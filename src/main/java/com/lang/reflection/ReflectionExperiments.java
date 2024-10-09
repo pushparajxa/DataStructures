@@ -1,5 +1,5 @@
 
-package com.reflection;
+package com.lang.reflection;
 
 import java.lang.reflect.Method;
 
@@ -10,7 +10,7 @@ public class ReflectionExperiments {
 
     public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException {
         System.out.println("hello");
-        Class cls = Class.forName("com.reflection.ReflectionTestClass");
+        Class cls = Class.forName("com.lang.reflection.ReflectionTestClass");
 
         Method[] declaredMethods = cls.getDeclaredMethods(); // gets all methods declared in the class
 

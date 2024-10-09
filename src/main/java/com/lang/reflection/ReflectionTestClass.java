@@ -1,5 +1,5 @@
 
-package com.reflection;
+package com.lang.reflection;
 
 public class ReflectionTestClass {
     private static final boolean val =true;

@@ -1,0 +1,29 @@
+# Reference: https://www.linkedin.com/posts/eatonphil_intuitions-for-distributed-consensus-ugcPost-7249781852339679232-x3O7
+
+ Some options for linearizability + availability
+ -----------------------------------------------
+ • chain replication (ebs)
+ • kafka replication protocol
+ • foundationdo replication protocol
+ • client-side quorums
+ • distributed consensus
+
+
+ Distributed Consensus
+ ---------------------
+     Is it fair to say that horizontal scaling always demands distributed consensus?
+     https://www.linkedin.com/feed/update/urn:li:ugcPost:7249781852339679232?commentUrn=urn%3Ali%3Acomment%3A%28ugcPost%3A7249781852339679232%2C7249789694635372544%29&dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287249789694635372544%2Curn%3Ali%3AugcPost%3A7249781852339679232%29
+
+     No not necessarily! Often people do use consensus for managing the shards
+     themselves and often people use consensus for HA within a shard.
+     But you could shard at the application level with Postgres for example
+     and in that case you'd not be using consensus anywhere.
+
+     Application-Level Sharding in PostgreSQL
+
+         Basic Concept:
+             The application code determines which database instance (shard) to use for each query or operation.
+             Each shard is an independent PostgreSQL database, potentially on separate servers.
+         Shard Distribution:
+             Data is typically divided based on a shard key (e.g., customer ID, geographic location).
+             The application uses an algorithm or lookup table to map shard keys to specific database instances.

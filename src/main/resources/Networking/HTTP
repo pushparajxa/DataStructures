@@ -277,6 +277,43 @@ message is identified with an identifier.
 
 Server Sent Events
 ------------------
+* Client uses EventSource object with server endpoint url.
+* After that, server can continuously send messages until client sends close connection request.
+* It offers reconnection for clients to reconnect back to the server.
+* It is a uni-directional communication scheme, i.e., from server to client only.
+
+
+  <! DOCTYPE html>
+
+  <html lang="en">
+
+      ‹head>
+
+      ‹meta charset="UTF-8">
+      ‹title>SSE Example</title>
+      </head>
+
+      ‹body>
+
+      <h1>Server Sent Events Example</h1>
+
+      ‹div id="events"></div>
+
+          ‹script>
+
+              const eventSource = new EventSource('/events');  // /events is the server url, can be anything.
+              eventSource. onmessage = function (event) {
+                  document.getElementById( 'events').innerHTML += 'New event: ' + event.message
+              };
+
+          </script>
+
+      </body>
+  </html>
+
+
+  # Reference: https://youtu.be/3Ud6Ds2abO8?si=eZsXaOd37vDyq957&t=230
+
 * COMET and HTTP Streams suffer the problem of buffering. SSE will eliminate that by sending HTTP ACKs.
 * Content type shall be set as below
     * Content-type: text/event-stream

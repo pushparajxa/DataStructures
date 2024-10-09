@@ -1,4 +1,4 @@
-package com.reflection;
+package com.lang.reflection;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -9,7 +9,7 @@ public class FinalPivateStaticMember {
         System.out.println("Initial value == "+Test.val);
         try {
            // Class cls = Class.forName("com.reflection.FinalPivateStaticMember$Test");
-            Class cls = Class.forName("com.reflection.ReflectionTestClass");
+            Class cls = Class.forName("com.lang.reflection.ReflectionTestClass");
             try {
                 Field file_systems_loaded = cls.getDeclaredField("val");
                 file_systems_loaded.setAccessible(true);

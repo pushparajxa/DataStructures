@@ -2,7 +2,7 @@
  * Copyright 2020 DigitalRoute Route AB. All rights reserved.
  *  Proprietary and Confidential.
  */
-package com.util;
+package com.lang.utils;
 
 import java.util.HashSet;
 import java.util.Set;
