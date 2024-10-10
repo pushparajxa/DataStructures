@@ -11,6 +11,10 @@ test2/
 *.iws
 .idea
 
+.DS_Store
+
+lib/
+
 **/.DS_Store
 
 output

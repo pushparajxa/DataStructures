@@ -9,13 +9,36 @@ P:: A problem which can be solvable and verifiable in polynomial time.
 NP-Complete:: All problem in NP should be convertible in polynomial time to an NP-Complete problem.
               An answer "yes" to this problem can be verified in polynomial time.
 
+              Every problem in NP-Complete can be reduced to any other problem in NP-Complete in polynomial time.
+
 
 NP-Hard:
-    - Some there problems may not be in NP. That is, an "yes" to the problem is not verifiable in
-      polynomial time.
+    - NP-Hard problems are not necessarily in NP themselves. That is, an "yes" to the problem may
+      not verifiable in polynomial time.
     - All NP-Complete problems are in NP-Hard.
     - All NP problems can be convertible in polynomial to every NP-Hard problem.
       That is to say that a problem can be in NP-Hard only if all NP problems can be reduced in
       polynomial time to that problem.
     - An NP-Hard problem may not need to be in NP. That is, its solution "yes" to a problem may not
       be verifiable in polynomial time.
+    - Not all NP-Hard problems can be directly converted to any other NP-Hard problem in polynomial time.
+
+
+NP-Hard Problems and Verification
+---------------------------------
+   -  Not all NP-Hard problems can be verified in polynomial time. In fact, some NP-Hard problems
+      are not even in NP.
+   -  NP-Hard problems that can be verified in polynomial time are actually a subset called
+       NP-Complete problems.
+
+
+An NP-Complete problem has two key properties:
+----------------------------------------------
+   - It is in NP (nondeterministic polynomial time), which means its solutions can be verified in
+      polynomial time by a deterministic Turing machine1
+
+   - It is NP-Hard, meaning every problem in NP can be reduced to it in polynomial time.
+
+
+ # Reference
+  https://www.perplexity.ai/search/what-are-np-hard-problems-oJJTIITMQWujsOXNatFt6Q
