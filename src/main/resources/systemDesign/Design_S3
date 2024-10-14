@@ -27,7 +27,25 @@ Sharding vs Partitioning vs Striping
 
 	In case of striping, we divide a file into multiple blocks and store it in different machines. We can combine with RAID to get durability
 
-	In case of  partitioning, we divide a table into mutliple sub-parts on a single database instance on a single machine.
+	In case of  partitioning,
+	  vertical partitioning, --> We split columns of table into multiple tables.
+	  Horizontal partitioning --> Partition rows of the database. If these partitions are stored at
+	  different db instances/machines then it is called sharding.
+
+	  # Refer:
+	    1. https://www.cockroachlabs.com/blog/what-is-data-partitioning-and-how-to-do-it-right/
+	    2. https://www.sqlshack.com/database-table-partitioning-sql-server/
+
+  Partitioning in Oracle Database
+    --> Partitioning refers to single database instance.
+        --> Oracle offers various partitioning strategies: range, list, hash, interval, and composite partitioning
+
+    --> Splitting rows across multiple database instances is referred as sharding.
+
+    # Refer
+      1. https://www.perplexity.ai/search/in-case-of-partitioning-we-div-Da_Uekr.S0utadc1hZYwRw#2
+      2. https://docs.oracle.com/en/database/oracle/oracle-database/21/cncpt/partitions-views-and
+      -other-schema-objects.html#GUID-3E154566-50D6-48C1-BAE5-57EF20266B43
 
 
   Refer: https://chatgpt.com/share/1ddd8ae0-63a6-403e-b8d6-56406aa31512
@@ -39,7 +57,10 @@ Durability or handling failure of disks
     ⁃	Replication
     ⁃	RAID
     ⁃	Erasure Coding
-	While technically RAID can be seen as a kind of erasure code,"RAID" is generally applied to an array attached to a single host computer (which is a single point of failure), while "erasure coding" generally implies multiple hosts, sometimes called a Redundant Array of Inexpensive Servers 		(RAIS). The erasure code allows operations to continue when any one of those hosts stops.
+	While technically RAID can be seen as a kind of erasure code,"RAID" is generally applied to an array attached to a single host
+	computer (which is a single point of failure), while "erasure coding" generally implies multiple hosts, sometimes called a
+	 Redundant Array of Inexpensive Servers
+		(RAIS). The erasure code allows operations to continue when any one of those hosts stops.
 	Compared to block-level RAID systems, object storage erasure coding has some significant differences that make it more resilient.
 
     Refer: https://en.wikipedia.org/wiki/Erasure_code
