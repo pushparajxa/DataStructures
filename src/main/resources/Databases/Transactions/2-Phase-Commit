@@ -66,7 +66,7 @@ Two Phase Commit
 
     Case  3& 4  ---> Refers to a situation where TC has made a decision but didn't reach every one.
 
-    Case 1 & 2  --> TMs would be in would have sent READY or ABORT after receiving the PREPARE
+    Case 1 & 2  --> TMs would have sent READY or ABORT after receiving the PREPARE
                      message. If they have sent READY then they will block until to hear from TC (to
                       COMMIT or ABORT)
 
@@ -86,8 +86,8 @@ Two Phase Commit
   be waiting by holding the locks on the resources.
 
 
-  3 PC
-  ----
+  3 PC    (An improvement over 2 PC to handle the case of coordinator crash).
+  -----
 
   1. PreCommit from TC to TMs
       canCommit from TMs to TC

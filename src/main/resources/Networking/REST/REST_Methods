@@ -30,6 +30,52 @@ PUT   :: MUST be idemppotent
      in the request message payload.
 
 
+PATCH:
+================================
+  + We use this method when we want to update only specific fields of a resource.
+  + We sent Map<AttributeName, Value> as in input.
+  + It is typically used for collections where
+    - You want to update a specific field in all the objects in a collection, such as, task status
+    in a collection tasks of batch.
+
+  + When Sending a Complete Object with PATCH May Be Appropriate
+
+        Dynamic Schema Requirements: If the backend supports dynamic object structures
+         where fields may not always be present, and only non-null fields should be updated,
+         you might use PATCH to send the full object, indicating changes without affecting unspecified fields.
+
+        API-Specific Behavior: Some APIs are designed to use PATCH for both partial
+          and full updates, treating fields that aren’t specified as “don’t change.”
+          In these cases, the API could handle a complete object in PATCH without resetting data.
+
+ + Response of a PATCH request
+   + Should you send complete object or only that have been modified?
+   + Using Prefer: header.
+    * Prefer: return=representation || Prefer: return=minimal
+
+      PATCH /item/123 HTTP/1.1
+      Host: example.org
+      Content-Type: application/example-patch
+      Prefer: return=representation
+
+      PATCH /item/123 HTTP/1.1
+      Host: example.org
+      Content-Type: application/example-patch
+      Prefer: return=minimal
+
+
+   + The "return=representation" preference indicates that the client prefers that the server
+     include an entity representing the current state of the resource in the response to a successful request.
+
+   + The "return=minimal" preference, on the other hand, indicates that the client wishes the
+     server to return only a minimal response to a successful request
+
+
+
+  # References:
+    1. https://greenbytes.de/tech/webdav/rfc7240.html#return
+    2. https://stackoverflow.com/questions/37718119/should-the-patch-method-return-all-fields-of-the-resource-in-the-response-body
+
 
 POST : Used to create a resource
 ================================

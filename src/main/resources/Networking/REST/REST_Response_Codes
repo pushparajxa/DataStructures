@@ -1,0 +1,9 @@
+100+ Informational
+  --> Conveying that server has received the request and processing it.
+
+200+ Success of request
+
+400+ Issue with the client request
+
+
+500+ Issue with the server business logic.

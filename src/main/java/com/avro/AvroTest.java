@@ -24,7 +24,7 @@ import org.apache.avro.generic.GenericDatumWriter;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.DatumWriter;
-import org.joda.time.DateTimeZone;
+//import org.joda.time.DateTimeZone;
 //import org.joda.time.LocalDate;
 
 public class AvroTest

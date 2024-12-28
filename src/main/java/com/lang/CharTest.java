@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.text.StringEscapeUtils;
+//import org.apache.commons.text.StringEscapeUtils;
 
 public class CharTest {
 
@@ -151,9 +151,9 @@ public class CharTest {
 
     String unescapedString = unescapedStringBuilder.toString();
 
-    String result = StringEscapeUtils.escapeJava("撤单报单被拒");
-    String result2 = StringEscapeUtils.unescapeJava(result);
-    System.out.println(result);
+  //  String result = StringEscapeUtils.escapeJava("撤单报单被拒");
+   // String result2 = StringEscapeUtils.unescapeJava(result);
+ //   System.out.println(result);
 
     String str = "撤单报单被拒";
     str="asciiString";

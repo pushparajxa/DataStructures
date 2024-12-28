@@ -1,5 +1,5 @@
 # Linux tries to use entire RAM for caching the data read from disk. If processes requires more RAM
-  it will automatically decrease the size of buffer cahce. Similarly it will increase if RAM is
+  it will automatically decrease the size of buffer cache Similarly it will increase if RAM is
   found empty.
 
 # The buffer cache in Linux is maintained in kernel space.

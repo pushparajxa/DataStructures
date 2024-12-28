@@ -1,9 +1,9 @@
 package com.redisson;
 
 import java.util.concurrent.Callable;
-import lombok.extern.slf4j.Slf4j;
+//import lombok.extern.slf4j.Slf4j;
 
-@lombok.extern.slf4j.Slf4j
+//@lombok.extern.slf4j.Slf4j
 class MyCallable implements Callable {
 
   @Override

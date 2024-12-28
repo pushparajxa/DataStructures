@@ -1,7 +1,7 @@
 
 package com.ds.sort;
 
-import static org.apache.commons.lang3.ArrayUtils.swap;
+//import static org.apache.commons.lang3.ArrayUtils.swap;
 
 import java.util.Arrays;
 
@@ -13,7 +13,7 @@ public class Heap {
         for (int i = a.length -1 ; i >0 ; i--) {
             if ( a[(i-1)/2] < a[i]) {
                 
-                swap(a, (i-1)/2, i);
+             //   swap(a, (i-1)/2, i);
             }
         }
         System.out.println(Arrays.toString(a));
