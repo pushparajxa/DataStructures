@@ -1,0 +1,14 @@
+
+
+
+
+
+Limitations and Challenges
+==========================
+* gRPC is pretty neat, only problem comes when you try to deserialize an empty buffer into a simple
+data type, which can result in a valid message object from invalid data.
+
+
+Reference:
+=========
+  * https://www.youtube.com/shorts/t0ONFCY6NWI

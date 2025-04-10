@@ -1,0 +1,17 @@
+In TreeMap when keys are iterated, you get them in sorted order based on their compareTo method.
+
+ TreeMap use red-black tree implementation, which gives constant o(logn) times for inserts, deletes
+ and search
+
+
+HashMap
+  --> No guarantee on the order of keys iteration.
+  --> It will rehash when the number of keys reaches a particular threshold.
+  --> During collision, instead of separate chaining, now it uses TreeMap giving guarantee on o
+  (logn) insertion time.
+
+
+
+
+
+

@@ -13,12 +13,12 @@ read() or write() system call  --> Puts data into Buffer cache
 
 Disk/Storage cache: --> Cache of storage device. Caching can be enabled or disable through command.
     - Storage can have caches.
-    - We have to do fsync to make this data writen to disk from its(disk cache).
+    - We have to do fsync to make this data written to disk from its(disk cache).
 
     - This article says that fsync doesn't guarantee that writes are flushed to the disk after fsync
         - https://fgiesen.wordpress.com/2015/10/25/reading-and-writing-are-less-symmetric-than-you-probably-think/
 
-    - But we go with the understanding that fysnch will flush the data through disk cache to the
+    - But we go with the understanding that fysnc will flush the data through disk cache to the
     disk as well as any metadata about the file such as access time and mtime (modification time).
 
       - https://man7.org/linux/man-pages/man2/fsync.2.html
