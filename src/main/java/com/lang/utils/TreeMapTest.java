@@ -52,6 +52,8 @@ public class TreeMapTest {
         
         System.out.println(collect);
         
+        TreeMapTest treeMapTest = new TreeMapTest();
+        treeMapTest.test2();
     }
     
     
@@ -83,5 +85,26 @@ public class TreeMapTest {
         public int hashCode(){
             return Integer.valueOf(this.price).hashCode() * 31 + name.hashCode();
         }
+    }
+    
+    public void test2(){
+        TreeMap<Integer, Integer> treeMap = new TreeMap<>();
+        
+        int [] arr = new int[]{3,4,6,6,6,3};
+        
+        for (int i = 0; i < arr.length; i++) {
+            if(treeMap.containsKey(arr[i])){
+                int cnt = treeMap.get(arr[i]);
+                treeMap.put(arr[i], cnt+1);
+            }
+            else {
+                treeMap.put(arr[i], 1);
+            }
+        }
+        
+        for(Map.Entry<Integer, Integer> entry: treeMap.entrySet()){
+            System.out.println("Key is =" + entry.getKey() + " and value is " + entry.getValue());
+        }
+        
     }
 }

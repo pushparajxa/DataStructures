@@ -18,5 +18,20 @@ References: https://manybutfinite.com/post/anatomy-of-a-program-in-memory/
 https://gist.github.com/CMCDragonkai/10ab53654b2aa6ce55c11cfc5b2432a4
 
 
+Process resources
+==================
+maximum size of core files
+maximum size of a process's data segment
+maximum size of files created
+maximum size that may be locked into memory
+maximum size of resident memory
+maximum number of file descriptors open at one time
+maximum size of the stack
+maximum amount of cpu time used
+maximum number of processes allowed
+maximum size of virtual memory available
+
+Reference:: https://serverfault.com/a/497207
+
 
            1
