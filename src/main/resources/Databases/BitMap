@@ -1,0 +1,14 @@
+When we have low cardinality columns, i.e, columns which can have only few values, like, Gender,
+which has only four values, male, female, etc..
+
+  If we store "Male" or "Female" for each row, then we would be having 4 bytes (Male --> String) for
+   each row. Which wastes memory.
+
+
+  To save this storage, we will keep bit array for each possible value of the column.
+     BitMap for "Male"
+     BitMap for "Female"
+
+   We take the value of the column for the each row and set the bit corresponding to that row "1".
+
+

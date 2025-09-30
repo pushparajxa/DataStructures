@@ -4,3 +4,14 @@ Clustered indices are stored in B+tree
   1. https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-index-design-guide?view=sql-server-ver16#clustered-index-architecture
   2. https://stackoverflow.com/a/53858534
   3. https://stackoverflow.com/a/50638924/1171533
+
+
+Clustered Index
+  --> It is supported by MySql InnoDB.
+  --> Rows are stored in the same order as the index entries.
+      --> If we are inserting a new row then we need to insert its index entry in the correct place.
+           Also, we need to identify the disk page in which to insert this new row. If the space is
+           not sufficient then we need to split it.
+
+  --> Postgres doesn't have clustered Index. New rows are inserted at the end like heap and index
+       entry will point to that address.

@@ -1,0 +1,28 @@
+Postgres doesn't store rows physically in the same order as the index. Only clustered index
+(supported by MySql , InnoDB engine) stores that way. For a given query, whichever row matches a
+condition, i.e, query's columns are in the index and we are matching it. When we find a match, we do
+ not immediately follow the row pointer to get the row.  We do the following.
+
+Bitmap Index Scan: In this initial phase, the database uses one or more indexes to identify the rows that match the query's conditions. Instead of immediately fetching each row from the table (which could involve a lot of random disk access), it creates a "bitmap" in memory. This bitmap is a data structure that marks the pages in the table's main data area (the "heap") that contain at least one matching row. If multiple indexes are used, the database can perform bitwise operations (like AND or OR) on their respective bitmaps to create a final bitmap representing the rows that satisfy all conditions.
+
+Bitmap Heap Scan: Once the bitmap is created, the Bitmap Heap Scan phase begins. It reads through the bitmap and visits only the marked pages in the table heap. Because the pages are read in their physical order on disk, this process is much more sequential and efficient than the random access that would occur with a simple index scan fetching scattered rows. For each page it visits, it then identifies and returns the specific rows that match the query's conditions.
+
+
+--> What if the query contains both indexable and non-indexable columns?
+  However, a query can still benefit from a Bitmap Heap Scan even if the search condition includes columns that are not indexed.
+
+  Here's what happens when a query's WHERE clause contains both indexed and non-indexed columns:
+
+  The Bitmap Index Scan is performed using the indexed column(s) to create the initial bitmap of relevant pages.
+
+  During the Bitmap Heap Scan phase, after a page is fetched from the table heap, the database will apply the conditions for the non-indexed column(s) to the rows on that page. This is often referred to as a "recheck" or "filter" step.
+
+  In essence, the index on the indexed column is used to narrow down the search to a smaller set of pages. Then, the conditions on the non-indexed columns are used to filter out the remaining rows on those pages. This approach is still significantly more efficient than a full table scan, where every single page and row would need to be checked against all conditions.
+
+
+Reference
+===========
+
+1. https://www.postgresql.org/message-id/12553.1135634231@sss.pgh.pa.us
+2. https://stackoverflow.com/questions/6592626/what-is-a-bitmap-heap-scan-in-a-query-plan
+3. https://www.youtube.com/watch?v=UXKYAZOWDgk
