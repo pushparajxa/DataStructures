@@ -1,0 +1,21 @@
+LinkedIn Screening Interview:
+----------------------------
+1. What is virtual memory
+
+2. How virtual memory is used in security?
+
+  2.1 Each process's Virtual memory is protected and can't be accessed by others.
+
+  2.2 Buffer overflow exploits:
+        Since OS is adding layer of abstraction over physical memory it can intercept any buffer
+        overflow exploit
+
+ 2.4 Preventing System Crashes:
+     The isolation provided by virtual memory helps to prevent applications from crashing the entire system.
+     If one process has a memory-related error, its effect is contained within its virtual memory
+     space, rather than impacting other parts of the system or other processes.
+
+ 2.5 Mitigating Exploits:
+     Virtual memory techniques like dynamic tainting (implemented in hardware by some processors, such as Oracle's Silicon Secured Memory)
+     can detect and halt illegal memory accesses, making it harder for attackers to exploit memory
+     vulnerabilities.
