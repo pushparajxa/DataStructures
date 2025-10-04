@@ -23,23 +23,33 @@ public class MaximumScoreFromMultiplcation_1770 {
         sol.fun2(new Object[]{});*/
         
        int [] nums = new int[]{1,2,3};
-       int [] multipliers = new int[]{3,2,1};
+       int [] multipliers = new int[]{1, 2,3};
         
+       /*
         nums = new int[]{-5,-3,-3,-2,7,1};
         multipliers = new int[] {-10,-5,3,4,6};
+        */
+        
        
-   //    int result = sol.maximumScore(nums, multipliers);
+      // int result = sol.maximumScore(nums, multipliers);
         
-     //  System.out.println(result);
-        
-        for (int i = 4; i >=0 ; i--) {
-            for (int j = 0; j <=i; j++) {
-                System.out.print(i+","+j+" ");
+       //System.out.println(result);
+        sol.fun3(nums, multipliers);
+       
+       /*
+        for (int i = 1; i <= nums.length-1; i++) {
+            for (int j = 0; j + i <=nums.length-1 ; j++) {
+                int x = j;
+                int y = i+j;
+                System.out.print("(["+x+","+y+"]-->" + "[" + j +"," + (y-1) + "]" + "[" +(x+1) +
+                    ","+ (y) + "]" +") --->");
+                System.out.println();
+              
                 
             }
             System.out.println();
         }
-        
+        */
     }
     
     
@@ -123,10 +133,83 @@ public class MaximumScoreFromMultiplcation_1770 {
     
     
      */
+    int fun3( int[] nums, int [] multipliers) {
+        
+        int mul_len = multipliers.length;
+        int num_len = nums.length;
+        int arr[];
+        
+        if(num_len == mul_len)
+            arr = new int[mul_len+1];
+        else
+            arr = new int[num_len -(num_len-mul_len) + 1];
+        
+        int inc2 = num_len-mul_len;
+        
+       int cnt = mul_len-1;
+       
+       int start, end, inc;
+       
+       while(cnt>=0){
+           /*
+                [7 9 8 2] [11]
+                
+                0 0
+                start = 0, end = 2
+                start = 1, end = 3
+                
+                start = 0, end  = 3
+                
+                
+                [7 9 8 2] [11 12]
+                
+                start = 0 , end = 1
+                start = 1, end = 2
+                start = 2, end = 3
+                
+                start = 0, end = 2
+                start =1 , end =  3
+                
+                start = 0, end = 3
+                
+                0      0     0
+                (s,e,
+                
+                
+            */
+           
+          
+           start = 0;
+           end = start + inc2;
+           int idx = 0;
+           while(end<nums.length){
+              
+              int val = Math.max((nums[end]*multipliers[cnt] + arr[idx]),
+                  (nums[start]*multipliers[cnt] + arr[idx+1])
+                  );
+               
+              arr[idx] = val;
+               System.out.println("start="+ start +", end ="+ end+", cnt="+ cnt+". Arr="+Arrays.toString(arr));
+                start++ ;
+                end = start + inc2;
+                idx ++;
+           }
+           
+           inc2++;
+           
+           cnt--;
+       }
+        
+        System.out.println("Final Array contents=" + Arrays.toString(arr));
+        return arr[0];
+    
+    }
+    
     
     int fun2(int start, int end, int[] nums, int[] arr, int [] multipliers, int index) {
       //  System.out.println("(["+start+ "," + end +"], " + index+")" + arr.length + "," + nums
        //  .length);
+        System.out.println("(["+start+ "," + end +"], " + index+")");
         int pointer = getIndex(start, end, nums.length);
         
         if(index>= multipliers.length)
