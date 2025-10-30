@@ -15,7 +15,8 @@ Read Committed
 
   - Lost update's can occur
 
-  - Non repeatable reads can occur.
+  - Non repeatable reads can occur. Read Skew is same as non-repeatable read. Skew here refers to
+  timing anomaly, Refer: DDIA, Page 237.
     * Client have to refresh the page to get latest data.
 
 
@@ -59,3 +60,4 @@ Phantom reads
   #Refer:
     https://cloud.google.com/blog/products/databases/strict-serializability-and-external-consistency-in-spanner?hl=en
     https://timilearning.com/posts/mit-6.824/lecture-13-spanner/
+

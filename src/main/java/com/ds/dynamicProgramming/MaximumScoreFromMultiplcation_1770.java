@@ -6,6 +6,11 @@ package com.ds.dynamicProgramming;
 import java.util.Arrays;
 import java.util.Collections;
 
+/*
+
+    It is explained here https://pushparaj89.wordpress.com/datastructures/
+
+ */
 public class MaximumScoreFromMultiplcation_1770 {
     
     public static void main(String[] args) {

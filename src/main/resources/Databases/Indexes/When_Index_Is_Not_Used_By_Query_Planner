@@ -1,0 +1,39 @@
+Low Selectivity (High Data Duplication):
+----------------------------------------
+If a column has a very low number of unique values (e.g., a boolean column or a status column with few distinct options), the index offers little benefit. Scanning the entire table can be more efficient than traversing the index and then fetching a large percentage of the table's rows.
+
+NOT or != Conditions or Range Conditions (<, >) :
+-------------------------------------------------
+Queries using negative conditions like NOT IN, NOT LIKE, or != (not equals) might not utilize an
+index effectively, as the database often needs to scan a broader range of data to find rows that
+don't match the specified criteria. Range queries too need to look at large range of values.
+
+
+Small Table Size:
+-----------------
+For very small tables, the overhead of using an index (traversing the index structure) can outweigh the benefits, and a full table scan might be faster.
+
+Returning a Large Percentage of Rows:
+-------------------------------------
+If a query is expected to return a significant portion of the table's rows (e.g., more than 20-30% in some cases), a full table scan can be more efficient than using an index to locate individual rows and then fetching them.
+
+Functions on Indexed Columns:
+------------------------------
+Applying a function to an indexed column in the WHERE clause (e.g., WHERE ABS(column_name) = 10) can prevent the optimizer from using the index, as the index is built on the raw column values, not the results of the function.
+
+
+Type or Collation Mismatch:
+---------------------------
+If the data types or character sets (collations) of the indexed column and the value being searched for are not compatible, the index might not be used.
+
+Optimizer Cost Estimation:
+---------------------------
+The query optimizer estimates the cost of different execution plans, including using or not using an index. If it determines that a full table scan is cheaper based on factors like I/O operations and CPU usage, it will choose that plan.
+
+Index Invisibility:
+-------------------
+In some database systems, an index can be explicitly marked as invisible, preventing its use by the optimizer unless explicitly hinted in the query.
+
+Frequent Updates/Inserts/Deletes:
+---------------------------------
+While not directly preventing index usage in a SELECT query, tables with very high write activity might be less ideal candidates for extensive indexing due to the performance overhead of maintaining indexes during these operations.
