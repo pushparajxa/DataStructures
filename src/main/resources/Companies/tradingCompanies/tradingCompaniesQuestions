@@ -1,0 +1,223 @@
+1. Java Collections framework
+2. Serializable vs Externalizable
+3. Checked exceptions
+4. BigDecimal and BigInteger
+   4.1 Why BigInteger when we have BigDecimal. What are the specific optimizations in BigInteger?
+
+
+      Here's why BigInteger is needed even with BigDecimal available:
+
+          Efficiency for Integer Operations:
+            BigInteger is specifically optimized for integer arithmetic. Operations like modular arithmetic,
+              prime number testing, bitwise manipulations, and GCD calculations are often more efficient
+              and convenient to perform with BigInteger because it doesn't need to manage decimal places or scales.
+
+          Clarity and Intent:
+            Using BigInteger clearly signals that the value being represented is an integer, eliminating any potential ambiguity
+            about decimal precision or rounding.
+
+          Specific Integer-Only Operations:
+          BigInteger provides methods for operations that are inherently integer-specific, such as:
+              modPow() (modular exponentiation)
+              gcd() (greatest common divisor)
+              isProbablePrime() (primality testing)
+              Bitwise operations (and, or, xor, not, shiftLeft, shiftRight)
+
+      While BigDecimal can represent integers (by having a scale of 0), it carries the overhead of managing decimal places,
+      which is unnecessary for purely integer calculations and can sometimes lead to performance differences.
+      Therefore, when working exclusively with very large integers and integer-specific operations, BigInteger
+      is the more appropriate and often more efficient choice.
+
+5. Weak Reference vs Soft Reference vs Phantom Reference vs Strong Reference.
+
+6. Why Externalizable requires a public no-arg constructor
+   The key difference lies in how an object is instantiated during deserialization.
+
+       Externalizable deserialization:
+           When deserializing an Externalizable object, the JVM first creates a new, blank instance of the class by calling its public no-argument constructor.
+           This means the instance is fully constructed before any deserialization occurs.
+           The JVM then calls the object's readExternal() method, which you implement. It is your responsibility to read the data from the stream and populate the object's fields.
+           If a public no-arg constructor is not available, the JVM will throw an InvalidClassException.
+       Serializable deserialization:
+           When deserializing a Serializable object, the JVM does not use the class's constructor.
+           Instead, it uses a specialized, non-public mechanism to create an instance of the class and then populates its fields directly from the stream using reflection.
+           This is why a Serializable class does not need a no-arg constructor, and it's why static and transient fields are not included in the byte stream. The constructor is simply bypassed.
+
+7. Why we need Externalizable interface when we have serializable interface?
+
+      Short answer:: We do not need to writer the class descriptor of nested objects. Look at the
+      java example below.
+
+    In Java serialization, a
+    class descriptor is an object of type java.io.ObjectStreamClass that contains metadata about a class. When you serialize an object, this descriptor is marshalled (encoded) into the byte stream along with the object's data, allowing the receiving system to recreate a semantically identical copy of the original object.
+    The class descriptor includes vital information for the deserialization process, such as:
+
+        The fully qualified name of the class.
+        The class's serialization version ID (serialVersionUID).
+        The names, types, and other attributes of the fields that are being serialized.
+        Flags indicating whether the class is Serializable or Externalizable, or if it is an enum.
+
+    How the class descriptor affects serialization
+    The time and CPU cost of marshalling the class descriptor is a key performance consideration in Java's native serialization:
+
+        Automatic serialization: When a class implements java.io.Serializable, Java's serialization framework automatically writes the class descriptor, which includes a comprehensive description of the class's fields. This is convenient but can generate significant overhead, especially for complex objects or objects embedded within other objects in a message.
+
+        Manual serialization: When a class implements java.io.Externalizable, the Java Virtual Machine (JVM) only writes the class descriptor for the top-level object. The methods writeExternal() and readExternal() give you complete control over what data is written to the stream, bypassing the costly descriptor generation for any nested objects. By manually writing the data for embedded objects rather than calling the framework's writeObject() method, you can eliminate the overhead of writing their individual class descriptors to the stream, as suggested by the JMS best practice.
+
+
+
+  Serializing a class descriptor incurs significant performance overhead primarily due to the extensive use of Java Reflection, complex class inspection, and the processing of additional metadata required for version compatibility
+  . This overhead is both a CPU (time) and memory (space) cost, especially for complex object graphs and in high-throughput applications.
+  Factors contributing to the overhead
+  1. Runtime class inspection via reflection
+
+      Deep analysis: When a class is serialized, the Java serialization framework must perform a deep inspection of its structure using Reflection. This includes checking the class's declared fields, its superclass, and implemented interfaces.
+      Costly process: Reflection is a computationally intensive process, and performing this introspection for every class within an object graph is slow. This is particularly problematic for objects that contain other objects, as each embedded class also requires a class descriptor to be processed.
+
+  2. Computation of serialVersionUID
+
+      Checksum generation: If a class does not explicitly declare a serialVersionUID, the serialization runtime must compute one by using a Secure Hash Algorithm (SHA-1) hash on the class's structure.
+      CPU-intensive: Calculating this hash involves processing the class name, its interfaces, methods, and fields. This entire operation is a CPU-intensive task that happens on every serialization when a serialVersionUID is absent, further adding to the overhead.
+
+  3. Writing and reading additional metadata
+
+      Verbose output: A standard serialized stream is not just raw data. For each class, the stream includes the fully qualified class name, the serialVersionUID, and a list of its serializable fields.
+      Space overhead: This metadata is written into the byte stream, increasing the overall size of the serialized message. For small objects, the size of the class descriptor can be a large percentage of the total message size. This "space overhead" can affect performance by increasing network latency for message transport.
+
+  4. Handling of object graphs
+
+      Reference tracking: The serialization framework must also track references to objects to correctly handle cycles in the object graph (e.g., if object A references object B, which in turn references A).
+      Performance cost: The process of detecting and handling these object cycles adds more complexity and processing overhead. The framework needs to maintain a hash table of objects that have already been written to the stream, which is an additional performance cost.
+
+  How Externalizable reduces overhead
+  ------------------------------------
+  By implementing java.io.Externalizable, you take manual control of the serialization process. As the original text suggests, calling obj.writeExternal(stream) on nested objects bypasses the default serialization framework's process. This eliminates the need to perform a class inspection and write a full class descriptor for every embedded object, which significantly cuts down the CPU and space overhead.
+
+
+
+
+References::
+  1. https://stackoverflow.com/questions/8627996/why-does-implementing-externalizable-need-a-default-public-constructor
+  2. https://stackoverflow.com/questions/16605376/why-we-have-externalizable-when-we-can-override-writeobject-and-readobject-in-ja
+  3. https://share.google/aimode/xCb5XalFOIbJWV78S
+
+
+  import java.io.IOException;
+
+  public class Address {
+      private String street;
+      private String city;
+      private int zip;
+
+      // Public no-arg constructor is mandatory for Externalizable deserialization.
+      public Address() {
+          System.out.println("Address: no-arg constructor called");
+      }
+
+      public Address(String street, String city, int zip) {
+          this.street = street;
+          this.city = city;
+          this.zip = zip;
+      }
+
+      @Override
+      public String toString() {
+          return "Address{" +
+                 "street='" + street + '\'' +
+                 ", city='" + city + '\'' +
+                 ", zip=" + zip +
+                 '}';
+      }
+
+      // Getters and setters omitted for brevity
+  }
+
+
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
+public class Customer implements Externalizable {
+    private static final long serialVersionUID = 1L;
+
+    private String name;
+    private int id;
+    private transient String password; // Will not be serialized by Externalizable unless explicitly handled.
+    private Address shippingAddress; // The embedded object.
+
+    // Public no-arg constructor is mandatory for Externalizable deserialization.
+    public Customer() {
+        System.out.println("Customer: no-arg constructor called");
+    }
+
+    public Customer(String name, int id, String password, Address shippingAddress) {
+        this.name = name;
+        this.id = id;
+        this.password = password;
+        this.shippingAddress = shippingAddress;
+    }
+
+    /**
+     * The writeExternal method for manually serializing the object.
+     * @param out The ObjectOutput stream to write to.
+     */
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        System.out.println("Customer: writeExternal called");
+
+        // Write the primitive fields.
+        out.writeUTF(name);
+        out.writeInt(id);
+
+        // Instead of out.writeObject(shippingAddress),
+        // we write the individual fields to avoid writing the Address class descriptor.
+        if (shippingAddress != null) {
+            out.writeBoolean(true); // Signal that an Address object follows.
+            out.writeUTF(shippingAddress.getStreet());
+            out.writeUTF(shippingAddress.getCity());
+            out.writeInt(shippingAddress.getZip());
+        } else {
+            out.writeBoolean(false); // Signal that there is no Address object.
+        }
+
+        // We can choose to explicitly write the transient field if needed.
+        out.writeUTF(password);
+    }
+
+    /**
+     * The readExternal method for manually deserializing the object.
+     * @param in The ObjectInput stream to read from.
+     */
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        System.out.println("Customer: readExternal called");
+
+        // The fields must be read in the same order and type as they were written.
+        this.name = in.readUTF();
+        this.id = in.readInt();
+
+        // Read the embedded Address object, checking for null.
+        if (in.readBoolean()) {
+            String street = in.readUTF();
+            String city = in.readUTF();
+            int zip = in.readInt();
+            this.shippingAddress = new Address(street, city, zip);
+        }
+
+        // Read the transient field that was explicitly written.
+        this.password = in.readUTF();
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+               "name='" + name + '\'' +
+               ", id=" + id +
+               ", password='" + password + '\'' +
+               ", shippingAddress=" + shippingAddress +
+               '}';
+    }
+
+    // Getters and setters omitted for brevity
+}

@@ -3,6 +3,9 @@ package com.lang.utils;
 
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
 
 /*
@@ -48,7 +51,8 @@ Use of WeakReference in Java
 A third common source of memory leaks is listeners and other callbacks.
 If you implement an API where clients register callbacks but don’t deregister them explicitly, they will accumulate unless you take some action.
  The best way to ensure that callbacks are garbage collected promptly is to store only weak references to them,
-  for instance, by storing them only as keys in a WeakHashMap.
+  for instance, by storing them only as keys in a WeakHashMap. This is explained with an example
+  at the end.
 */
 
 
@@ -112,6 +116,7 @@ public class WeakHashMapTest {
       }
       count++;
     }
+    System.out.println(referenceQueue.poll());
   }
 
   static void testWithOutReferenceQueue(){
@@ -137,5 +142,79 @@ public class WeakHashMapTest {
     }
 
   }
-
+  
+  // A simple listener interface
+  interface MyListener {
+    void onEvent(String event);
+  }
+  
+  // The class that generates events, now using a WeakHashMap
+  class NonLeakySubject {
+    // WeakHashMap keys are weak references. Listeners will be garbage collected
+    // when they are not strongly referenced elsewhere.
+    private final Map<MyListener, Void> listeners = Collections.synchronizedMap(new WeakHashMap<>());
+    
+    public void registerListener(MyListener listener) {
+      listeners.put(listener, null);
+    }
+    
+    public void notifyListeners(String event) {
+      // Iterate over a copy of the key set to avoid ConcurrentModificationException
+      // while an entry is being removed by the GC.
+      Set<MyListener> listenersToNotify = listeners.keySet();
+      for (MyListener listener : listenersToNotify) {
+        if (listener != null) {
+          listener.onEvent(event);
+        }
+      }
+    }
+  }
+  
+  // A listener class that will be garbage collected after its work is done
+  class MyListenerImpl implements MyListener {
+    private final String name;
+    
+    public MyListenerImpl(String name) {
+      this.name = name;
+    }
+    
+    @Override
+    public void onEvent(String event) {
+      System.out.println(name + " received event: " + event);
+    }
+  }
+  
+  class WeakReferenceExample {
+    public void main(String[] args) throws InterruptedException {
+      NonLeakySubject subject = new NonLeakySubject();
+      
+      // This listener will be added but not explicitly removed.
+      MyListener listener1 = new MyListenerImpl("Listener 1");
+      subject.registerListener(listener1);
+      
+      // This listener is not held by a strong reference outside the subject.
+      subject.registerListener(new MyListenerImpl("Listener 2"));
+      
+      subject.notifyListeners("Initial event");
+      
+      // The main method's strong reference to `listener1` is removed.
+      listener1 = null;
+      
+      System.out.println("--- After strong reference to Listener 1 is removed ---");
+      
+      // Request garbage collection.
+      System.gc();
+      
+      // Wait for the garbage collector to do its work.
+      Thread.sleep(100);
+      
+      // The subject can still notify the listeners, but 'Listener 2' is now gone.
+      System.out.println("Notifying remaining listeners:");
+      subject.notifyListeners("Second event");
+      
+      System.out.println("Weak reference magic! Listener 2 was garbage collected.");
+    }
+  }
+  
+  
 }

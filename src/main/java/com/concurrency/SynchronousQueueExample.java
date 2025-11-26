@@ -14,7 +14,8 @@ public class SynchronousQueueExample {
           try {
             System.out.println("Producer:: "+this.getName()+"::"+10);
             Thread.sleep(5*1000l);
-            synchronousQueue.put(10);
+            synchronousQueue.add(10);
+              System.out.println("Done with put");
 
           } catch (InterruptedException e) {
             e.printStackTrace();
@@ -26,6 +27,7 @@ public class SynchronousQueueExample {
         try {
           System.out.println("Waiting for take");
           System.out.println("Taking"+synchronousQueue.take());
+          System.out.println("Done with polling.");
         } catch (InterruptedException e) {
           e.printStackTrace();
       }

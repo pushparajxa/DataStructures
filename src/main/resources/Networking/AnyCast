@@ -1,0 +1,6 @@
+AnyCast:: Where multiple machines share same ip address in multiple locations.
+
+ This is used for CDN (Content delivery networks)
+
+
+ Refer: https://www.cloudflare.com/learning/cdn/glossary/anycast-network/

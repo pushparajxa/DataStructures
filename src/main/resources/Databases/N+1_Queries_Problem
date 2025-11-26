@@ -1,0 +1,86 @@
+The N+1 queries problem is a performance anti-pattern in software development where
+an application executes a disproportionate number of database queries (specifically, one
+initial query plus an additional query for each of the  N results) instead of fetching all the
+required data in a few, more efficient queries.
+
+This issue commonly occurs in applications using
+Object-Relational Mapping (ORM) frameworks, which often use "lazy loading" as a default behavior.
+
+How it Happens
+==============
+
+Consider retrieving a list of authors and their books. The "+1" query fetches all authors, and then
+"N" separate queries fetch books for each of the N authors. This results in N+1 queries, leading to
+poor performance and increased database load.
+
+Impact
+======
+The N+1 problem causes increased latency due to multiple database round trips,
+high database load from numerous small requests, and scalability issues as the amount of data grows.
+
+
+Common Solutions::
+==================
+
+To avoid N+1 queries, the primary approach is to use eager loading to fetch all
+related data in fewer queries. This can be done through:
+
+  Eager Loading (with ORMs): ORM features like includes or JOIN FETCH load related data together.
+
+  Using SQL JOINs: Crafting SQL queries with JOIN clauses to retrieve data from multiple tables at once.
+
+  Batching queries: Retrieving related data for multiple primary records in a single query when
+  eager loading is not suitable.
+
+  Caching: Storing frequently used data in memory to reduce database access.
+
+
+When eager loading is not possible
+===================================
+Eager loading uses JOIN operations to load all related data in a single, potentially large, query.
+Batching, conversely, makes a few separate, optimized queries (e.g., one for primary records,
+ one for related data using the primary keys in a WHERE IN (...) clause) and then efficiently maps the results.
+
+Scenarios where eager loading is not suitable and batching is a better option include:
+
+
+1. Complex Object Graphs and Deep Nesting
+   --------------------------------------
+  When dealing with deeply nested relationships (e.g., User -> Company -> Departments -> Employees
+  -> Skills), eager loading the entire graph can be extremely inefficient.
+  The resulting single query could be very complex, difficult to manage, and might return a huge,
+   flattened, and de-normalized result set with significant data duplication.
+    Batching allows for loading each level of the graph with a small number of focused queries.
+
+2. Potential for Very Large Result Sets
+  --------------------------------------
+  If eager loading a relationship leads to a massive amount of data (e.g., loading all reviews for users when a u
+  ser might have thousands of reviews), it can consume excessive memory and bandwidth.
+  Batching can load data in controlled chunks, which is more memory efficient.
+
+3. Dynamic and Unpredictable Data Needs (e.g., GraphQL)
+   --------------------------------------
+  In architectures like GraphQL, different clients may request different sets of related data
+  in a single request. It's difficult to predict all required associations in advance to use a single,
+  static eager load query. Batched loading with a "dataloader" pattern can collect all requests for
+  specific related items within a single request cycle and execute one optimized batch query, satisfying
+  all needs efficiently without over-fetching.
+
+4. Conditional or Partial Loading of Relationships
+  ------------------------------------------------
+  Eager loading typically retrieves all related entities for all primary records.
+  If you only need related data for a subset of the primary records or need to apply specific filtering,
+  ordering, or limiting to the related data, eager loading becomes complex or might not work as intended within
+   many ORMs. Batching gives more granular control.
+
+5. ORM Limitations or Complex Query Logic
+  --------------------------------------
+  Sometimes ORM features for eager loading can be "fussy" or do not support certain complex SQL operations
+  (like specific WHERE, ORDER BY, or LIMIT clauses on the joined data). In these cases, manually crafted batched queries
+  (multiple simple SQL queries) can provide the necessary control and performance.
+
+6. Decoupling Logic from Data Access
+  --------------------------------------
+ Eager loading can tie the business logic closely to the data access layer (by explicitly stating
+ all includes). Batching can allow for more decoupled logic, where the need for related data is identified and
+ loaded later in the process in a batched manner, often without the calling code needing explicit include statements

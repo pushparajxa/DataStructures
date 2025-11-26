@@ -31,5 +31,6 @@ public class HashMapTest {
     Shape s2 = new Shape(4);
     map.put(s1,"hello");
     System.out.println(map.get(s2));
+    map.computeIfAbsent()
   }
 }

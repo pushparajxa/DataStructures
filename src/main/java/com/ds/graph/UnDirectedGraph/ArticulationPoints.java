@@ -83,23 +83,24 @@ public class ArticulationPoints {
                     if (!otherEnd.equals(parent)) {
                         int discTime = Vertex.getDiscoveryTime(otherEnd);
                         if (discTime < discoveryTime) {
-                            lowTime = discTime;
+                            lowTime = Math.min(lowTime,discTime);
                         }
                     }
                 }else{
                     childrenCount++;
                     clock = doADFS(otherEnd,vertex,clock);
-                    if(parent==null){
+                    
+                    int otherEndLowTime = Vertex.getLowTime(otherEnd);
+                    lowTime = Math.min(lowTime,otherEndLowTime);
+                    
+                    if(parent==null){// This vertex is the root of the DFS tree.
                         if(childrenCount>=2){
                             Vertex.setArticularionPointFlag(vertex,true);
                         }
                     }else{
-                        int otherEndLowTime = Vertex.getLowTime(otherEnd);
                         if(otherEndLowTime>=discoveryTime){
                             Vertex.setArticularionPointFlag(vertex,true);
                         }
-                        lowTime = Math.min(lowTime,otherEndLowTime);
-
                     }
                 }
             }

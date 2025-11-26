@@ -8,6 +8,7 @@ import com.ds.graph.utils.DirectedGraphUtils;
 
 // For this algorithm graph should be a directed graph. Difference between this and Dijkstra's
 // algorithm is that it will handle edges with negative weight
+// Calculate shortest path from a given vertex to all other vertices in the graph.
 public class BellmanFordSingleSourceShortestPaths
 {
     
@@ -17,11 +18,15 @@ public class BellmanFordSingleSourceShortestPaths
         String distance = "DISTANCE";
         String previous = "PREVIOUS_VERTEX";
         
+        int startVertex = 1;
+        
+        
         // Why we do n -1 times loop over all edges?
         // Ans: Check the example run of algorithm in Algorithm design book
     
         for (Vertex vertex: directedGraph.getVertices()) {
-            vertex.updateProperty(distance, Integer.MAX_VALUE);
+            if(vertex.getNumber()!= startVertex)
+                vertex.updateProperty(distance, Integer.MAX_VALUE);
         }
         
         for (int i = 1; i <= directedGraph.getNumberOfVertices()-1 ; i++) {

@@ -118,4 +118,66 @@ Two Phase Commit
 
 
 
+The Two-Phase Commit (2PC) algorithm is a standard distributed protocol used to ensure atomicity across
+multiple participants in a distributed transaction. The goal is that
+all participants either commit the transaction (make their changes permanent) or abort (roll back their changes).
 
+
+The process is managed by a central coordinator and several participants (data resources or nodes).
+ It involves two distinct phases: the Prepare Phase (Phase 1) and the Commit Phase (Phase 2).
+
+Phase 1: The Prepare Phase (Voting Phase)
+-----------------------------------------
+The coordinator sends a "prepare" request to all participants to ensure
+they are ready to commit the transaction and can guarantee their ability to
+ make the changes permanent, even in the face of failure.
+
+What Happens in the Prepare Phase:
+
+    Coordinator Actions:
+        The coordinator sends a <PREPARE> message to all participants involved in the transaction.
+        It then waits for responses from all participants.
+
+    Participant Actions:
+
+        Upon receiving the <PREPARE> message, each participant performs the necessary actions to be ready to commit. This typically involves:
+            Ensuring the local transaction operations are completed.
+            Writing all transaction logs to stable storage (ensuring durability).
+            Acquiring all necessary local locks to isolate the transaction.
+            Crucially, the participant must guarantee it can complete the commit or abort process once it has voted "yes".
+
+        The participant then votes:
+            If ready to commit: The participant sends a <VOTE_COMMIT> (or "Yes") message back to the coordinator.
+            The participant is now in a "prepared" or "ready" state and must wait for the final decision from the coordinator.
+
+            If not ready: The participant sends a <VOTE_ABORT> (or "No") message back to the
+            coordinator and immediately rolls back its local transaction.
+
+Phase 2: The Commit Phase (Decision Phase)
+-----------------------------------------
+Based on the votes received in Phase 1, the coordinator makes the final decision on whether
+ to commit or abort the entire global transaction and broadcasts this decision to all participants.
+
+What Happens in the Commit Phase:
+
+    Coordinator Actions:
+        If all participants voted "Yes" (<VOTE_COMMIT>):
+            The coordinator decides to commit the transaction globally.
+            It records a "global commit" record in its own log and sends a <GLOBAL_COMMIT> message to all participants.
+        If any participant voted "No" (<VOTE_ABORT}), or a participant failed to respond:
+            The coordinator decides to abort the transaction globally.
+            It records a "global abort" record in its own log and sends a <GLOBAL_ABORT> message to all participants.
+    Participant Actions:
+        Upon receiving the coordinator's decision message:
+            If <GLOBAL_COMMIT> is received: The participant locally commits the transaction, makes
+                the changes permanent in the database, releases all held locks,
+                and sends a <ACK> (acknowledgment) back to the coordinator.
+            If <GLOBAL_ABORT> is received: The participant locally aborts/rolls back the transaction
+             (using the logs written in Phase 1), releases all held locks, and sends an <ACK> back to the coordinator.
+
+
+    Final Step: Once the coordinator receives acknowledgments (<ACK>) from all participants that
+    successfully processed the final decision, it considers the distributed transaction complete.
+
+
+  Reference:: https://www.google.com/search?client=firefox-b-1-d&q=what+is+automatic+transaction+in+Apache+Seata&udm=50&ved=2ahUKEwifnJjKq-6QAxXLmSYFHR93IDsQ0NsOegQIKRAA&aep=10&ntc=1&mstk=AUtExfAenOLkHYsPTZ06dh8nZ5Zm52zI-p9Rxpg2uYbx_aOBhlmizI7vRv9a1m-TzqmxRT-zksl5vN4ZKRYNzKqVzaEvxJ5Hyqr9e4hf8zLZ8n262PxKqABJrFFJqBt4o7XtDHHbU_wTPfmeocLoAGfYEbs9hkldGtOt02uX75op-rbaKrO1E7rnF-I6IKRVmh_WlINlVzbVyOZG6PfLBludHqadJwcUOIt_MRSmRDkCYUKDklyz2FK4H7mF7bd4cpvlVaEvT6Z0SSvwXlD7kevh2K3DaC2ftWJJUx51_pbjaSvH9NoXPy1anto9RRjmXRPTfhamjgO3pxv2yA&csuir=1&mtid=g2UVacH7F_O6qtsPq5KLwA8

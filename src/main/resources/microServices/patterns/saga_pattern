@@ -1,0 +1,113 @@
+Alex Wu, Vol-2, Digital Wallet. Page no: 354
+
+Implementation:
+===============
+    https://dev.to/yedf2/how-to-implement-saga-pattern-in-microservices-2gj3
+
+
+Coming Up with the Order of Transactions
+======================
+The order of transactions in a saga should follow the natural flow of the business
+ operation. The goal is to design the sequence such that updates in "less sensitive" or
+  "easily reversible" services happen before those in more critical services
+  (e.g., payment processing), if possible.
+
+    Model the business process:
+        Break down the overall business goal (e.g., placing an order) into a
+        sequence of local transactions, each handled by a specific microservice.
+
+    Identify dependencies:
+        Order the steps based on dependencies. For example,
+        you cannot process a payment until an order is created,
+        and you cannot ship an order until inventory is reserved and payment is confirmed.
+
+    Prioritize easy reversals:
+            Where feasible, structure the sequence so that actions
+            which are difficult to compensate for (like physical shipping) occur
+            later in the saga, after the more easily reversible digital actions (like database status updates).
+        Example (E-commerce):
+            Order Service: Creates an order with PENDING status.
+            Payment Service: Processes the payment.
+            Inventory Service: Reserves items in stock.
+            Shipping Service: Schedules the shipment and updates order status to COMPLETED
+
+Defining Compensatory Steps in Case of Failures
+===============================================
+Each forward step (local transaction) that modifies data within a service must have a
+corresponding compensating transaction that semantically undoes the changes made by the preceding step.
+
+    Define a specific action for each step: For every action, define its exact reversal.
+
+    Compensate in reverse order:
+        When a failure occurs at a specific step, the saga must execute the
+        compensating transactions for all previously completed steps in the
+        reverse order of their original execution.
+
+    Not all steps need compensation:
+        Read-only operations or operations that are naturally idempotent
+        and can be retried without side effects may not require explicit
+        compensating actions.
+
+      Example (E-commerce Failure at Shipping Service): If the Shipping Service fails,
+            the following compensation sequence would be triggered:
+
+
+        Inventory Service: Release Inventory (compensates for Reserve Inventory).
+        Payment Service: Refund Payment (compensates for Process Payment).
+        Order Service: Cancel Order (compensates for Create Order).
+
+
+Coordination Approach
+======================
+The strategy for ordering and managing compensation depends on the chosen saga implementation:
+
+    Orchestration:
+          A central orchestrator service defines the workflow,
+          the order of steps, and the explicit compensating actions
+          for each potential failure. This provides a clear, centralized
+          view of the entire process.
+
+    Choreography:
+          Services communicate via events, and each service
+          knows which event to publish next or which compensating action
+          to perform based on a failure event it receives. This approach
+          is more distributed but can be harder to monitor and manage.
+
+Modeling the entire process using a state machine can be helpful for visualization
+and ensuring all success and failure paths (including human intervention for
+unrecoverable errors) are covered
+
+
+
+General-Purpose Saga Frameworks
+================================
+    Axon Framework (Java):
+            A popular choice for building event-driven microservices
+            that supports both command-based and event-based sagas.
+            It integrates well with Spring Boot applications.
+
+    Eventuate Tram Sagas (Java, Spring Boot, Micronaut):
+            Specifically designed for microservices using the "database per service" pattern,
+            providing an orchestration framework built on the Eventuate Tram core messaging library.
+
+    Apache Seata (Java, Go, C++):
+            An open-source distributed transaction solution, originally developed
+            by Alibaba, which supports multiple transaction modes including the Saga
+            pattern, TCC (Try-Confirm-Cancel), and AT (Automatic Transaction).
+
+    Temporal:
+              A more modern, general-purpose platform for building reliable,
+              durable, and scalable applications. It treats sagas as long-running,
+              fault-tolerant workflows (called "Workflows" in Temporal terminology).
+
+    Eclipse MicroProfile LRA (Long Running Actions):
+            An implementation of distributed
+            transactions in the Saga style for HTTP transport, based on REST principles.
+
+Workflow & Integration Frameworks (Orchestration)
+==================================================
+    Camunda (Java): A framework utilizing BPMN for workflow automation and managing saga orchestrators.
+
+    Apache Camel: An integration framework supporting the Saga Enterprise Integration Pattern (EIP) to define actions and compensations.
+
+    Netflix Conductor: A workflow system previously used internally by Netflix, although it is no longer actively maintained by them.

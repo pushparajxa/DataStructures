@@ -41,14 +41,17 @@ Data partitioning options
 
   Bridge
   -------
-    – A second approach to partition tenant data is to share the same database instance but use a different schema for each tenant. The model can have cost savings due to resource sharing, but the maintenance and tenant setup can be quite complicated.
+    – A second approach to partition tenant data is to share the same database instance but use a different schema for each tenant. The model can have cost savings due to resource sharing,
+     but the maintenance and tenant setup can be quite complicated.
 
 
   Pool
   -----
     – The third partitioning model uses both a shared database instance and namespace. In this
 design, all tenant data sits side-by-side, but each table or view contains a partitioning key (usually the tenant identifier), which you use to filter the data.
-A pooled model saves the most on operational costs and reduces your infrastructure code and maintenance overhead. However, this model can be more difficult to enforce your data access policies, and is commonly implemented by hoping the correct WHERE clause is implemented in every SQL statement.
+A pooled model saves the most on operational costs and reduces your infrastructure code and maintenance overhead.
+However, this model can be more difficult to enforce your data access policies, and is commonly implemented by hoping the correct
+ WHERE clause is implemented in every SQL statement.
 
 
 

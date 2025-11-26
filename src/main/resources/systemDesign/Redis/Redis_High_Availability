@@ -20,11 +20,34 @@ Master - Replica Model
 
 Sentinel Model
 ==============
+Redis Sentinel provides high availability for Redis when not using Redis Cluster. It is a tool that provides the automatic failover
+in a setup of 1 master and N replicas.
 
   # Reference:
     - https://redis.io/learn/operate/redis-at-scale/high-availability/understanding-sentinels
 
 
+
+Redis Cluster master-replica model
+===================================
+To remain available when a subset of master nodes are failing or are not able to communicate with the majority of nodes,
+Redis Cluster uses a master-replica model where every hash slot has from 1 (the master itself) to N replicas (N-1 additional replica nodes).
+
+In our example cluster with nodes A, B, C, if node B fails the cluster is not able to continue, since we no longer have a
+ way to serve hash slots in the range 5501-11000.
+
+However, when the cluster is created (or at a later time), we add a replica node to every master, so that the final cluster is
+ composed of A, B, C that are master nodes, and A1, B1, C1 that are replica nodes. This way, the system can continue if node B fails.
+
+Node B1 replicates B, and B fails, the cluster will promote node B1 as the new master and will continue to operate correctly.
+
+However, note that if nodes B and B1 fail at the same time, Redis Cluster will not be able to continue to operate.
+
+  Referece:: https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/
+
+  Redis cluster doesn't offer strong consistency even when WAIT command is used.
+
+  Reference:: https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/#redis-cluster-consistency-guarantees
 
 Redis Cluster with hash slots
 =============================

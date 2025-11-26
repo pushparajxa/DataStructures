@@ -101,7 +101,7 @@
                     // Track the offset
                     offsets.put(new TopicPartition(record.topic(), record.partition()),
                                 new OffsetAndMetadata(record.offset() + 1));
-                }
+                }F
 
                 // Send offsets to the transaction
                 producer.sendOffsetsToTransaction(offsets, "consumer-group");
@@ -130,3 +130,100 @@
 
 # Reference:
   - ChatGPT: https://chatgpt.com/share/4e97c0a3-b6ae-41ef-875a-a1a4b223af08
+
+
+Implementation details of Kafka transactions
+=============================================
+
+nternally, the
+Kafka brokers implement exactly-once semantics through careful design of the storage layer and the introduction of new components:
+the Transaction Coordinator and the use of the Transaction Log (an internal Kafka topic).
+
+1. Broker-side for Idempotent Producers
+
+For idempotent producers, the broker's primary role is to track and filter duplicate
+messages based on unique identifiers.
+
+    PID (Producer ID) Management:
+          When an idempotent producer starts, it sends an InitProducerId request to the broker.
+          A designated broker (acting as the transaction coordinator, even for just idempotence) assigns a unique,
+          long-lived PID to the producer session.
+
+    Sequence Number Tracking:
+          Each broker's partition leader maintains a state for every active PID writing to it.
+           This state includes the last sequence number successfully written to the log for that PID and partition.
+           This information is stored durably in an internal snapshot file (.snapshot).
+
+    Duplicate Detection:
+          When a producer sends a batch of messages, it includes its PID and the sequence numbers
+          for that batch. The broker checks the incoming sequence number against the last one stored.
+
+          -> If the incoming sequence number is exactly one greater than the stored one, the broker
+          accepts the request and
+           appends the messages to the partition log.
+
+         ->  If the sequence number is less than or equal to the stored one, the broker detects
+           it as a duplicate (due to a producer retry) and discards the message batch without writing it
+           to the log, while still sending back a success acknowledgment to the producer.
+
+         ->  If the sequence number is significantly larger, it indicates out-of-order delivery, and
+          the broker may reject the request.
+
+    Durability:
+          The producer state (PID, epoch, last sequence number) is persisted to disk to
+          survive broker restarts. On restart, the broker rebuilds its in-memory state from these logs and snapshots,
+          ensuring that idempotence guarantees are maintained even if the broker fails.
+
+
+2. Broker-side for Transactional Producers and Atomic Commits
+    Transactions involve coordination across potentially multiple topic partitions
+     and use a two-phase commit protocol managed by a specialized component.
+
+    Transaction Coordinator: Every Kafka broker runs a TransactionCoordinator module.
+      Each transactional.id is mapped to a specific partition of an internal Kafka topic
+      called the __transaction_state (or transaction log) using a hash function. The broker that
+      is the leader for that partition is the coordinator for that specific transactional.id.
+
+
+    Transaction Log: The transaction log stores the current state of all ongoing
+        transactions (e.g., Ongoing, PrepareCommit, CompleteCommit). This log
+        is highly available and replicated like any other Kafka topic, providing durability for transaction state.
+
+
+    Two-Phase Commit Protocol:
+
+        Producer Registration: The producer first registers its transactional.id with its
+              assigned coordinator. The coordinator uses an epoch to prevent "zombie" producer instances
+              from interfering with the current one.
+
+        Message Production: Messages are sent to the respective partition leaders. Each message in a
+        transaction is marked internally as belonging to an open transaction. The data is written
+        to the topic-partitions immediately, but it is not yet visible to read_committed consumers.
+        The list of partitions involved in the transaction is tracked in the transaction log.
+
+        Phase 1 (Prepare Commit): When the producer calls commitTransaction(), the coordinator
+        updates the state in the transaction log to PrepareCommit. Once this is logged and replicated,
+        the transaction is guaranteed to be committed, regardless of further failures.
+
+        Phase 2 (Write Markers): The coordinator then writes a special "commit marker"
+        (or "abort marker" if aborted) to all topic partitions that were part of the transaction.
+        These markers are control messages that consumers use for filtering.
+
+        Complete Transaction: Once all markers are written, the coordinator updates the
+        transaction state in the transaction log to CompleteCommit.
+        The producer can now start a new transaction.
+
+3. Broker-side for Consumers (read_committed)
+
+    Filtering Logic:
+        Consumers configured with isolation.level=read_committed are aware of these transaction
+        markers. When a broker receives a Fetch request from such a consumer, the broker's
+        response logic filters out messages belonging to open transactions (those without a commit/abort marker)
+        and messages from aborted transactions. Only messages with a commit marker, or
+        non-transactional messages, are returned to the
+        consumer.
+
+
+### Reference:
+
+https://www.google.com/search?client=firefox-b-1-d&q=how+apache+kafka+implemented+exactly+once+semantics%3F&udm=50&ved=2ahUKEwj4vPiOle2QAxU56ckDHYnRALoQ0NsOegQIAxAB&aep=10&ntc=1&mstk=AUtExfBCjRkLDhYMYy9E_oDTIhEX5RXwvqWXlj3jnWpLaiEfhDac58atWnO-cuavM20cC4Ug5Z13EjW0oYazGvfx7Q3ThqE_3qJSQH81tBcfdz_2VhJhsA9E4A5BEOfA9rWIlhDIynZxitxdlGxTRCEM2olf4Pbad_cvzYQUaGqmDs5VqprA5cHZOxIpUcoiMyBcFY9-bkqlzP0HdbGCSy5TBJxONBT3PuX8K3ma-wYyXt8zGBD_WwjQXx-jDsqgEEyBBOROx1AbTJh0C8OUUMPO8-gMb3R-tC7TfbaWXl-lDO3Q9HytnqbWoswepBw3oRb7yYcXql2RYwxz-Q&csuir=1&mtid=2scUaeiVE4HHp84Pso6cmA4
