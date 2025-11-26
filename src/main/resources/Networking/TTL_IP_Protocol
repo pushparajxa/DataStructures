@@ -1,0 +1,44 @@
+The Time-to-Live (TTL) field is an 8-bit field in the Internet Protocol version 4 (IPv4) header that
+ serves a critical function: preventing data packets from circulating indefinitely on a network.
+The TTL acts as a counter or a "hop limit" for the packet's lifespan.
+
+
+How the TTL Field Works
+
+    Initial Value:
+          When a host sends an IP packet, it sets the TTL field to an initial numerical
+          value (often 64, 128, or 255, depending on the operating system).
+
+    Decrementing at Routers:
+          Every time the packet passes through a router (a "hop") on its journey,
+          the router decrements the TTL value by at least 1.
+
+    Expiration and Discarding:
+          If a router receives a packet with a TTL of 1, it decrements it to 0,
+          and then discards the packet immediately.
+
+    ICMP Error Message:
+          When a router discards a packet due to an expired TTL, it typically sends
+          an ICMP "Time Exceeded" message back to the original source IP address.
+
+Purpose and Importance
+    The primary purpose of the TTL is to prevent network loops. If a router fails or a routing
+    table is incorrectly configured, packets could theoretically bounce back and forth between
+     routers forever, consuming bandwidth and system resources.
+    By forcing packets to expire after a certain number of hops, the TTL ensures that
+    the network clears looped packets efficiently.
+
+Role in the traceroute Command
+    The traceroute command specifically manipulates the TTL field to function.
+     It sends packets with TTLs of 1, 2, 3, and so on,
+    forcing each successive router along the path to discard the packet and send back the necessary
+    "Time Exceeded" ICMP message that identifies the router's IP address and measures the RTT (Round-Trip Time).
+
+The IPv6 Equivalent: "Hop Limit"
+    In the modern IPv6 protocol, the TTL field has been renamed to the "Hop Limit" field.
+    It performs the exact same function as TTL, but the name change clarifies that the counter refers strictly to the number of
+    hops (routers visited) and has nothing to do with time measurements.
+
+
+Reference::
+   https://www.google.com/search?q=tcplife%2C+tcpretrans%2C+udpconnect+commands+and+their+usage+scenarios&client=firefox-b-1-d&sca_esv=170749da7b18780d&sxsrf=AE3TifMthZGh9Mwi7idom_iIzz65BAnldA%3A1763691997381&ei=3c0faZ2BF4e7qtsP0Ym5iQM&ved=2ahUKEwiImt3gmIKRAxX9mGoFHarpLZ4Q0NsOegQIAxAB&uact=5&sclient=gws-wiz-serp&udm=50&fbs=AIIjpHxU7SXXniUZfeShr2fp4giZ1Y6MJ25_tmWITc7uy4KIeiAkWG4OlBE2zyCTMjPbGmMU8EWskMk2JSE__efdUJ3xRFvZ0M2vJLB0hUMk5HOE2LIh0lYoQhkqi8VHGoz9929jVmtFQ7ktivkBytrPl89EzjvEpTWsDR0N162q3FY5rMfOGvP-aQ8xa_WGLQJn96vUiPujpyZ5FJfr_klrcrVALaCG8A&aep=10&ntc=1&mstk=AUtExfAybWNfTQisDmfFE2xn3gcK35oyav7cW3NPwKUwq75XmtUXY4lS_jiG6pT5VNVcIOdv4gGP5LM_RaiqB5t1WLHV9B5wLdfJr6FqDgh7um53Nq85Yf7hi_aOAEZeh9Ctj__lKaV7UyBOCG6eU-_j1R6KVLnmk63IplCrWsl6hAyuRCpiNptBlfFSx7YyCtieIwyniyYKHNY_5ECZhfTQRPWbez2_EWsUCTWUZrc_ZGx18gKz8zJiG4CBvzIRASGRan4RbkBbHuACs9jOk-NFm2AlVZbT6nVHpIiapXx07pCUnqtyDb_aTdhr2qbAlBOuG64VIhKY7v23hw&csuir=1&mtid=Ks4faZ2BFYG4mtkP7ZDakA4
