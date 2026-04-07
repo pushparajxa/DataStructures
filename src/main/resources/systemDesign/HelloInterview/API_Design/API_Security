@@ -1,0 +1,57 @@
+API_Security
+------------
+
+@auth: admin     --> Indicates that this endpoint requires authentication and only admin can invoke
+this endpoint.
+
+POST /events
+
+JWT(Json Web Token) - Encodes user data and permissions directly into a signed token
+Session token - A random token which is used to find user info server side
+
+ Both JWT and session token are used fr authentication.
+
+
+POST /tweets
+{
+  text,
+  userId ---> Do not use userId since it is already gotten from authentication
+}
+
+
+Session Tokens (Stateful)
+--------------------------
+  In this traditional approach, the server creates and manages a record for each user who logs in.
+
+    Storage:
+          The server stores session data (e.g., in a database or Redis),
+          while the client only stores a unique session ID in a cookie.
+
+    Control:
+        Revoking access is easy because the server can simply delete the session record from its database.
+
+    Best For:
+        Monolithic applications, traditional web apps, and systems requiring immediate logout capability.
+
+    Process:
+       When you log in, the server validates your credentials and generates a unique session ID.
+       It then includes this ID in the response headers like this: Set-Cookie: sessionId=abc123xyz; HttpOnly; Secure.
+
+JWT (Stateless)
+---------------
+   JWTs are self-contained tokens that carry user information directly within the token itself.
+
+    Storage:
+          The server does not store session data; instead, it signs the token and sends it to
+          the client. The client stores the token (e.g., in localStorage or a cookie) and sends it with every request.
+
+    Scalability:
+          Because no server-side lookup is needed, JWTs are highly scalable
+          and ideal for distributed systems.
+
+    Revocation:
+          Revoking a JWT before it expires is difficult since the token is valid as long as
+          its signature is verified and the expiration time hasn't passed.
+
+    Best For: Microservices, mobile apps, Single Page Applications (SPAs), and public APIs.
+

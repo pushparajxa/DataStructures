@@ -144,6 +144,34 @@ HTTP 1.1
           Response ETag: The server generates an ETag when sending a response. This tag reflects the current version of the resource.
           Request ETag: The client can include the If-None-Match header in subsequent requests to check if the resource has changed.
 
+
+          The If-None-Match request header is included by the client to indicate that the server is only to complete the HTTP request
+          if none of the specified HTTP ETag headers match. In the case of safe methods, HTTP GET and HTTP HEAD, the resource will only be
+           returned if one of the specified HTTP ETag headers matches. Otherwise, the server will return the HTTP 304 Not Modified status code.
+
+          When the server returns the HTTP 304 Not Modified status code, it must include appropriate HTTP headers following wh
+          at is sent had the HTTP response succeeded and resulted in an HTTP 200 OK status code. Specifically,
+          it must include one of the following HTTP headers: Cache-Control, Content-Location, Date, ETag, Expires, or Vary.
+
+          A common use of If-None-Match is to update a local cache for resources obtained using HTTP GET or HTTP HEAD.
+          For unsafe methods such as HTTP PUT, this can be used to ensure that an existing file is not being
+           overwritten, resulting in the lost update problem.
+
+          The only directive is the ETag value. Multiple HTTP ETag headers can be specified on
+          different lines or instead as a comma-delimited list on a single line.
+           Including the asterisk * acts as a wildcard, meaning that every resource matches.
+
+          Example::
+
+          Request
+
+           If-None-Match: "1234567890"
+
+            In this example, the HTTP request will only be processed if the ETag does not match one that is already on the server.
+
+           Reference:: https://http.dev/if-none-match
+
+
       Example of ETag in Request:
       -----------------
         HTTP/1.1 200 OK

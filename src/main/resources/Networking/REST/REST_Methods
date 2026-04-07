@@ -82,6 +82,12 @@ POST : Used to create a resource
  - This is not idempotent. Calling POST n times will create n resources
  - We should not include a resource that doesn't exist already in the URL.
  - We use this to create new resources given that resource id is specified.
+ - When length of GET URL goes beyound 2000/4096 characters, use POST as it supports larger payload
+   size.
+      Use POST for Large Data: If you need to send a large amount of data
+      (e.g., many filter parameters, a large list of IDs), use an HTTP POST request
+      instead of GET. POST requests place data in the request body, which has a much
+      larger limit (often several megabytes, depending on server configuration).
 
 
    Note that the following is an error:
@@ -109,6 +115,45 @@ Reference:
 
 While chossing between POST and PUT, think in terms of idempotency. PUT operations must be
 idempotent.
+
+
+GET
+===========
+   Path parameters:
+   ----------------
+
+     GET: events/{id} (Use this when you must id to get the events you want)
+
+   Query Parameters:
+   ----------------
+        (Use query parameters when you need to filter the data. In this we want to
+         filter events by city and date. Someone might make a request to get all the events with just
+         city.)
+
+     GET: events?city=LA&date=2025-01-01
+
+
+
+
+Idempotent Verbs
+----------------
+  --> PUT
+  --> OPTIONS (also safe)
+  --> HEAD (also safe)
+  --> DELETE
+       Idempotency in the context of HTTP refers to the intended effect on the server, not the response code returned to the client
+
+           Same Server State:
+                    The effect of a single DELETE request is that the resource is removed.
+                    If you send the exact same DELETE request multiple times, the final state of the server remains the same: the resource is deleted (or remains deleted).
+
+           Different Responses are Acceptable:
+                  The first DELETE request might successfully return a 200 OK or 204 No Content,
+                   while subsequent identical requests may return a 404 Not Found because the resource is already gone. The varying response
+                    codes do not break the idempotency principle because the end result on the server is the same
+
+   Safe:: meaning it is designed only to retrieve metadata (headers) about a resource without
+   modifying the server state. PUT and DELETE changes the server state.
 
 
 Updating a value RESTfully with POST vs PUT

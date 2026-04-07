@@ -1,0 +1,18 @@
+service TicketService {
+  rpc GetEvent (GetEventRequest) returns (Event);
+  rpc CreateBooking(CreateBookingRequest) returns (Booking);
+  rpc GetAvailableTickets(GetTicketsRequest) returns (TicketList);
+}
+
+
+message GetEventRequest {
+  string event_id = 1;
+}
+
+
+message Event {
+  string id = 1;
+  string name = 2;
+  int64 date = 3;
+  Venue venue = 4;
+}

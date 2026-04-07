@@ -1,0 +1,81 @@
+
+fetch.max.bytes:
+----------------
+    The fetch.max.bytes configuration in Apache Kafka is a consumer-level setting that defines the
+    maximum amount of data in bytes that the broker will return in a single fetch request.
+
+
+
+
+  max.partition.fetch.bytes:
+  --------------------------
+        This is the total limit for the entire fetch request (across all partitions),
+        while max.partition.fetch.bytes (default 1 MiB) sets the limit for data fetched from any single partition within that request.
+        The max.partition.fetch.bytes value should always be at least as large as the broker's message.max.bytes setting to prevent issues
+
+
+  Broker Interaction:
+  -------------------
+      This is a consumer parameter, but a corresponding broker setting
+      also exists. If you increase the consumer's fetch.max.bytes but the
+      broker's limit (e.g., in Kafka Bridge configuration, it might be tied to
+      a broker-side limit) is lower, the lower limit will take precedence
+
+The ordering is rather complicated. Here is how it works for Kafka 2.6:
+
+    * when you assign topic partitions to a consumer, those will be kept in a hash table, therefore
+      the order will be stable, but not necessarily the one you used
+    * when you call Consumer.poll(N) it returns all the enqueued messages, but at most max.poll
+      .records (see below)
+    * when nothing is enqueued, all the topic partitions you assigned, are partitioned per Kafka
+      node, where the leader of that topic-partition resides
+
+    * each of those lists is sent to each respective nodes in a fetch request
+
+    * each node will return at most fetch.max.bytes (or at least one message if available)
+
+    * the node will fill those bytes with messages from the requested partitions, always starting
+       with the first
+
+    * if there are no more messages in the current partition left, but there are still bytes to
+      fill, it will move to the next partition, until there are no more messages or the buffer is full
+
+    * the node can also decide to stop using the current partition and continue with the next one,
+      even if there are still messages available in the current one
+
+    * after the client/consumer receives the buffer, it will split it into CompletedFetches, where
+      one CompletedFetch contains exactly all the messages of one topic partition from the buffer
+
+    * those CompletedFetches are enqueued (they may contain 0 message or 1000 or more). There will
+      be one CompletedFetch for every requested topic partition
+
+   * since all the requests to the nodes are run in parallel, but there is only one queue, the
+     CompletedFetches/topic partitions may be mixed up in the final result as opposed to the original assignment order
+
+   * the enqueued CompletedFetches are logically flattened into one big queue
+
+   * Consumer.poll(N) will read and dequeue at most max.poll.records from that flattened big queue
+
+   * before the records are returned to the caller of poll, another fetch request to all nodes is
+     started, but this time, all the topic partitions that are already in the flattened queue are excluded
+
+   * this holds for all future poll calls
+
+In practice that means that you'll have no starving, but you may have a large number of
+messages from one topic, before you'll get a large number of messages for the next topic.
+
+In tests with a message size of 10 bytes, there were around 58000 messages read from one topic,
+ before roughly the same amount was read from the next.
+
+All topics were prefilled with 1 million messages.
+
+Therefore you'll have a kind of batched round robin.
+                        ----------------------------
+
+
+## Reference:
+  -- https://stackoverflow.com/questions/53149012/order-of-receiving-messages-if-kafka-consumer-subscribes-to-multiple-topics
+
+  -- https://www.google.com/search?client=firefox-b-1-d&q=kafka+fetch.max.bytes
+
+  -- https://www.google.com/search?client=firefox-b-1-d&q=kafka+fetch.max.bytes&fbs=ADc_l-aN0CWEZBOHjofHoaMMDiKpaEWjvZ2Py1XXV8d8KvlI3p-ML-906rRL_m6h4jR-tdCH-vUIlZq9RzugLEcfjf51b4dfDKizXS4hTwRCZW2TydVcnv1RUVx0SX0axPgL6aBqzWLqM7Fgdp1vAJL9RWZPIc2PHUY9zbtbj_6P9oDRDl5qriFVIJfnTEOneZ1ow892J3CE1uHNREFxoOuMyUb1ThO7uA&ved=2ahUKEwjjhczrl6-TAxWYkWoFHWgjDlkQ0NsOegQIAxAA&aep=10&ntc=1&mstk=AUtExfDdPQSwDWTGZzje6OqgkKNiNzaRf_zi1zxtt0eHx8aC5XwuLJmVfYdZ0loY6b4nOVHgQq_xB3mWf4TMmHqDelNxiTCWtmX28djV57Eui3_9HjFW0gC-8M39VhrOHYADW0MRwa-26OcXDwNmOQ3-YTZceYtz64p-cM3K1kv473GLLWrviY4aPHg8AJKDjOD89x8xtEvsRr51tB9GIEtbtgpH7kpvpBn8HgBghzZ6MOjLgME824Eqh6f66ZA6xUZ0-SSySMKCdIDYpbxKH_YFgZAAwxhDmEbVXVNqEf_dNuPDXlgKK66yGSEf6es-dPmMbilfTEA8emkffw&csuir=1&mtid=WJ29adKpH5-kqtsPkt7fiQY&udm=50

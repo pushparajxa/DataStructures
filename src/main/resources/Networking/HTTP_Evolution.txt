@@ -1,0 +1,271 @@
+HTTP/1.1
+========
+   --> Max 2 connections to a domain but most browsers ignore this and allow 6 simultaneous requests per domain.
+   --> It has head of line blocking issue 
+   --> Domain Sharding && Why it opens paralalle connections
+   
+       As an HTTP/1.x connection is serializing requests, even without any ordering,
+	   it can't be optimal without large enough available bandwidth. As a solution,
+	   browsers open several connections to each domain, sending parallel requests.
+	   Default was once 2 to 3 connections, but this has now increased to a more 
+	   common use of 6 parallel connections. There is a risk of triggering DoS 
+	   protection on the server side if attempting more than this number.
+
+	   If the server wishes a faster website or application response, 
+	   it is possible for the server to force the opening of more connections. 
+	   For example, instead of having all resources on the same domain, 
+	   say www.example.com, it could split over several domains, www1.example.com, 
+	   www2.example.com, www3.example.com. Each of these domains resolves to the 
+	   same server, and the Web browser will open 6 connections to each 
+	   (in our example, boosting the connections to 18).
+	   This technique is called domain sharding.
+	   
+   --> Pipelining
+	   By default, HTTP requests are issued sequentially. The next request is 
+	   only issued once the response to the current request has been received. 
+	   As they are affected by network latencies and bandwidth limitations, 
+	   this can result in significant delay before the next request is seen by the server.
+
+	   Pipelining is the process to send successive requests, 
+	   over the same persistent connection, without waiting for the answer.	
+   
+   
+   --> How HOL Blocking Persists with Pipelining
+   
+	   Strict Response Ordering: 
+	   - - - - - - - - - - - -
+			The HTTP/1.1 standard requires the server to send responses in the 
+			exact same order the requests were received.
+			
+			Why responses must come back in order?
+			- - - - - - - - - - - - - - - - - - -
+			   Because there is no identifier in the response indicating to 
+			   which request it belongs. HTTP/2 solves this with stream identifiers.
+			   https://www.rfc-editor.org/rfc/rfc7540#section-5.1.1
+
+			
+	   Lack of Multiplexing:
+	   - - - - - - - - - - - 	
+		Unlike HTTP/2, HTTP/1.1 does not have a way to "tag" data chunks (frames) to 
+		tell the client which response a specific piece of data belongs to.
+		
+		
+	   The "Slow Response" Bottleneck: 
+	   - - - - - - - - - - - - - - - -
+	   If the first request in a pipeline is for a large file (like a video) or 
+	   a slow-to-generate resource (like a complex database query), the server must finish 
+	   sending that entire response before it can start sending the next one.
+		
+		Example: If you request A, B, and C in that order, and A is a massive image 
+		while B and C are tiny text files, the browser cannot receive B or C 
+		until the server has pushed every byte of A.
+
+	   Network Interruptions:
+       - - - - - - - - - - - -	   
+	   If a single TCP packet for the first response is lost or delayed, the entire 
+	   pipeline stops. The TCP layer must retransmit that specific packet before 
+	   the application can "see" any subsequent data, even if the data for the next 
+	   responses has already arrived. 
+
+
+	--> HTTP/1.1 Streams::
+	    - - - - - - - - -
+		Transfer-Encoding: 
+			chunked was introduced in HTTP/1.1 to allow "streaming" of a single 
+			resource when its total size is unknown at the start (e.g., a live database report or a video). 
+
+			How it works:
+				Instead of a Content-Length header, the server sends the data 
+				in a series of chunks. Each chunk is prefixed by its size in hexadecimal, 
+				and the stream ends with a final "0-size" chunk.
+				
+				
+			The Limitation: 
+				While this allows a single file to be sent piece-by-piece, 
+				it does not change the sequential nature of the connection. 
+				The "pipe" is still occupied by that one file until the 
+				final 0-size chunk arrives. 
+
+			How it Fails to Solve HOL Blocking:
+				Head-of-Line (HOL) blocking persists because HTTP/1.1 lacks multiplexing. 
+
+					No Interleaving: 
+						Even with chunked encoding, a server cannot pause 
+						"Chunk 2" of a large video to quickly send a small "CSS file" 
+						in the middle. It must finish every chunk of the first resource 
+						before it can start the next one.
+						
+						
+					Pipelining Failure: 
+						While "pipelining" lets a client send multiple requests 
+						at once, the server is still legally required to return the 
+						responses in the exact same order they were requested.
+						
+					Result:
+						A single slow response at the "head" of the line blocks 
+						everything behind it, regardless of whether chunked 
+						encoding is used. 
+
+				In contrast, HTTP/2 uses a binary framing layer to "tag" frames with a 
+				Stream ID, allowing it to mix and match chunks from different files 
+				simultaneously on the same connection.
+
+   
+HTTP/2
+======
+   ---> No HOL at application level like HTTP/1.1 but HOL at TCP level
+   ---> Uses only single connections.
+   ---> Uses streams to send multiple parallel requests
+   ---> Binary format transmission unlike HTTP/1.1
+   ---> What are streams? In HTTP/2 each request is a stream?
+		- - - - - - - - - - - - - - - - - - - - - - - - - - -
+		Multiplexing:
+			Multiple streams can exist concurrently over a single TCP connection, 
+			allowing for parallel requests and responses without head-of-line 
+			blocking at the application layer.
+		
+		Bidirectional Flow:
+			A stream is a bidirectional flow of binary-encoded frames 
+			between the client and the server.
+			
+		Unique Identifier: 
+			Each stream is assigned a unique integer identifier. 
+			Streams initiated by the client use odd numbers, while 
+			server-initiated streams (for Server Push) use even numbers.
+			
+		Frames:
+			Logical HTTP messages (requests or responses) are broken down into 
+			smaller units called frames. Each frame includes a stream identifier 
+			in its header, allowing the receiving endpoint to reassemble the frames 
+			into the correct message, even if frames from different streams are 
+			interleaved on the wire.
+			
+		Prioritization:
+			Streams can be prioritized using weights and dependencies, 
+			allowing clients and servers to optimize the delivery 
+			order of important resources for better performance.
+			
+		Lifecycle:
+			A stream is used for a single HTTP request/response exchange 
+			and then closed; stream identifiers cannot be reused within the same connection.
+			
+	--> Why HTTP/2 can't solve TCP HOL by creating new connections?
+		
+			Opening multiple TCP connections has several performance costs that HTTP/2 tries to avoid: 
+
+				Handshake Overhead: 
+					Each new TCP connection requires a three-way handshake and 
+					a TLS handshake, adding latency.
+					
+				TCP Slow Start: 
+					New connections start sending data slowly to 
+					avoid network congestion. One long-lived connection 
+					stays in a "warm" 	state, allowing it to use maximum available 
+					bandwidth immediately.
+					
+				Resource Heavy: 
+					Maintaining many open connections consumes more memory and 
+					CPU on both the client and the server.  
+		 
+		 
+	References:
+    - - - - - 
+		https://www.google.com/search?q=how+many+persistent+connections+can+be+mady+a+client+to+server+in+HTTP%2F1.1+and+HTTP%2F2&rlz=1C1GCFA_enUS1134US1135&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIHCAEQIRiPAtIBCTMxMjk1ajBqN6gCALACAA&sourceid=chrome&ie=UTF-8&udm=50&fbs=ADc_l-aN0CWEZBOHjofHoaMMDiKp9lEhFAN_4ain3HSNQWw-mI4C1ELY88XaJ57aZGHEMB2MFGv1IWRDzqHU7Je8enJ5m6ozCSWTCL4PgTtVyc5w3QIog-iO7-u85hE7dlOo99jBIeOkUMT8nwjxQPdXb4MRgwCFQpJHjGDJhUfZexvpZD82CAIr9P0DQ-3hNW5gegHLBGvestT3QFsTqsp4-pHDD1Q9Vg&ved=2ahUKEwifxYOn6-iSAxXGEmIAHYq1BuAQ0NsOegQIAxAB&aep=10&ntc=1&mstk=AUtExfCUlg8XwMVpQ5qAUeBpBkSaCBhFHoyt7PDSQ9K0rmzQ8i0E-Z5xelp7aUSuuk7EZr8HS728Juw18X0kwLxwfTlwvyDNGecZZ0-_9mqnLtUcsWXQHoL2JS3b4JvGpiJoJxTbWnLvExREaihDhFfGXaAvh5vbAQvkSoQ&csuir=1
+
+	
+HTTP/3
+======
+  ----> Uses UDP instead of TCP, because of which HOL at transport layer is also goone. 
+
+
+Head-of-line blocking
+=======================
+	In computer networking, head-of-line blocking (HOL blocking) refers to a 
+	performance bottleneck that occurs when a queue of packets is held up by the 
+	first packet in the queue, even though other packets in the queue could be processed.
+
+	In HTTP/1.1, requests on a single TCP connection are usually sent sequentially 
+	— a new request can't be made on the connection while waiting for a response to the
+	 previous request. This can lead to HOL blocking problems even if there are several 
+	 TCP connections between the client and server.
+
+	HTTP/1.1 defines an optional feature called HTTP pipelining that 
+	unsuccessfully attempted to work around HOL blocking, by allowing 
+	requests to be sent without waiting for earlier responses. Unfortunately 
+	the design of HTTP/1.1 means that responses must be returned in the
+	 same order as the requests were received, so HOL blocking can still 
+	 occur if a request takes a long time to complete. Network conditions
+	 such as congestion, packet loss (and the resulting TCP retransmissions),
+	 or TCP slow start can also delay transmission and cause later responses 
+	 to be blocked by earlier ones.
+
+	HTTP/2 reduces application-level HOL blocking by introducing request 
+	and response multiplexing. With this feature multiple requests and responses 
+	can be interleaved over a single TCP connection using independently numbered 
+	streams, and stream prioritization helps the server decide which streams to 
+	send first. Packet loss at the transport layer can still cause HOL blocking 
+	across streams because HTTP/2 runs over TCP — a lost TCP segment can stall 
+	all streams carried on that connection until the lost data is retransmitted.
+
+	HTTP/3 eliminates the transport-layer head-of-line blocking by using QUIC 
+	over UDP and thus HOL problem on HTTP no longer exists. QUIC provides 
+	multiple independent streams with per-stream loss recovery, so packet 
+	loss affects only the stream where it occurs rather than the entire 
+	connection. This removes the TCP-level HOL problem.
+
+
+	Reference: https://developer.mozilla.org/en-US/docs/Glossary/Head_of_line_blocking
+  
+
+TCP HOL
+=======
+
+TCP head-of-line (HOL) blocking is a performance bottleneck where a lost or delayed
+ packet stops the entire stream, forcing subsequent, perfectly fine packets to wait. 
+ Because TCP ensures strict, ordered delivery, a single missing packet at the 
+ front of the queue stalls data processing, leading to higher latency and reduced 
+ throughput, a limitation often addressed by HTTP/3 via QUIC. 
+
+
+	Key Aspects of TCP HOL Blocking:
+    ###############################
+	
+		Ordered Delivery Penalty: 
+        - - - - - - - - - - - - -
+			TCP requires packets to be reassembled in order. If segment 1 is lost, segments 2, 3, and 4 cannot be delivered to the application, even if they have arrived at the receiver.
+
+		Impact on Multiplexing: 
+        - - - - - - - - - - - - 
+			While HTTP/2 allows multiple requests over one connection, a single packet loss in that TCP stream blocks all multiplexed requests.
+
+		Context:
+		- - - -
+			It commonly occurs during network congestion, high packet loss environments, or when the first packet in a queue takes too long to process 
+
+
+		
+TCP Slow start https://developer.mozilla.org/en-US/docs/Glossary/TCP_slow_start
+==============
+	TCP slow start
+		TCP slow start is an algorithm that helps discover the available network
+		bandwidth for packet transfer, and balance transmission speed according to 
+		the network's capabilities. The mechanism rapidly increases the volume of 
+		information sent from a very low level to a threshold level. If congestion 
+		is detected the threshold is reset to a much reduced level and the slow
+		start process starts again. This prevents congestion when a network's
+		capabilities are unknown or exceeded — at the beginning of a connection,
+		after a period of inactivity, or after detecting congestion — without itself causing congestion.
+
+		Network congestion occurs when more data is sent than the network is able 
+		to transfer between nodes at any given time. When a network is congested,
+		machines on the network experience degraded quality of service, including 
+		slow data transfers and dropped packets.
+
+		The slow start algorithm is a major part of TCP congestion control, 
+		as it ensures that new connections progressively increase data rates and 
+		that those rates don't overwhelm other nodes.
+
+			
+
+References:
+  https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Connection_management_in_HTTP_1.x			

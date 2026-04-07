@@ -21,7 +21,7 @@ Redis vs Memcached
   3. Persistence: Redis offers persistence and can restart with data saved on to disk. This is not
                   possible in Memcached.
 
-  4. Redis has master-slave cluster mode and offers high avaailability through sentinel mode.
+  4. Redis has master-slave cluster mode and offers high availability through sentinel mode.
 
 
 
@@ -47,3 +47,41 @@ This is the full list of Sentinel capabilities at a macroscopic level (i.e. the 
     4. Configuration provider. Sentinel acts as a source of authority for clients service discovery:
              clients connect to Sentinels in order to ask for the address of the current Redis master responsible for a given service.
              If a failover occurs, Sentinels will report the new address.
+
+
+Redis Persistence
+====================
+--> RDB
+    - Taking snapshots of data in-memory. Redis spawns/forks a new process for forking. When forked,
+      page table is copied. It means both processes point to the same physical memory. Parent process
+      has pages in read-only mode, i.e., when a page is changed it will be copied to different
+      location. This way main/parent process and forked process(snapshot process) can work together
+
+    - Depending on the page table size, it may take few ms for forking.
+
+    - You can configure to take snapshots afetr certain operations or time.
+
+    - Snapshot file will be in binary format and restart after crash is faster.
+
+--> AOF
+    - Appends all write operations to a file. This file is compacted. It needs fsync command
+    to persist to a file. You can comfigure fsyc per every request or for a certain batch of
+    operations
+
+    - Restart after crash takes more time as it has to replay all the write operations in the file
+
+    - Write operartions are stored in plain text which are human readable.
+
+
+--> Hybrid
+    - If a file has RDB preamble, the first part of the file is snapshot (RDB) which is a binary
+    blob. After that AOF related write operations are appended.
+
+    - During rewirte, some of AOF operations can be compacted into RDB and write operations
+    afterwards can be append to the file.
+
+
+  --> On kuberenets/Containers, redis should be mounted to persistent volumes such as PVC
+  (Persistent Volum Claim) in case of Kubernetes.
+
+

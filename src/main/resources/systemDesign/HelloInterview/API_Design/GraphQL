@@ -1,0 +1,76 @@
+N+1 Problem
+===========
+ POST /graphql
+query {
+  authors {
+    id
+    name
+    posts {
+      title
+    }
+  }
+}
+
+
+On the server side, a naive implementation would execute queries in this sequence:
+
+   1. One (1) initial query to fetch all authors: SELECT * FROM authors;
+   2.  The server then loops through the list of authors and, for each one, triggers N additional
+        queries to fetch their posts:
+        SELECT * FROM posts WHERE author_id = 1;
+        SELECT * FROM posts WHERE author_id = 2;
+        ...and so on for N authors.
+
+If there are 50 authors, this single GraphQL query results in 51 database round trips.
+This high number of requests increases latency, wastes server resources,
+and can lead to timeouts and poor user experience as data sets grow.
+
+
+Even if several posts share the same author, the server will still issue
+duplicate queries unless you implement deduplication or batching manually.
+
+The Solution: DataLoaders
+--------------------------
+
+The most common and recommended solution to the N+1 problem is using a utility
+called DataLoader (or similar implementations in other languages/frameworks).
+DataLoader works by batching and caching requests within a single GraphQL query execution:
+
+    Batching:
+        It collects all the individual requests for a specific type of data that occur within a
+        short time frame (e.g., all author IDs needed for all posts). It then executes a single, optimized
+        database query (e.g., using a WHERE IN (...) clause) to fetch all the required related data at once.
+        This reduces the number of database calls from N to 1 for the related data.
+
+    Caching:
+        It stores the results of a query in a per-request cache, ensuring that
+        if the same data is requested again during the same operation, it is returned
+        from the cache rather than triggering another database call.
+
+        {
+          me { name }
+          currentProject {
+            owner { name } # This is 'me' again!
+          }
+        }
+
+
+By implementing DataLoader, the 51 queries in the previous example can be reduced to just two: one for the
+   authors and one batched query for all the posts, drastically improving performance and
+   scalability.
+
+
+
+Authorization
+=============
+
+--> Unlike REST where we secure at endpoint level, in GraphQL, we can set permissions field by field
+    This is facilitated by Schema Resolvers.
+
+ References:
+
+   --> https://www.graphql-js.org/docs/n1-dataloader/
+   --> https://www.apollographql.com/docs/graphos/schema-design/guides/handling-n-plus-one
+   --> https://github.com/graphql/dataloader?tab=readme-ov-file
+   --> https://www.graphql-js.org/docs/resolver-anatomy/
+   --> https://www.apollographql.com/docs/graphos/schema-design/guides/handling-n-plus-one

@@ -1,0 +1,13 @@
+--> 5 mins max.
+--> 95% of time go with REST, in certain cases use GraphQL. User RPC for internal communication.
+--> Do not spend more time and energy on whether it should be PUT vs POST
+    --> Most of the time we use GET and POST
+
+Pagination
+===========
+  1. Page - GET /events?page=2&limit=25  (return results from 26 to 50).
+  2. Cursor - GET /events?cursor=123&limit=25 (return 25 results starting at 123).
+
+
+## References:
+  1. https://www.youtube.com/watch?v=DQ57zYedMdQ
