@@ -19,6 +19,12 @@ Read Committed
   timing anomaly, Refer: DDIA, Page 237.
     * Client have to refresh the page to get latest data.
 
+Repeatable Reads
+=================
+
+--> How lost updates can occur in repeatable read isolation level in MVCC (MySql)
+     https://www.google.com/search?q=How+read+uncommitted+is+implemented+in+general+%3F+Also+explain+if+it+is+implemented+using+locks.+%0D%0AHow+it+prevents+dirty+writes%3F+%0D%0AIn+read+committed+isolation+level%2C+write+locks+are+held+till+the+completion+of+the+transation%3F+&sca_esv=c4b1addd543662be&sxsrf=APpeQnvvh19JTKaF4zhu-C1DgdT8HbgHng%3A1786779989530&source=hp&ei=VRmAase5HYqw0PEP3ZavoAw&iflsig=ABILxe8AAAAAaoAnZemTFEp5OSaDU2XX2mNgNfhpSj1s&aep=22&ved=0ahUKEwiHuMKUkqKWAxUKGDQIHV3LC8QQteYPCCM&cs=1&oq=How+read+uncommitted+is+implemented+in+general+%3F+Also+explain+if+it+is+implemented+using+locks.+%0D%0AHow+it+prevents+dirty+writes%3F+%0D%0AIn+read+committed+isolation+level%2C+write+locks+are+held+till+the+completion+of+the+transation%3F+&gs_lp=Egdnd3Mtd2l6It8BSG93IHJlYWQgdW5jb21taXR0ZWQgaXMgaW1wbGVtZW50ZWQgaW4gZ2VuZXJhbCA_IEFsc28gZXhwbGFpbiBpZiBpdCBpcyBpbXBsZW1lbnRlZCB1c2luZyBsb2Nrcy4gCkhvdyBpdCBwcmV2ZW50cyBkaXJ0eSB3cml0ZXM_IApJbiByZWFkIGNvbW1pdHRlZCBpc29sYXRpb24gbGV2ZWwsIHdyaXRlIGxvY2tzIGFyZSBoZWxkIHRpbGwgdGhlIGNvbXBsZXRpb24gb2YgdGhlIHRyYW5zYXRpb24_IEjNvglQAFjNlwdwD3gAkAEAmAGXAaABwEWqAQU3OC4yNrgBAcgBAPgBAZgCRKAC8TDCAgQQIxgnwgIHECMY8AUYJ8ICDRAjGKIHGJ4GGPAFGCfCAg4QLhiABBixAxjHARjRA8ICDhAAGIAEGIoFGLEDGIMBwgIFEAAYgATCAg0QIxjwBRieBhiiBxgnwgILEAAYgAQYsQMYgwHCAgsQLhiABBixAxiDAcICCBAAGIAEGLEDwgILEAAYgAQYigUYsQPCAhEQABiABBiKBRixAxiDARjwBsICCxAAGPwGGPIGGI8HwgIIEAAYgAQY8AbCAgYQABgWGB7CAggQABgWGB4YCsICCxAAGIAEGIoFGIYDwgIFEAAY7wXCAggQABiABBiiBMICCBAAGIkFGKIEwgIFECEYqwLCAgUQIRigAZgDAJIHBTQzLjI1oAeblAOyBwUzOS4yNbgH4DDCBwoxMS40MC4xNS4yyAeDAYAIAQ&sclient=gws-wiz&mstk=AUtExfAZunApXaX8LY2wGsQtWmT7mGL41XWhbkk-BC-4skyuRJuQUmRJrKMqdf67503n86qeF7Fld0zVRcPbGarsAHBHwu02M96YlygTmrVhGQ6iZ9iHYiiaWrK3xV-RFOXK8TfyhKywsRq2RRo8r7xaQidVx74Kv6LQ0MlfYW7iQscNkbilyEYXNwIMj6OfQnl-1MUtq1_eKGhdGmNgPtcxF5bifZTsdn90HvpKeTgvYPjuaASv_keqAS6C2WqclZxLZzpg0OlJ0v1T_w&csuir=1&atvm=2&mtid=8xmAasqCLtOs0PEPirqY4As&udm=50
+
 
 Snapshot Isolation
 ==================
@@ -40,6 +46,10 @@ Phantom reads
       + Double Spend
       + Booking same slot concurrently by two users
       + Claiming a userid concurrently by two processes.
+      + Write skew can occur if two transactions read the same objects, and then update some of
+        those objects (different transactions may update different objects).\ In the special case
+        where different transactions update the same object, \you get a dirty write or
+        lost update anomaly (depending on the timing). Page. 248 DDIA
 
  # Ref: DDIA, Page 251
 
@@ -61,3 +71,20 @@ Phantom reads
     https://cloud.google.com/blog/products/databases/strict-serializability-and-external-consistency-in-spanner?hl=en
     https://timilearning.com/posts/mit-6.824/lecture-13-spanner/
 
+Dirty Writes , Page no: 235, DDIA
+============
+
+What happens if two transactions concurrently try to update the same object in a database?
+We don’t know in which order the writes will happen, but we normally assume
+ that the later write overwrites the earlier write.
+However, what happens if the earlier write is part of a transaction that
+has not yet committed, so the later write overwrites an uncommitted value? This is called a dirty write
+
+
+-- Read uncommitted  [No dirty writes]
+   --> Write locks till the end of the transaction
+   --> Another transaction can read uncommitted data ,i.e., No locks are requested, and existing locks are ignored.
+
+-- Read committed [ No dirty writes, No dirty reads]
+    --> Write locks till the end of the transaction
+    --> Reads require lock when they want to read.
