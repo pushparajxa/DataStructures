@@ -71,7 +71,7 @@
     <dependency>
       <artifactId>kafka-clients</artifactId>
       <groupId>org.apache.kafka</groupId>
-      <version>2.6.0</version>
+      <version>7.1.3-4-ccs</version>
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/io.confluent/kafka-avro-serializer -->
